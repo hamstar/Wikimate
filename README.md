@@ -9,9 +9,9 @@ Wikimate is a wrapper for the MediaWiki API that aims to be very easy to use.  I
 
 Need to make sure you have some configuration constants before hand so edit the config.php
 
-	define('WIKI_USERNAME','testbot'); // bot name
-	define('WIKI_PASSWORD','bottest'); // bot password
-	define('WIKI_API','http://example.com/api.php'); // api url
+define('WIKI_USERNAME','testbot'); // bot name
+define('WIKI_PASSWORD','bottest'); // bot password
+define('WIKI_API','http://example.com/api.php'); // api url
 
 ## Usage
 
@@ -22,17 +22,23 @@ Include the globals.php file and create a new Wikimate object.
 
 On creating a new Wikimate object it will log into the wiki api - if it fails to authenticate your $wiki object will be null.
 
+### Getting a page object
+
 Once logged in you can start playing around with pages.  If the title given to the WikiPage object is invalid, your WikiPage object will be null.
 
 	$page = $wiki->getPage('Sausages'); // create a new page object
 	if ( $page->exists() ) die(); // check if the page exists or not
 	echo $page->getTitle(); // get the title
 
+### Reading...
+
 You can get the text of the page by using the getText() method which returns the text that was obtained when the page object was created.  If you 
 want fresh page text from the wiki then just put boolean true as the first argument.
 
 	$wikiCode = $page->getText(); // get the text of the page
 	$wikiCode = $page->getText(true); // get fresh page text from the api
+
+### Writing...
 
 You can modify the whole article using the setText() method:
 
@@ -44,6 +50,8 @@ You can modify only sections of the article by adding a second parameter to the 
 	$this->setText("==Section 4==\n\nThis will appear in section 4", 4 ); // provide a section number to overwrite only that section
 	$this->setText("==New section==\n\nStuff", 'new' ) // ...or make a new section
 	$this->setText("Sausages are cylindrical packages of meat.", 0 ) // ...zero is the very first section
+
+### Other stuff
 
 Something go wrong?  Check the error array"
 
