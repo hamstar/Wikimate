@@ -18,7 +18,7 @@ Need to make sure you have some configuration constants before hand so edit the 
 
 ## Usage
 
-Include the globals.php file and create a new Wikimate object.
+Include the `globals.php` file and create a new Wikimate object.
 
 	include 'globals.php';
 	$wiki = new Wikimate;
@@ -27,7 +27,7 @@ On creating a new Wikimate object it will log into the wiki api - **if it fails 
 
 ### Getting a page object
 
-Once logged in you can start playing around with pages.  If the title given to the WikiPage object is invalid, your WikiPage object will be null.
+Once logged in you can start playing around with pages.  If the title given to the WikiPage object is invalid, your `$page` object will be null.
 
 	$page = $wiki->getPage('Sausages'); // create a new page object
 	if ( $page->exists() ) die(); // check if the page exists or not
@@ -37,7 +37,7 @@ Once logged in you can start playing around with pages.  If the title given to t
 
 ### Reading...
 
-You can get the text of the page by using the getText() method which returns the text that was obtained when the page object was created.  If you want fresh page text from the wiki then just put boolean true as the first argument.
+You can get the text of the page by using the `getText()` method which returns the text that was obtained when the page object was created.  If you want fresh page text from the wiki then just put boolean `true` as the first argument.
 
 	$wikiCode = $page->getText(); // get the text of the page
 	$wikiCode = $page->getText(true); // get fresh page text from the api and rebuild sections
@@ -70,12 +70,12 @@ The array looks like this:
 
 ### Writing...
 
-You can modify the whole article using the setText() method:
+You can modify the whole article using the `setText()` method:
 
 	$page->setText("==Testing==\n\n This is a whole page"); // returns true if the edit worked
 	$page->setText("==Changed==\n\n I just changed the whole page"); // the setText() method will overwrite the entire page!
 
-You can modify only sections of the article by adding a second parameter to the setText() method.  Please note you can't use section names here **you must use section indexes**.
+You can modify only sections of the article by adding a second parameter to the `setText()` method.  Please note you can't use section names here **you must use section indexes**.
 
 	$page->setText("==Section 4==\n\nThis will appear in section 4", 4 ); // provide a section number to overwrite only that section
 	$page->setText("==New section==\n\nStuff", 'new' ) // ...or make a new section
@@ -127,11 +127,11 @@ Both methods return an array of the MediaWiki API result.
 
 ## Version 0.4
 
-* Added WikiPage::newSection() and WikiPage::setSection() (shortcuts to WikiPage::setText())
-* Added the ability to get individual sections of the article with WikiPage::getSection()
-* Added the ability to get all sections in an array with WikiPage::getAllSections()
-* Added the ability to get array showing section offsets and lengths in the page wikicode with WikiPage::getSectionOffsets()
-* Added the ability to see how many sections are on a page with WikiPage::getNumSections()
+* Added `WikiPage::newSection()` and `WikiPage::setSection()` (shortcuts to `WikiPage::setText()`)
+* Added the ability to get individual sections of the article with `WikiPage::getSection()`
+* Added the ability to get all sections in an array with `WikiPage::getAllSections()`
+* Added the ability to get array showing section offsets and lengths in the page wikicode with `WikiPage::getSectionOffsets()`
+* Added the ability to see how many sections are on a page with `WikiPage::getNumSections()`
 
 ## Version 0.3
 
