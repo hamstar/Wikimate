@@ -5,10 +5,13 @@
  *
  * @author Robert McLeod
  * @since December 2010
- * @version 0.2
+ * @version 0.4
  */
 
 class Wikimate {
+
+    const SECTIONLIST_BY_NAME = 1;
+    const SECTIONLIST_BY_INDEX = 2;
 
     private $c = null;
 
@@ -17,11 +20,12 @@ class Wikimate {
      * If it can't login the class will exit and return null
      */
     function __construct() {
-	$this->c = new Curl();
-	if ( !$this->login() ) {
-	    echo "Failed to authenticate - cannot create Wikimate";
-	    return null;
-	}
+		$this->c = new Curl();
+		$this->c->user_agent = "Wikimate 0.3";
+		if ( !$this->login() ) {
+			echo "Failed to authenticate - cannot create Wikimate";
+			return null;
+		}
     }
 
     /**
@@ -30,32 +34,32 @@ class Wikimate {
      */
     private function login() {
 
-	Logger::log("Logging in");
+		//Logger::log("Logging in");
 
-	$details = array(
-		'action' => 'login',
-		'lgname' => WIKI_USERNAME,
-		'lgpassword' => WIKI_PASSWORD,
-		'format' => 'json'
-	);
+		$details = array(
+			'action' => 'login',
+			'lgname' => WIKI_USERNAME,
+			'lgpassword' => WIKI_PASSWORD,
+			'format' => 'json'
+		);
 
-	$loginResult = $this->c->post( WIKI_API, $details )->body;
+		$loginResult = $this->c->post( WIKI_API, $details )->body;
 
-	$loginResult = json_decode( $loginResult );
+		$loginResult = json_decode( $loginResult );
 
-	if ( $loginResult->login->result == "NeedToken" ) {
-	    Logger::log("Sending token {$loginResult->login->token}");
-	    $details['lgtoken'] = $loginResult->login->token;
-	    $loginResult = $this->c->post( WIKI_API, $details )->body;
-	    $loginResult = json_decode( $loginResult );
+		if ( $loginResult->login->result == "NeedToken" ) {
+			//Logger::log("Sending token {$loginResult->login->token}");
+			$details['lgtoken'] = $loginResult->login->token;
+			$loginResult = $this->c->post( WIKI_API, $details )->body;
+			$loginResult = json_decode( $loginResult );
 
-	    if ( $loginResult->login->result != "Success" ) {
-		return false;
-	    }
-	}
+			if ( $loginResult->login->result != "Success" ) {
+			return false;
+			}
+		}
 
-	Logger::log("Logged in");
-	return true;
+		//Logger::log("Logged in");
+		return true;
 
     }
 
@@ -65,7 +69,7 @@ class Wikimate {
      * @return WikiPage the page object
      */
     function getPage( $title ) {
-	return new WikiPage( $title, $this );
+		return new WikiPage( $title, $this );
     }
 
     /**
@@ -75,12 +79,13 @@ class Wikimate {
      */
     function query( $array ) {
 
-	$array['action'] = 'query';
-	$array['format'] = 'php';
+		$array['action'] = 'query';
+		$array['format'] = 'php';
 
-	$apiResult = $this->c->get( WIKI_API, $array );
+		$apiResult = $this->c->get( WIKI_API, $array );
 
-	return unserialize($apiResult);
+		return unserialize($apiResult);
+		
     }
 
     /**
@@ -89,15 +94,15 @@ class Wikimate {
      * @return array unserialized php output from the wiki
      */
     function edit( $array ) {
-	$c = $this->c;
-	$c->headers['Content-Type'] = "application/x-www-form-urlencoded";
+		$c = $this->c;
+		$c->headers['Content-Type'] = "application/x-www-form-urlencoded";
 
-	$array['action'] = 'edit';
-	$array['format'] = 'php';
+		$array['action'] = 'edit';
+		$array['format'] = 'php';
 
-	$apiResult = $c->post( WIKI_API, $array );
+		$apiResult = $c->post( WIKI_API, $array );
 
-	return unserialize($apiResult);
+		return unserialize($apiResult);
     }
 }
 
@@ -105,9 +110,13 @@ class Wikimate {
  * Models a wiki article page that can have its text altered and retrieved.
  * @author Robert McLeod
  * @since December 2010
- * @version 0.2
+ * @version 0.5
  */
 class WikiPage {
+
+    const SECTIONLIST_BY_INDEX = 1;
+    const SECTIONLIST_BY_NAME = 2;
+    const SECTIONLIST_BY_NUMBER = 3;
 
     private $title = null;
     private $exists = false;
@@ -117,6 +126,13 @@ class WikiPage {
     private $wikimate = null;
     private $error = null;
     private $invalid = false;
+    private $sections = null;
+
+    /*
+     *
+     * Magic methods
+     *
+     */
 
     /**
      * Constructs a WikiPage object from the title given and adds
@@ -126,15 +142,54 @@ class WikiPage {
      */
     function __construct( $title, $wikimate ) {
 
-	$this->wikimate = $wikimate;
-	$this->title = $title;
-	$this->text = $this->getText(true);
-	
-	if ( $this->invalid ) {
-	    echo "Invalid page title - cannot create WikiPage";
-	    return null;
-	}
+		$this->wikimate = $wikimate;
+		$this->title = $title;
+		$this->text = $this->getText(true);
+		
+		if ( $this->invalid ) {
+			echo "Invalid page title - cannot create WikiPage";
+			return null;
+		}
 
+    }
+
+    /**
+     *
+     * @return <type> Destructor
+     */
+    function  __destruct() {
+		$this->title = null;
+		$this->exists = false;
+		$this->text = null;
+		$this->edittoken = null;
+		$this->starttimestamp = null;
+		$this->wikimate = null;
+		$this->error = null;
+		$this->invalid = false;
+		return null;
+    }
+
+    /**
+     * Returns the wikicode of the page
+     * @return string of wikicode
+     */
+    function __toString() {
+		return $this->text;
+    }
+
+    /**
+     * Returns an array sections with the section name as the key and the text
+     * as the element e.g.
+     *
+     * array(
+     *   'intro' => 'this text is the introduction',
+     *   'History' => 'this is text under the history section'
+     * )
+     *
+     * @return array of sections
+     */
+    function __invoke() {
+		return $this->getAllSections( false, self::SECTIONLIST_BY_NAME );
     }
 
     /**
@@ -142,20 +197,59 @@ class WikiPage {
      * @return boolean true if page exists
      */
     function exists() {
-	return $this->exists;
+		return $this->exists;
     }
+
+    /**
+     * Alias of self::__destruct()
+     */
+    function destroy() {
+		$this->__destruct();
+    }
+
+    /*
+     *
+     * Page meta functions
+     *
+     */
 
     /**
      * Returns an error if there is one, null shows no error
      * @return mixed null for no errors or an error array object
      */
     function getError() {
-	return $this->error;
+		return $this->error;
     }
 
+    /**
+     * Returns the title of this page
+     * @return string the title of this page
+     */
     function getTitle() {
-	return $this->title;
+		return $this->title;
     }
+
+    /**
+     * Returns the number of sections in this page
+     * @return integer the number of sections in this page
+     */
+    function getNumSections() {
+		return count( $this->sections->byIndex );
+    }
+	
+	/**
+	 * Returns the sections offsets and lengths
+	 * @return StdClass section class
+	 */
+	function getSectionOffsets() {
+		return $this->sections;
+	}
+
+    /*
+     *
+     * Getting functions
+     *
+     */
 
     /**
      * Gets the text of the page.  If refesh is true then this method will
@@ -165,42 +259,168 @@ class WikiPage {
      */
     function getText($refresh=false) {
 
-	if ( $refresh ) { // we want to query the api
+		if ( $refresh ) { // we want to query the api
 
-	    $data = array(
-		'prop' => 'info|revisions',
-		'intoken' => 'edit',
-		'titles' => $this->title,
-		'rvprop' => 'content' // need to get page text
-	    );
+			$data = array(
+			'prop' => 'info|revisions',
+			'intoken' => 'edit',
+			'titles' => $this->title,
+			'rvprop' => 'content' // need to get page text
+			);
 
-	    $r = $this->wikimate->query( $data ); // run the query
+			$r = $this->wikimate->query( $data ); // run the query
 
-	    $page = array_pop( $r['query']['pages'] ); // get the page (there should only be one)
+			// Check for errors
+			if ( isset( $r['error'] ) ) {
+				$this->error = $r; // set the error if there was one
+			} else {
+				$this->error = null; // reset the error status
+			}
 
-	    if ( isset( $page['invalid'] ) ) {
-		$this->invalid = true;
-	    }
+			$page = array_pop( $r['query']['pages'] ); // get the page (there should only be one)
 
-	    $this->edittoken = $page['edittoken'];
-	    $this->starttimestamp = $page['starttimestamp'];
+			unset( $r, $data );
 
-	    if ( !isset( $page['missing'] ) ) {
-		$this->exists = true; // update the existance if the page is there
-		$this->text = $page['revisions'][0]['*']; // put the content into text
-	    }
+			if ( isset( $page['invalid'] ) ) {
+				$this->invalid = true;
+			}
 
-	    if ( isset( $r['error'] ) ) {
-		$this->error = $r; // set the error if there was one
-	    } else {
-		$this->error = null; // reset the error status
-	    }
+			$this->edittoken = $page['edittoken'];
+			$this->starttimestamp = $page['starttimestamp'];
 
-	}
+			if ( !isset( $page['missing'] ) ) {
+				$this->exists = true; // update the existance if the page is there
+				$this->text = $page['revisions'][0]['*']; // put the content into text
+			}
 
-	return $this->text; // return the text in any case
+			unset( $page );
+
+			// Now we need to get the section information
+			preg_match_all("@(={1,5}.*)@", $this->text, $m );
+			
+			// Set the intro section (between title and first section)
+			$this->sections->byIndex[0]['offset'] = 0;
+			$this->sections->byName['intro']['offset'] = 0;
+			
+			if ( !empty( $m[1] ) ) {
+				
+				// Array of section names
+				$sections = $m[1];
+				
+				// Setup the current section
+				$currIndex = 0;
+				$currName = 'intro';
+				
+				foreach ( $sections as $i => $section ) {
+					
+					// Get the current offset
+					$currOffset = strpos( $this->text, $section );
+					
+					// Are we still on the first section?
+					if ( $currIndex == 0 ) {
+						$this->sections->byIndex[$currIndex]['length'] = $currOffset;
+						$this->sections->byName[$currName]['length'] = $currOffset;
+					}
+					
+					// Get the current name and index
+					$currName = trim(str_replace('=','',$section));
+					$currIndex++;
+					
+					// Set the offset for the current section
+					$this->sections->byIndex[$currIndex]['offset'] = $currOffset;
+					$this->sections->byName[$currName]['offset'] = $currOffset;
+				
+					// If there is a section after this, set the length of this one
+					if ( isset( $sections[$currIndex] ) ) {
+						$nextOffset = strpos( $this->text, $sections[$currIndex] ); // get the offset of the next section
+						$length = $nextOffset - $currOffset; // calculate the length of this one
+						
+						// Set the length of this section
+						$this->sections->byIndex[$currIndex]['length'] = $length;
+						$this->sections->byName[$currName]['length'] = $length;
+					}
+				
+				}
+			}
+		}
+
+		return $this->text; // return the text in any case
 
     }
+
+    /**
+     * Returns the section requested, section can be the following:
+     * - section name (string:"History")
+     * - section index (int:3)
+     * 
+     * @param mixed $section the section to get
+     * @param boolan $includeHeading false to get section text only
+     * @return string wikitext of the section on the page 
+     */
+    function getSection( $section, $includeHeading=false ) {
+		// Check if we have a section name or index
+		if ( is_int($section) ) {
+			$coords = $this->sections->byIndex[$section];
+		} else if( is_string($section) ) {
+			$coords = $this->sections->byName[$section];
+		}
+
+		// Extract the text
+		@extract( $coords );
+		if ( isset( $length ) ) {
+			$text = substr( $this->text, $offset, $length );
+		} else {
+			$text = substr( $this->text, $offset );
+		}
+		
+		// Whack of the heading if need be
+		if ( !$includeHeading && $offset > 0 ) {
+			$text = substr( $text, strpos( trim($text), "\n" ) ); // chop off the first line
+		}
+		
+		return $text;
+	
+    }
+
+    /**
+     * Return all the sections of the page in an array - the key names can be
+     * set to name or index by using the following for the second param
+     * - self::SECTIONLIST_BY_NAME
+     * - self::SECTIONLIST_BY_INDEX
+     *
+     * @param boolean $includeHeading false to get section text only
+     * @param integer $keyNames modifier for the array key names
+     * @return array of sections
+     */
+    function getAllSections($includeHeading=false, $keyNames=self::SECTIONLIST_BY_INDEX ) {
+
+		$sections = array();
+
+		switch ( $keyNames ) {
+			case self::SECTIONLIST_BY_INDEX:
+				$array = array_keys( $this->sections->byIndex );
+				break;
+			case self::SECTIONLIST_BY_NAME:
+				$array = array_keys( $this->sections->byName );
+				break;
+			default:
+				throw new Exception('Unexpected parameter $keyNames given to WikiPage::getAllSections()');
+				break;
+		}
+
+		foreach ( $array as $key ) {
+			$sections[$key] = $this->getSection( $key, $includeHeading );
+		}
+
+		return $sections;
+
+    }
+
+    /*
+     *
+     * Setting functions
+     *
+     */
 
     /**
      * Sets the text in the page.  Updates the starttimestamp to the timestamp
@@ -209,54 +429,86 @@ class WikiPage {
      * @param string $section the section to edit (null for whole page)
      * @return boolean true if page was edited successfully
      */
-    function setText( $text, $section=null ) {
+    function setText( $text, $section=null, $minor=false, $summary=null ) {
 
-	$data = array(
-	    'title' => $this->title,
-	    'text' => $text,
-	    'md5' => md5( $text ),
-	    'bot' => "true",
-	    'token' => $this->edittoken,
-	    'starttimestamp' => $this->starttimestamp
-	);
+		$data = array(
+			'title' => $this->title,
+			'text' => $text,
+			'md5' => md5( $text ),
+			'bot' => "true",
+			'token' => $this->edittoken,
+			'starttimestamp' => $this->starttimestamp
+		);
 
-	if ( !is_null( $section ) ) {
-	    $data['section'] = $section;
-	}
+		// set options from arguments
+		if ( !is_null( $section ) ) $data['section'] = $section;
+		if ( $minor ) $data['minor'] = $minor;
+		if ( !is_null($summary) ) $data['summary'] = $summary;
 
-	// Make sure we don't create a page by accident or overwrite another one
-	if ( !$this->exists ) {
-	    $data['createonly'] = "true"; // createonly if not exists
-	} else {
-	    $data['nocreate'] = "true"; // don't create, it should exist
-	}
+		// Make sure we don't create a page by accident or overwrite another one
+		if ( !$this->exists ) {
+			$data['createonly'] = "true"; // createonly if not exists
+		} else {
+			$data['nocreate'] = "true"; // don't create, it should exist
+		}
 
-	$r = $this->wikimate->edit( $data ); // the edit query
+		$r = $this->wikimate->edit( $data ); // the edit query
 
-	// Check if it worked
-	if ( $r['edit']['result'] == "Success" ) {
-	    $this->exists = true;
-	    $this->text = $text;
+		// Check if it worked
+		if ( $r['edit']['result'] == "Success" ) {
+			$this->exists = true;
 
-	    // Get the new starttimestamp
-	    $data = array(
-		'prop' => 'info',
-		'intoken' => 'edit',
-		'titles' => $this->title,
-	    );
+			if ( is_null($section) ) {
+			$this->text = $text;
+			} else {
 
-	    $r = $this->wikimate->query( $data );
+			}
 
-	    $page = array_pop( $r['query']['pages'] ); // get the page
+			// Get the new starttimestamp
+			$data = array(
+			'prop' => 'info',
+			'intoken' => 'edit',
+			'titles' => $this->title,
+			);
 
-	    $this->starttimestamp = $page['starttimestamp']; // update the starttimestamp
+			$r = $this->wikimate->query( $data );
 
-	    $this->error = null; // reset the error
-	    return true;
-	}
+			$page = array_pop( $r['query']['pages'] ); // get the page
 
-	$this->error = $r;
-	return false;
+			$this->starttimestamp = $page['starttimestamp']; // update the starttimestamp
+
+			$this->error = null; // reset the error
+			return true;
+		}
+
+		$this->error = $r;
+		return false;
+    }
+
+    /**
+     * Sets the text of the given section.
+     * Essentially an alias of WikiPage:setText() with the summary and minor
+     * parameters switched.
+     *
+     * @param string $text The text of the section
+     * @param mixed $section section index, new by default
+     * @param string $summary summary text
+     * @param boolean $minor true for minor edit
+     * @return boolean true if the section was saved
+     */
+    function setSection( $text, $section=0, $summary=null, $minor=false ) {
+		$this->setText( $text, $section, $minor, $summary );
+    }
+
+    /**
+     * Alias of WikiPage::setSection() specifically for creating new sections
+     *
+     * @param string $name the heading name for the new section
+     * @param string $text The text of the new section
+     * @return boolean true if the section was saved
+     */
+    function newSection( $name, $text ) {
+		return $this->setSection( $text, $section='new', $summary=$name, $minor=false);
     }
 
 }
