@@ -9,9 +9,9 @@ Wikimate is a wrapper for the MediaWiki API that aims to be very easy to use.  I
 
 Need to make sure you have some configuration constants before hand so edit the config.php
 
-define('WIKI_USERNAME','testbot'); // bot name
-define('WIKI_PASSWORD','bottest'); // bot password
-define('WIKI_API','http://example.com/api.php'); // api url
+    define('WIKI_USERNAME','testbot'); // bot name
+    define('WIKI_PASSWORD','bottest'); // bot password
+    define('WIKI_API','http://example.com/api.php'); // api url
 
 ## Usage
 
@@ -91,7 +91,7 @@ Here's some easier functions for editing sections
 
 ### Other stuff
 
-Something go wrong?  Check the error array"
+Something go wrong?  Check the error array
 
 	print_r( $this->getError() );
 
