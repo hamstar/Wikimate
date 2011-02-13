@@ -5,7 +5,7 @@
  *
  * @author Robert McLeod
  * @since December 2010
- * @version 0.4
+ * @version 0.4.5
  */
 
 class Wikimate {
@@ -14,17 +14,24 @@ class Wikimate {
     const SECTIONLIST_BY_INDEX = 2;
 
     private $c = null;
+    private $error = array();
+    private $debugMode = false;
 
     /**
      * Creates a curl object and logs in
      * If it can't login the class will exit and return null
      */
     function __construct() {
+		$this->debugMode = ( defined( 'WIKIMATE_DEBUG' ) ) ? WIKIMATE_DEBUG : false;
+		if ( !class_exists('Curl') || !class_exists('CurlResponse') ) {
+			echo "Failed to create Wikimate - could not find the Curl class";
+			return NULL;
+		}
 		$this->c = new Curl();
 		$this->c->user_agent = "Wikimate 0.3";
 		if ( !$this->login() ) {
-			echo "Failed to authenticate - cannot create Wikimate";
-			return null;
+			echo "Failed to authenticate - {$this->error['login']}";
+			return NULL;
 		}
     }
 
@@ -43,24 +50,70 @@ class Wikimate {
 			'format' => 'json'
 		);
 
+		// Send the login request
 		$loginResult = $this->c->post( WIKI_API, $details )->body;
 
+		// Check if we got an API result or the API doc page (invalid request)
+		if ( strstr( $loginResult, "This is an auto-generated MediaWiki API documentation page" ) ) {
+		        $this->error['login'] = "The API could not understand the first login request";
+		        return false;
+		}
+
 		$loginResult = json_decode( $loginResult );
+
+		if ( $this->debugMode ) {
+			echo "Login request response:\n";
+			print_r( $loginResult );
+		}
 
 		if ( $loginResult->login->result == "NeedToken" ) {
 			//Logger::log("Sending token {$loginResult->login->token}");
 			$details['lgtoken'] = $loginResult->login->token;
+
+			// Send the confirm token request
 			$loginResult = $this->c->post( WIKI_API, $details )->body;
+			
+			// Check if we got an API result or the API doc page (invalid request)
+			if ( strstr( $loginResult, "This is an auto-generated MediaWiki API documentation page" ) ) {
+			        $this->error['login'] = "The API could not understand the confirm token request";
+			        return false;
+			}
+
 			$loginResult = json_decode( $loginResult );
 
+			if ( $this->debugMode ) {
+				echo "Confirm token response:\n";
+				print_r( $loginResult );
+			}
+
 			if ( $loginResult->login->result != "Success" ) {
-			return false;
+				// Some more comprehensive error checking
+				switch ($loginResult->login->result) {
+			            case 'NotExists':
+			                $this->error['login'] = 'The username does not exist';
+			                break;
+			            default:
+			                $this->error['login'] = 'The API result was: '. $loginResult->login->result;
+			                break;
+			        }
+				return false;
 			}
 		}
 
 		//Logger::log("Logged in");
 		return true;
 
+    }
+
+    /**
+     * Sets the debug mode
+     *
+     * @param boolean $debugMode true to turn debugging on
+     * @return Wikimate this object
+     */
+    function setDebugMode( $b ) {
+	$this->debugMode = $b;
+	return $this;
     }
 
     /**
