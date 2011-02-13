@@ -15,6 +15,7 @@ Need to make sure you have some configuration constants before hand so edit the 
     define('WIKI_USERNAME','testbot'); // bot name
     define('WIKI_PASSWORD','bottest'); // bot password
     define('WIKI_API','http://example.com/api.php'); // api url
+    define('WIKIMATE_DEBUG', false); // turn debug output on/off
 
 ## Usage
 
@@ -23,7 +24,9 @@ Include the `globals.php` file and create a new Wikimate object.
 	include 'globals.php';
 	$wiki = new Wikimate;
 
-On creating a new Wikimate object it will log into the wiki api - **if it fails to authenticate** your `$wiki` object will be null.
+On creating a new Wikimate object it will log into the wiki api - **if it fails to authenticate** your `$wiki` object will be null.  You should get a meaningful error message telling you why it didn't authenticate.
+
+You can also enable/disable debugging with the `$wiki->debugMode($boolean)` method - currently only output from the logon process is printed for debugging.
 
 ### Getting a page object
 
