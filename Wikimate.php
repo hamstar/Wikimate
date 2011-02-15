@@ -5,7 +5,7 @@
  *
  * @author Robert McLeod
  * @since December 2010
- * @version 0.4.5
+ * @version 0.4.6
  */
 
 class Wikimate {
@@ -29,6 +29,7 @@ class Wikimate {
 		}
 		$this->c = new Curl();
 		$this->c->user_agent = "Wikimate 0.3";
+		$this->c->cookie_file = "wikimate_cookie.txt";
 		if ( !$this->login() ) {
 			echo "Failed to authenticate - {$this->error['login']}";
 			return NULL;
@@ -62,6 +63,8 @@ class Wikimate {
 		$loginResult = json_decode( $loginResult );
 
 		if ( $this->debugMode ) {
+			echo "Login request:\n";
+			print_r( $details );
 			echo "Login request response:\n";
 			print_r( $loginResult );
 		}
@@ -82,6 +85,8 @@ class Wikimate {
 			$loginResult = json_decode( $loginResult );
 
 			if ( $this->debugMode ) {
+				echo "Confirm token request:\n";
+				print_r( $details );
 				echo "Confirm token response:\n";
 				print_r( $loginResult );
 			}
