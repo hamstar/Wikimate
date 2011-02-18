@@ -116,17 +116,33 @@ class Wikimate {
      * @param boolean $debugMode true to turn debugging on
      * @return Wikimate this object
      */
-    function setDebugMode( $b ) {
+    public function setDebugMode( $b ) {
 	$this->debugMode = $b;
 	return $this;
     }
+
+    /**
+     * Either return or print the curl configuration settings.
+     *
+     * @param boolean $echo True to echo the configuration
+     * @return mixed Array of config if $echo is false, (boolean)true if echo is true
+     */
+    public function debugCurlConfig( $echo=false ) {
+        if ( $echo ) {
+            echo "Curl Configuration:\n";
+            print_r($this->c->config);
+            return true;
+        }
+        
+        return $this->c->config;
+    }        
 
     /**
      * Returns a WikiPage object populated with the page data
      * @param string $title The name of the wiki article
      * @return WikiPage the page object
      */
-    function getPage( $title ) {
+    public function getPage( $title ) {
 		return new WikiPage( $title, $this );
     }
 
@@ -135,7 +151,7 @@ class Wikimate {
      * @param array $array array of details to be passed in the query
      * @return array unserialized php output from the wiki
      */
-    function query( $array ) {
+    public function query( $array ) {
 
 		$array['action'] = 'query';
 		$array['format'] = 'php';
@@ -151,7 +167,7 @@ class Wikimate {
      * @param array $array array of details to be passed in the query
      * @return array unserialized php output from the wiki
      */
-    function edit( $array ) {
+    public function edit( $array ) {
 		$c = $this->c;
 		$c->headers['Content-Type'] = "application/x-www-form-urlencoded";
 
