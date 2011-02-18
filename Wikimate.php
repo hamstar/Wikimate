@@ -122,7 +122,7 @@ class Wikimate {
     }
 
     /**
-     * Either return or print the curl configuration settings.
+     * Either return or print the curl settings.
      *
      * @param boolean $echo True to echo the configuration
      * @return mixed Array of config if $echo is false, (boolean)true if echo is true
@@ -130,11 +130,11 @@ class Wikimate {
     public function debugCurlConfig( $echo=false ) {
         if ( $echo ) {
             echo "Curl Configuration:\n";
-            print_r($this->c->config);
+            print_r($this->c->options);
             return true;
         }
         
-        return $this->c->config;
+        return $this->c->options;
     }        
 
     /**
