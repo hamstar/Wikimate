@@ -5,7 +5,7 @@
  *
  * @author Robert McLeod
  * @since December 2010
- * @version 0.4.6
+ * @version 0.4.7
  */
 
 class Wikimate {
@@ -71,7 +71,7 @@ class Wikimate {
 
 		if ( $loginResult->login->result == "NeedToken" ) {
 			//Logger::log("Sending token {$loginResult->login->token}");
-			$details['lgtoken'] = $loginResult->login->token;
+			$details['lgtoken'] = strtolower(trim($loginResult->login->token));
 
 			// Send the confirm token request
 			$loginResult = $this->c->post( WIKI_API, $details )->body;
