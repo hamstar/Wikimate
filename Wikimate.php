@@ -1,15 +1,13 @@
 <?php
-/**
- * Provides an interface over wiki api objects such as pages
- * Logs into the wiki on construction
- *
- * @author Robert McLeod
- * @since December 2010
- * @version 0.5-oop
- */
 
  class WikiLoginException extends Exception {}
  
+ /**
+  * Utility functions
+  *
+  * @author Robert McLeod
+  * @version 0.1
+  */
  class WikiUtil {
 	
 	public static function printDebug( $title, $objects=array() ) {
@@ -28,6 +26,12 @@
 	
  }
  
+ /**
+ * Class to handle logging into the wiki API
+ *
+ * @author Robert McLeod
+ * @version 0.1
+ */
  class WikiLogin {
  
 	private $c;
@@ -36,10 +40,15 @@
 	public function __construct( $curl ) {
 		
 		$this->c = WikiCurl::getCurlObject();
-		$this->details = self::getDefaultFields();
+		$this->details = self::getDefaultDetails();
 	}
  
-	private static function getDefaultFields() {
+	/**
+	 * Returns an array of default details for logging into the API
+	 *
+	 * @return array of default details
+	 */
+	private static function getDefaultDetails() {
 		
 		return array(
 			'action' => 'login',
@@ -49,6 +58,11 @@
 		);
 	}
  
+	/**
+	 * Check that our API request was recognized
+	 *
+	 * @param StdClass $loginResult the json object
+	 */
 	private function preconditions( $loginResult ) {
 		
 		// Check if we got an API result or the API doc page (invalid request)
@@ -57,6 +71,11 @@
 		}
 	}
  
+	/**
+	 * The initial login request to the API
+	 *
+	 * @return StdClass containing json data
+	 */
 	private function initialRequest() {
 		
 		$loginResult = $this->c->post( WIKI_API, $this->details )->body;
@@ -77,6 +96,12 @@
 		
 	}
  
+	/**
+	 * If the api requests a token this method will try give the
+	 * the api the token when given the login result
+	 *
+	 * @param StdClass $loginResult The json object from the initial request
+	 */
 	private function getToken( $loginResult ) {
 		
 		//Logger::log("Sending token {$loginResult->login->token}");
@@ -97,7 +122,11 @@
 			)
 		);
 		
-		return $loginResult;
+		if ( $loginResult->login->result == 'Success' ) {
+			return true;
+		}
+		
+		throw new WikiLoginException("The API will not accept the token");
 
 	}
  
@@ -123,6 +152,13 @@
  
  }
  
+ /**
+  * Provides a nice generic class to allow WikiMate objects
+  * to make queries to the wiki api
+  * 
+  * @author Robert McLeod
+  * @version 0.1
+  */
  class WikiCurl {
 	
 	private $c;
@@ -132,6 +168,11 @@
 		$this->c = self::getCurlObject();
 	}
 	
+	/**
+	 * Gets a curl object initialized with our settings
+	 *
+	 * @return Curl wrapper initalized for WikiMate
+	 */
 	public static function getCurlObject() {
 		
 		// Setup curl
@@ -184,7 +225,14 @@
 	
 }
 	
- 
+ /**
+ * Provides an interface over wiki api objects such as pages
+ * Logs into the wiki on construction
+ *
+ * @author Robert McLeod
+ * @since December 2010
+ * @version 0.5-oop
+ */
 class Wikimate {
 
     const SECTIONLIST_BY_NAME = 1;
@@ -196,15 +244,8 @@ class Wikimate {
      */
     function __construct() {
 		
-		try {
-		
-			$wl = new WikiLogin;
-			$wl->login();
-		} catch ( WikiLoginException $e ) {
-		
-			echo '<h1>',$e->getMessage(),'</h1>';
-			return NULL;
-		}
+		$wl = new WikiLogin;
+		$wl->login();
     }
 
     /**
@@ -222,7 +263,7 @@ class Wikimate {
  * Models a wiki article page that can have its text altered and retrieved.
  * @author Robert McLeod
  * @since December 2010
- * @version 0.5
+ * @version 0.5.1
  */
 class WikiPage {
 
