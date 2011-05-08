@@ -5,147 +5,143 @@
  *
  * @author Robert McLeod
  * @since December 2010
- * @version 0.4.7
+ * @version 0.5-oop
  */
 
-class Wikimate {
+ class WikiLoginException extends Exception {}
+ 
+ class WikiUtil {
+	
+	public static function printDebug( $title, $objects=array() ) {
 
-    const SECTIONLIST_BY_NAME = 1;
-    const SECTIONLIST_BY_INDEX = 2;
-
-    private $c = null;
-    private $error = array();
-    private $debugMode = false;
-
-    /**
-     * Creates a curl object and logs in
-     * If it can't login the class will exit and return null
-     */
-    function __construct() {
-		$this->debugMode = ( defined( 'WIKIMATE_DEBUG' ) ) ? WIKIMATE_DEBUG : false;
-		if ( !class_exists('Curl') || !class_exists('CurlResponse') ) {
-			echo "Failed to create Wikimate - could not find the Curl class";
-			return NULL;
+		if ( !WIKI_DEBUG ) return;
+		
+		echo "<h1>$title</h1>";
+		
+		foreach ( $objects as $name => $object ) {
+		
+			echo "$name:\n";
+			echo '<pre>',print_r( $object, 1 ), '</pre>';
 		}
-		$this->c = new Curl();
-		$this->c->user_agent = "Wikimate 0.3";
-		$this->c->cookie_file = "wikimate_cookie.txt";
-		if ( !$this->login() ) {
-			echo "Failed to authenticate - {$this->error['login']}";
-			return NULL;
-		}
-    }
 
-    /**
-     * Logs in to the wiki
-     * @return boolean true if logged in
-     */
-    private function login() {
-
-		//Logger::log("Logging in");
-
-		$details = array(
+	}
+	
+ }
+ 
+ class WikiLogin {
+ 
+	private $c;
+	private $details;
+ 
+	public function __construct( $curl ) {
+		
+		$this->c = WikiCurl::getCurlObject();
+		$this->details = self::getDefaultFields();
+	}
+ 
+	private static function getDefaultFields() {
+		
+		return array(
 			'action' => 'login',
 			'lgname' => WIKI_USERNAME,
 			'lgpassword' => WIKI_PASSWORD,
 			'format' => 'json'
 		);
-
-		// Send the login request
-		$loginResult = $this->c->post( WIKI_API, $details )->body;
-
+	}
+ 
+	private function preconditions( $loginResult ) {
+		
 		// Check if we got an API result or the API doc page (invalid request)
 		if ( strstr( $loginResult, "This is an auto-generated MediaWiki API documentation page" ) ) {
-		        $this->error['login'] = "The API could not understand the first login request";
-		        return false;
+		    throw new WikiLogonException("The API could not understand the first login request");
 		}
+	}
+ 
+	private function initialRequest() {
+		
+		$loginResult = $this->c->post( WIKI_API, $this->details )->body;
+
+		$this->preconditions( $loginResult );
 
 		$loginResult = json_decode( $loginResult );
+		
+		Util::printDebug(
+			"Debug output after first login request",
+			array(
+				'Login details' => $this->details,
+				'Login result' => $loginResult
+			)
+		);
+		
+		return $loginResult;
+		
+	}
+ 
+	private function getToken( $loginResult ) {
+		
+		//Logger::log("Sending token {$loginResult->login->token}");
+		$this->details['lgtoken'] = strtolower(trim($loginResult->login->token));
 
-		if ( $this->debugMode ) {
-			echo "Login request:\n";
-			print_r( $details );
-			echo "Login request response:\n";
-			print_r( $loginResult );
+		// Send the confirm token request
+		$loginResult = $this->c->post( WIKI_API, $this->details )->body;
+		
+		$this->preconditions( $loginResult );
+
+		$loginResult = json_decode( $loginResult );
+		
+		Util::printDebug(
+			"Debug output after first login request",
+			array(
+				'Login details' => $this->details,
+				'Login result' => $loginResult
+			)
+		);
+		
+		return $loginResult;
+
+	}
+ 
+	/**
+     * Logs in to the wiki
+     * @return boolean true if logged in
+     */
+    public function login() {
+	
+		//Logger::log("Logging in");
+
+		// Send the login request
+		$loginResult = $this->initialRequest();
+		
+		switch ( $loginResult->login->result ) {
+			case 'NeedToken': $this->getToken( $loginResult ); // will return true if no exception thrown
+			case "Success": return true; break;
+			case 'NotExists': throw new WikiLoginException('The username does not exist'); break;
+			default: throw new WikiLoginException('The API result was: '. $loginResult->login->result); break;
 		}
-
-		if ( $loginResult->login->result == "NeedToken" ) {
-			//Logger::log("Sending token {$loginResult->login->token}");
-			$details['lgtoken'] = strtolower(trim($loginResult->login->token));
-
-			// Send the confirm token request
-			$loginResult = $this->c->post( WIKI_API, $details )->body;
-			
-			// Check if we got an API result or the API doc page (invalid request)
-			if ( strstr( $loginResult, "This is an auto-generated MediaWiki API documentation page" ) ) {
-			        $this->error['login'] = "The API could not understand the confirm token request";
-			        return false;
-			}
-
-			$loginResult = json_decode( $loginResult );
-
-			if ( $this->debugMode ) {
-				echo "Confirm token request:\n";
-				print_r( $details );
-				echo "Confirm token response:\n";
-				print_r( $loginResult );
-			}
-
-			if ( $loginResult->login->result != "Success" ) {
-				// Some more comprehensive error checking
-				switch ($loginResult->login->result) {
-			            case 'NotExists':
-			                $this->error['login'] = 'The username does not exist';
-			                break;
-			            default:
-			                $this->error['login'] = 'The API result was: '. $loginResult->login->result;
-			                break;
-			        }
-				return false;
-			}
-		}
-
-		//Logger::log("Logged in");
-		return true;
-
+		
     }
+ 
+ }
+ 
+ class WikiCurl {
+	
+	private $c;
 
-    /**
-     * Sets the debug mode
-     *
-     * @param boolean $debugMode true to turn debugging on
-     * @return Wikimate this object
-     */
-    public function setDebugMode( $b ) {
-	$this->debugMode = $b;
-	return $this;
-    }
+	function __construct() {
 
-    /**
-     * Either return or print the curl settings.
-     *
-     * @param boolean $echo True to echo the configuration
-     * @return mixed Array of config if $echo is false, (boolean)true if echo is true
-     */
-    public function debugCurlConfig( $echo=false ) {
-        if ( $echo ) {
-            echo "Curl Configuration:\n";
-            print_r($this->c->options);
-            return true;
-        }
-        
-        return $this->c->options;
-    }        
-
-    /**
-     * Returns a WikiPage object populated with the page data
-     * @param string $title The name of the wiki article
-     * @return WikiPage the page object
-     */
-    public function getPage( $title ) {
-		return new WikiPage( $title, $this );
-    }
-
+		$this->c = self::getCurlObject();
+	}
+	
+	public static function getCurlObject() {
+		
+		// Setup curl
+		$c = new Curl();
+		$c->user_agent = "Wikimate 0.5-oop";
+		$c->cookie_file = "wikimate_cookie.txt";
+		
+		return $c;
+	}
+	
     /**
      * Performs a query to the wiki api with the given details
      * @param array $array array of details to be passed in the query
@@ -178,6 +174,48 @@ class Wikimate {
 
 		return unserialize($apiResult);
     }
+	
+	/**
+     * Print the curl settings.
+     */
+    public function debugCurlConfig() {
+		Util::printDebug( "Curl Configuration", array( 'Curl Options' => $this->c->options ) );
+    }        
+	
+}
+	
+ 
+class Wikimate {
+
+    const SECTIONLIST_BY_NAME = 1;
+    const SECTIONLIST_BY_INDEX = 2;
+
+    /**
+     * Creates a curl object and logs in
+     * If it can't login the class will exit and return null
+     */
+    function __construct() {
+		
+		try {
+		
+			$wl = new WikiLogin;
+			$wl->login();
+		} catch ( WikiLoginException $e ) {
+		
+			echo '<h1>',$e->getMessage(),'</h1>';
+			return NULL;
+		}
+    }
+
+    /**
+     * Returns a WikiPage object populated with the page data
+     * @param string $title The name of the wiki article
+     * @return WikiPage the page object
+     */
+    public function getPage( $title ) {
+		return new WikiPage( $title, new WikiCurl );
+    }
+
 }
 
 /**
@@ -214,9 +252,9 @@ class WikiPage {
      * @param string $title name of the wiki article
      * @param WikiBot $wikibot WikiBot object
      */
-    function __construct( $title, $wikimate ) {
+    function __construct( $title, WikiCurl $wc ) {
 
-		$this->wikimate = $wikimate;
+		$this->wc = $wc;
 		$this->title = $title;
 		$this->text = $this->getText(true);
 		
@@ -237,7 +275,7 @@ class WikiPage {
 		$this->text = null;
 		$this->edittoken = null;
 		$this->starttimestamp = null;
-		$this->wikimate = null;
+		$this->wc = null;
 		$this->error = null;
 		$this->invalid = false;
 		return null;
@@ -342,7 +380,7 @@ class WikiPage {
 			'rvprop' => 'content' // need to get page text
 			);
 
-			$r = $this->wikimate->query( $data ); // run the query
+			$r = $this->wc->query( $data ); // run the query
 
 			// Check for errors
 			if ( isset( $r['error'] ) ) {
@@ -526,7 +564,7 @@ class WikiPage {
 			$data['nocreate'] = "true"; // don't create, it should exist
 		}
 
-		$r = $this->wikimate->edit( $data ); // the edit query
+		$r = $this->wc->edit( $data ); // the edit query
 
 		// Check if it worked
 		if ( $r['edit']['result'] == "Success" ) {
@@ -545,7 +583,7 @@ class WikiPage {
 			'titles' => $this->title,
 			);
 
-			$r = $this->wikimate->query( $data );
+			$r = $this->wc->query( $data );
 
 			$page = array_pop( $r['query']['pages'] ); // get the page
 
