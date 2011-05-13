@@ -10,7 +10,7 @@
 	private $c;
 	private $details;
  
-	public function __construct( $curl ) {
+	public function __construct( ) {
 		
 		$this->c = WikiCurl::getCurlObject();
 		$this->details = self::getDefaultDetails();
@@ -57,7 +57,7 @@
 
 		$loginResult = json_decode( $loginResult );
 		
-		Util::printDebug(
+		WikiUtil::printDebug(
 			"Debug output after first login request",
 			array(
 				'Login details' => $this->details,
@@ -87,7 +87,7 @@
 
 		$loginResult = json_decode( $loginResult );
 		
-		Util::printDebug(
+		WikiUtil::printDebug(
 			"Debug output after first login request",
 			array(
 				'Login details' => $this->details,
