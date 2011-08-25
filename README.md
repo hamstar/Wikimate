@@ -11,18 +11,15 @@ First of all make sure you download [Sean Hubers awesome curl wrapper](http://gi
 ## Configuration
 
 Need to make sure you have some configuration constants before hand so edit the config.php
-
-    define('WIKI_USERNAME','testbot'); // bot name
-    define('WIKI_PASSWORD','bottest'); // bot password
-    define('WIKI_API','http://example.com/api.php'); // api url
     define('WIKIMATE_DEBUG', false); // turn debug output on/off
+No need to make any more constants
 
 ## Usage
 
 Include the `globals.php` file and create a new Wikimate object.
 
 	include 'globals.php';
-	$wiki = new Wikimate;
+	$wiki = new Wikimate($api_url,$username,$password);
 
 On creating a new Wikimate object it will log into the wiki api - **if it fails to authenticate** your `$wiki` object will be null.  You should get a meaningful error message telling you why it didn't authenticate.
 
