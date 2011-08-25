@@ -12,6 +12,9 @@ class Wikimate {
 
     const SECTIONLIST_BY_NAME = 1;
     const SECTIONLIST_BY_INDEX = 2;
+    private $api;
+    private $username;
+    private $password;
 
     private $c = null;
     private $error = array();
@@ -21,7 +24,10 @@ class Wikimate {
      * Creates a curl object and logs in
      * If it can't login the class will exit and return null
      */
-    function __construct() {
+    function __construct($api,$username="",$password="") {
+    		$this->api = $api;
+    		$this->username = $username;
+    		$this->password = $password;
 		$this->debugMode = ( defined( 'WIKIMATE_DEBUG' ) ) ? WIKIMATE_DEBUG : false;
 		if ( !class_exists('Curl') || !class_exists('CurlResponse') ) {
 			echo "Failed to create Wikimate - could not find the Curl class";
@@ -46,13 +52,13 @@ class Wikimate {
 
 		$details = array(
 			'action' => 'login',
-			'lgname' => WIKI_USERNAME,
-			'lgpassword' => WIKI_PASSWORD,
+			'lgname' => $this->username,
+			'lgpassword' => $this->password,
 			'format' => 'json'
 		);
 
 		// Send the login request
-		$loginResult = $this->c->post( WIKI_API, $details )->body;
+		$loginResult = $this->c->post( $this->api, $details )->body;
 
 		// Check if we got an API result or the API doc page (invalid request)
 		if ( strstr( $loginResult, "This is an auto-generated MediaWiki API documentation page" ) ) {
@@ -74,7 +80,7 @@ class Wikimate {
 			$details['lgtoken'] = strtolower(trim($loginResult->login->token));
 
 			// Send the confirm token request
-			$loginResult = $this->c->post( WIKI_API, $details )->body;
+			$loginResult = $this->c->post( $this->api, $details )->body;
 			
 			// Check if we got an API result or the API doc page (invalid request)
 			if ( strstr( $loginResult, "This is an auto-generated MediaWiki API documentation page" ) ) {
@@ -156,7 +162,7 @@ class Wikimate {
 		$array['action'] = 'query';
 		$array['format'] = 'php';
 
-		$apiResult = $this->c->get( WIKI_API, $array );
+		$apiResult = $this->c->get( $this->api, $array );
 
 		return unserialize($apiResult);
 		
@@ -174,7 +180,7 @@ class Wikimate {
 		$array['action'] = 'edit';
 		$array['format'] = 'php';
 
-		$apiResult = $c->post( WIKI_API, $array );
+		$apiResult = $c->post( $this->api, $array );
 
 		return unserialize($apiResult);
     }
