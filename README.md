@@ -11,7 +11,9 @@ First of all make sure you download [Sean Hubers awesome curl wrapper](http://gi
 ## Configuration
 
 Need to make sure you have some configuration constants before hand so edit the config.php
+
     define('WIKIMATE_DEBUG', false); // turn debug output on/off
+    
 No need to make any more constants
 
 ## Usage
