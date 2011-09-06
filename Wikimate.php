@@ -184,6 +184,9 @@ class Wikimate {
 
 		return unserialize($apiResult);
     }
+    public function getError(){
+    	return $this->error;
+    }
 }
 
 /**
