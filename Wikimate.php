@@ -12,6 +12,7 @@ class Wikimate {
 
     const SECTIONLIST_BY_NAME = 1;
     const SECTIONLIST_BY_INDEX = 2;
+    
     private $api;
     private $username;
     private $password;
@@ -24,22 +25,40 @@ class Wikimate {
      * Creates a curl object and logs in
      * If it can't login the class will exit and return null
      */
-    function __construct($api,$username="",$password="") {
+    function __construct( $api, $username, $password ) {
+    	
     		$this->api = $api;
     		$this->username = $username;
     		$this->password = $password;
-		$this->debugMode = ( defined( 'WIKIMATE_DEBUG' ) ) ? WIKIMATE_DEBUG : false;
-		if ( !class_exists('Curl') || !class_exists('CurlResponse') ) {
-			echo "Failed to create Wikimate - could not find the Curl class";
-			return NULL;
-		}
-		$this->c = new Curl();
-		$this->c->user_agent = "Wikimate 0.3";
-		$this->c->cookie_file = "wikimate_cookie.txt";
+    		
+		$this->initCurl();		
+		$this->checkCookieFileIsWritable();
+		
 		if ( !$this->login() ) {
 			echo "Failed to authenticate - {$this->error['login']}";
 			return NULL;
 		}
+    }
+    
+    private function initCurl() {
+    	
+    	if ( !class_exists('Curl') || !class_exists('CurlResponse') )
+		throw new Exception("Failed to create Wikimate - could not find the Curl class");
+		
+	$this->c = new Curl();
+	$this->c->user_agent = "Wikimate 0.4.7";
+	$this->c->cookie_file = "wikimate_cookie.txt";
+    }
+    
+    private function checkCookieFileIsWritable() {
+    	
+	if ( !file_exists( $this->c->cookie_file ) )
+		if ( file_put_contents( $this->c->cookie_file, "" ) === FALSE )
+			throw new Exception("Could not write to cookie file, please check that the web server can write to ".dirname(__SCRIPT__));
+
+	if ( file_exists( $this->c->cookie_file ) )
+		if ( !is_writable( $this->c->cookie_file ) )
+			throw new Exception("The cookie file is not writable, please check that the web server can write to ".dirname(__SCRIPT__));
     }
 
     /**
