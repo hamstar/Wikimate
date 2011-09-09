@@ -5,7 +5,7 @@
  *
  * @author Robert McLeod
  * @since December 2010
- * @version 0.4.7
+ * @version 0.5
  */
 
 class Wikimate {
@@ -34,10 +34,8 @@ class Wikimate {
 		$this->initCurl();		
 		$this->checkCookieFileIsWritable();
 		
-		if ( !$this->login() ) {
-			echo "Failed to authenticate - {$this->error['login']}";
-			return NULL;
-		}
+		if ( !$this->login() )
+			throw new Exception("Couldn't login because: {$this->error['login']}");
     }
     
     private function initCurl() {
