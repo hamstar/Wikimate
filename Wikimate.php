@@ -44,7 +44,7 @@ class Wikimate {
 		throw new Exception("Failed to create Wikimate - could not find the Curl class");
 		
 	$this->c = new Curl();
-	$this->c->user_agent = "Wikimate 0.4.7";
+	$this->c->user_agent = "Wikimate 0.5";
 	$this->c->cookie_file = "wikimate_cookie.txt";
     }
     
@@ -153,7 +153,7 @@ class Wikimate {
     public function debugCurlConfig( $echo=false ) {
         if ( $echo ) {
             echo "Curl Configuration:\n";
-            print_r($this->c->options);
+            echo "<pre>",print_r($this->c->options,1),"</pre>";
             return true;
         }
         
