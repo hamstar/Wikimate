@@ -8,20 +8,19 @@ Wikimate is a wrapper for the MediaWiki API that aims to be very easy to use.  I
 
 First of all make sure you download [Sean Hubers awesome curl wrapper](http://github.com/shuber/curl) and put `curl.php` in the directory with all these files.
 
-## Configuration
-
-Need to make sure you have some configuration constants before hand so edit the config.php
-
-    define('WIKIMATE_DEBUG', false); // turn debug output on/off
-    
-No need to make any more constants
+Also make sure that the server has access to write to the folder, or make a wikimate_cookie.txt file in the same directory as the wikimate files and give the server write access to that.  If you don't do this you won't be able to login and Wikimate will throw an exception.
 
 ## Usage
 
-Include the `globals.php` file and create a new Wikimate object.
+Include the `globals.php` file and create a new Wikimate object with username, password and the api address.
 
 	include 'globals.php';
-	$wiki = new Wikimate($api_url,$username,$password);
+	
+	$api = 'http://example.com/api.php';
+	$username = 'bot';
+	$password = 'password';
+	
+	$wiki = new Wikimate($api_url, $username, $password);
 
 On creating a new Wikimate object it will log into the wiki api - **if it fails to authenticate** your `$wiki` object will be null.  You should get a meaningful error message telling you why it didn't authenticate.
 
@@ -126,6 +125,12 @@ Both methods return an array of the MediaWiki API result.
 * Sean Hubers [awesome curl wrapper](http://github.com/shuber/curl)
 
 # Changelog
+
+## Version 0.5
+
+* Removed the use of constants in favour of constructor arguments
+* Added checks that throw an exception if can't write to wikimate_cookie.txt
+* Throws exception if curl library not loaded
 
 ## Version 0.4
 
