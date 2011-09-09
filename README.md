@@ -20,7 +20,13 @@ Include the `globals.php` file and create a new Wikimate object with username, p
 	$username = 'bot';
 	$password = 'password';
 	
-	$wiki = new Wikimate($api_url, $username, $password);
+	try {
+	
+		$wiki = new Wikimate($api_url, $username, $password);
+	} catch ( Exception $e ) {
+		
+		echo "An error occured: ".$e->getMessage();
+	}
 
 On creating a new Wikimate object it will log into the wiki api - **if it fails to authenticate** your `$wiki` object will be null.  You should get a meaningful error message telling you why it didn't authenticate.
 
@@ -131,6 +137,7 @@ Both methods return an array of the MediaWiki API result.
 * Removed the use of constants in favour of constructor arguments
 * Added checks that throw an exception if can't write to wikimate_cookie.txt
 * Throws exception if curl library not loaded
+* Throws exception if can't login
 
 ## Version 0.4
 
