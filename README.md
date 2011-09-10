@@ -1,12 +1,12 @@
 # What is this?
 Wikimate is a wrapper for the MediaWiki API that aims to be very easy to use.  It consists of two classes currently:
 
-* **Wikimate** - serves as a loader and manager for different wiki objects (e.g. pages)
-* **WikiPage** - the only object made so far provides an interface to getting/editing pages
+* **Wikimate** - Serves as a loader and manager for different wiki objects (e.g. pages)
+* **WikiPage** - The only object made so far. Provides an interface to getting/editing pages
 
 # How do I use it?
 
-First of all make sure you download [Sean Hubers awesome curl wrapper](http://github.com/shuber/curl) and put `curl.php` in the directory with all these files.
+First of all make sure you download [Sean Huber's awesome curl wrapper](http://github.com/shuber/curl) and copy `curl.php` and the `lib` folder into your wikimate directory.
 
 Also make sure that the server has access to write to the folder, or make a wikimate_cookie.txt file in the same directory as the wikimate files and give the server write access to that.  If you don't do this you won't be able to login and Wikimate will throw an exception.
 
@@ -16,15 +16,16 @@ Include the `globals.php` file and create a new Wikimate object with username, p
 
 	include 'globals.php';
 	
-	$api = 'http://example.com/api.php';
+	$api_url = 'http://example.com/api.php';
 	$username = 'bot';
 	$password = 'password';
 	
-	try {
-	
+	try
+	{
 		$wiki = new Wikimate($api_url, $username, $password);
-	} catch ( Exception $e ) {
-		
+	}
+	catch ( Exception $e )
+	{
 		echo "An error occured: ".$e->getMessage();
 	}
 
