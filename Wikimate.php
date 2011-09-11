@@ -25,17 +25,12 @@ class Wikimate {
      * Creates a curl object and logs in
      * If it can't login the class will exit and return null
      */
-    function __construct( $api, $username, $password ) {
+    function __construct( $api ) {
     	
     		$this->api = $api;
-    		$this->username = $username;
-    		$this->password = $password;
     		
 		$this->initCurl();		
 		$this->checkCookieFileIsWritable();
-		
-		if ( !$this->login() )
-			throw new Exception("Couldn't login because: {$this->error['login']}");
     }
     
     private function initCurl() {
@@ -63,14 +58,14 @@ class Wikimate {
      * Logs in to the wiki
      * @return boolean true if logged in
      */
-    private function login() {
+    public function login($username,$password) {
 
 		//Logger::log("Logging in");
 
 		$details = array(
 			'action' => 'login',
-			'lgname' => $this->username,
-			'lgpassword' => $this->password,
+			'lgname' => $username,
+			'lgpassword' => $password,
 			'format' => 'json'
 		);
 
@@ -80,6 +75,7 @@ class Wikimate {
 		// Check if we got an API result or the API doc page (invalid request)
 		if ( strstr( $loginResult, "This is an auto-generated MediaWiki API documentation page" ) ) {
 		        $this->error['login'] = "The API could not understand the first login request";
+		        throw new Exception("Couldn't login because: {$this->error['login']}");
 		        return false;
 		}
 
@@ -102,6 +98,7 @@ class Wikimate {
 			// Check if we got an API result or the API doc page (invalid request)
 			if ( strstr( $loginResult, "This is an auto-generated MediaWiki API documentation page" ) ) {
 			        $this->error['login'] = "The API could not understand the confirm token request";
+			        throw new Exception("Couldn't login because: {$this->error['login']}");
 			        return false;
 			}
 
@@ -124,6 +121,7 @@ class Wikimate {
 			                $this->error['login'] = 'The API result was: '. $loginResult->login->result;
 			                break;
 			        }
+			    throw new Exception("Couldn't login because: {$this->error['login']}");
 				return false;
 			}
 		}
