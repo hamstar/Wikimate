@@ -75,7 +75,6 @@ class Wikimate {
 		// Check if we got an API result or the API doc page (invalid request)
 		if ( strstr( $loginResult, "This is an auto-generated MediaWiki API documentation page" ) ) {
 		        $this->error['login'] = "The API could not understand the first login request";
-		        throw new Exception("Couldn't login because: {$this->error['login']}");
 		        return false;
 		}
 
@@ -98,7 +97,6 @@ class Wikimate {
 			// Check if we got an API result or the API doc page (invalid request)
 			if ( strstr( $loginResult, "This is an auto-generated MediaWiki API documentation page" ) ) {
 			        $this->error['login'] = "The API could not understand the confirm token request";
-			        throw new Exception("Couldn't login because: {$this->error['login']}");
 			        return false;
 			}
 
@@ -121,7 +119,6 @@ class Wikimate {
 			                $this->error['login'] = 'The API result was: '. $loginResult->login->result;
 			                break;
 			        }
-			    throw new Exception("Couldn't login because: {$this->error['login']}");
 				return false;
 			}
 		}
