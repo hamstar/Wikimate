@@ -22,7 +22,13 @@ Include the `globals.php` file and create a new Wikimate object with username, p
 	
 	try
 	{
-		$wiki = new Wikimate($api_url, $username, $password);
+		$wiki = new Wikimate($api_url);
+		if ($wiki->login($username,$password))
+			echo 'user logged in .' ;
+		else {
+			$error = $wiki->getError();
+			$echo $error['login'];
+		}
 	}
 	catch ( Exception $e )
 	{
