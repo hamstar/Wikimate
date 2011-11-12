@@ -391,7 +391,7 @@ class WikiPage {
 			unset( $page );
 
 			// Now we need to get the section information
-			preg_match_all("@(={1,5}.*)@", $this->text, $m );
+			preg_match_all('/((\r|\n)={1,5}.*={1,5}(\r|\n))/', $this->text, $m ); // TODO: improve regexp if possible
 			
 			// Set the intro section (between title and first section)
 			$this->sections->byIndex[0]['offset'] = 0;
