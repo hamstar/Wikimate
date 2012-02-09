@@ -7,11 +7,13 @@ class WikiQuery {
 	
 	private $curl;
 	private $auth;
+	private $api_url;
 	
 	function __construct( WikiAuth $auth, Curl $curl ) {
 		
 		$this->auth = $auth;
 		$this->curl = $curl;
+		$this->api_url = $auth->get_api_url();
 	}
 	
 	function query( $data ) {
@@ -19,7 +21,13 @@ class WikiQuery {
 		$data['action'] = 'query';
 		$data['format'] = 'php';
 
-		$response = $this->c->get( $this->api, $data );
+		if ( defined( 'WIKIMATE_DEBUG' ) )
+			print_r( $data );
+
+		$response = $this->curl->get( $this->api_url, $data );
+
+		if ( defined( 'WIKIMATE_DEBUG' ) )
+			print_r( unserialize($response) );
 
 		return unserialize($response);
 	}
@@ -32,7 +40,13 @@ class WikiQuery {
 		$data['action'] = 'edit';
 		$data['format'] = 'php';
 
-		$response = $c->post( $this->api, $data );
+		if ( defined( 'WIKIMATE_DEBUG' ) )
+			print_r( $data );
+
+		$response = $c->post( $this->api_url, $data );
+
+		if ( defined( 'WIKIMATE_DEBUG' ) )
+			print_r( unserialize($response) );
 
 		return unserialize($response);
 	}
