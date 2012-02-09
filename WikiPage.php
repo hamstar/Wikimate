@@ -9,9 +9,7 @@ class WikiPage {
 	
 	function __construct($title, WikiQuery $query) {
 		
-		$page_result = $query->get_page( $title );
-		
-		$data = array( )
+		$page_result = $query->get_page_data( $title );
 	}
 	
 	function save() {
@@ -26,7 +24,7 @@ class WikiPage {
 		$this->query->edit( $data );
 	}
 	
-	function extract_categories( $text ) {
+	private function extract_categories( $text ) {
 		
 		$array = array();
 		
@@ -36,7 +34,7 @@ class WikiPage {
 		return $array;
 	}
 	
-	function build_categories() {
+	private function build_categories() {
 		
 		$category_string = "";
 		
@@ -57,7 +55,11 @@ class WikiPage {
 		$this->text = preg_replace("/\[\[Category:.*\]\]","", $text);
 	}
 	
-	function get_section() {
+	function get_sections() {
+		
+	}
+	
+	function get_section( $name_or_number ) {
 		
 	}
 	
@@ -66,11 +68,14 @@ class WikiPage {
 	}
 	
 	function get_categories() {
-		
 		return $this->categories();
 	}
 	
 	function add_categories( $cats=array() ) {
-		
+		$this->categories = array_merge( $this->categories, $cats );
+	}
+	
+	function set_categories( $cats = array() ) {
+		$this->categories = $cats;
 	}
 }
