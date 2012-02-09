@@ -26,6 +26,7 @@ Basic usage is almost like before:
 ## Tests
 
 Tests to be done:
+
 * Logging in with good details
 * Logging in with bad details
 * Getting text from uncreated page
