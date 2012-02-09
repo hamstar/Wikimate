@@ -1,8 +1,7 @@
 <?php
 
 class WikiQueryException extends Exception{}
-class WikiQueryInvalidPageException extends Exception{}
-class WikiQueryPageMissingException extends Exception{}
+class WikiQueryPageSaveException extends Exception{}
 
 class WikiQuery {
 	
@@ -56,8 +55,16 @@ class WikiQuery {
 		return array_pop( $response['query']['pages'] ); // get the page (there should only be one)
 	}
 	
-	function save_page_data( $title, $text ) {
+	function save_page_data( $data ) {
 		
+		// TODO: precons to ensure proper data given
 		
+		$data['md5'] => md5( $data['text'] );
+		$data['bot'] => "true";
+		
+		$response = $this->edit( $data );
+		
+		if ( $response['edit']['result'] != "Success" )
+			throw new WikiQueryPageSaveException();
 	}
 }
