@@ -56,6 +56,9 @@ class WikiPage {
 		}
 		
 		$this->query->set_page_data( $data );
+		$this->refresh(); // update the page
+		
+		return $this;
 	}
 	
 	/**
@@ -65,6 +68,7 @@ class WikiPage {
 	function refresh() {
 		
 		$this->__construct( $this->title, $this->query );
+		return $this;
 	}
 	
 	/**
@@ -140,10 +144,14 @@ class WikiPage {
 	}
 	
 	function add_categories( $cats=array() ) {
+		
 		$this->categories = array_merge( $this->categories, $cats );
+		return $this;
 	}
 	
 	function set_categories( $cats = array() ) {
+		
 		$this->categories = $cats;
+		return $this;
 	}
 }
