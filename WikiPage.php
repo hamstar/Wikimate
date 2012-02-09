@@ -26,6 +26,9 @@ class WikiPage {
 	 */
 	private function process_page_response( $page ) {
 		
+		if ( defined( 'WIKIMATE_DEBUG' ) )
+			print_r( $page );
+		
 		if ( isset( $page['invalid'] ) )
 			throw new WikiQueryInvalidPageException();
 			
@@ -54,6 +57,9 @@ class WikiPage {
 		} else {
 			$data['nocreate'] = "true"; // don't create, it should exist
 		}
+		
+		if ( defined( 'WIKIMATE_DEBUG' ) )
+			print_r( $data );
 		
 		$this->query->set_page_data( $data );
 		$this->refresh(); // update the page
