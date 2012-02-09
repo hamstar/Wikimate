@@ -22,12 +22,12 @@ class WikiQuery {
 		$data['format'] = 'php';
 
 		if ( defined( 'WIKIMATE_DEBUG' ) )
-			print_r( $data );
+			echo __CLASS__.'::'.__METHOD__.' line '.__LINE__,":\n",print_r( $data, 1 );
 
 		$response = $this->curl->get( $this->api_url, $data );
 
 		if ( defined( 'WIKIMATE_DEBUG' ) )
-			print_r( unserialize($response) );
+			echo __CLASS__.'::'.__METHOD__.' line '.__LINE__,":\n",print_r( unserialize($response), 1 );
 
 		return unserialize($response);
 	}
@@ -41,12 +41,12 @@ class WikiQuery {
 		$data['format'] = 'php';
 
 		if ( defined( 'WIKIMATE_DEBUG' ) )
-			print_r( $data );
+			echo __CLASS__.'::'.__METHOD__.' line '.__LINE__,":\n",print_r( $data, 1 );
 
 		$response = $c->post( $this->api_url, $data );
 
 		if ( defined( 'WIKIMATE_DEBUG' ) )
-			print_r( unserialize($response) );
+			echo __CLASS__.'::'.__METHOD__.' line '.__LINE__,":\n",print_r( unserialize($response), 1 );
 
 		return unserialize($response);
 	}
