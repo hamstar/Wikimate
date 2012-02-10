@@ -28,12 +28,12 @@ class WikiQuery {
 		$data['format'] = 'php';
 
 		if ( defined( 'WIKIMATE_DEBUG' ) )
-			echo __CLASS__.'::'.__METHOD__.' line '.__LINE__,":\n",print_r( $data, 1 );
+			WikiMate::print_debug(__CLASS__.'::'.__METHOD__.' line '.__LINE__,":\n", $data );
 
 		$response = $this->curl->get( $this->api_url, $data );
 
 		if ( defined( 'WIKIMATE_DEBUG' ) )
-			echo __CLASS__.'::'.__METHOD__.' line '.__LINE__,":\n",print_r( unserialize($response), 1 );
+			WikiMate::print_debug(__CLASS__.'::'.__METHOD__.' line '.__LINE__,":\n", unserialize($response) );
 
 		return unserialize($response);
 	}
@@ -47,12 +47,12 @@ class WikiQuery {
 		$data['format'] = 'php';
 
 		if ( defined( 'WIKIMATE_DEBUG' ) )
-			echo __CLASS__.'::'.__METHOD__.' line '.__LINE__,":\n",print_r( $data, 1 );
+			WikiMate::print_debug(__CLASS__.'::'.__METHOD__.' line '.__LINE__,":\n", $data );
 
 		$response = $c->post( $this->api_url, $data );
 
 		if ( defined( 'WIKIMATE_DEBUG' ) )
-			echo __CLASS__.'::'.__METHOD__.' line '.__LINE__,":\n",print_r( unserialize($response), 1 );
+			WikiMate::print_debug(__CLASS__.'::'.__METHOD__.' line '.__LINE__,":\n", unserialize($response) );
 
 		return unserialize($response);
 	}
