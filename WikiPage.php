@@ -34,11 +34,8 @@ class WikiPage {
 	 */
 	private function process_page_response( $page ) {
 		
-		if ( defined( 'WIKIMATE_DEBUG' ) )
-			print_r( $page );
-		
 		if ( isset( $page['invalid'] ) )
-			throw new WikiQueryInvalidPageException();
+			throw new WikiQueryInvalidPageException("Invalid page");
 			
 		if ( !isset( $page['missing'] ) ) {
 			$this->exists = true;
@@ -65,10 +62,7 @@ class WikiPage {
 		} else {
 			$data['nocreate'] = "true"; // don't create, it should exist
 		}
-		
-		if ( defined( 'WIKIMATE_DEBUG' ) )
-			print_r( $data );
-		
+
 		$this->query->set_page_data( $data );
 		$this->refresh(); // update the page
 		
@@ -167,5 +161,20 @@ class WikiPage {
 		
 		$this->categories = $cats;
 		return $this;
+	}
+	
+	/**
+	 * Searches for the categories given and removes them
+	 * @param array $cats the categories to remove
+	 */
+	function remove_categories( $cats=array() ) {
+		
+		if ( count( $cats ) == 0 )
+			return false;
+		
+		foreach ( $cats as $cat )
+			foreach ( $this->categories as $i => $_cat )
+				if ( $cat == $_cat )
+					unset( $this->categories[$i] );
 	}
 }
