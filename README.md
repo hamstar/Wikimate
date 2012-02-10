@@ -1,4 +1,4 @@
-# What is this
+# What is this is?
 
 This is a rewrite of the Wikimate class to be more object oriented.  People like and are using the non-oop class so I thought I would leave it as it is.
 
@@ -11,6 +11,8 @@ I'm working on it... the login system is not yet done
 ## How to use
 
 Basic usage is almost like before:
+
+    # define('WIKIMATE_DEBUG',1); // uncomment to debug
 
     try {
         $wikimate = new WikiMate();
@@ -39,3 +41,9 @@ Tests to be done:
 * Setting text and getting text
 * Setting categories and getting categories
 * Adding categories and getting categories
+* Testing invalid page
+
+# Licence
+
+![CC BY-NC 3.0 NZ](http://i.creativecommons.org/l/by-nc/3.0/nz/88x31.png)
+This work is licensed under a [Creative Commons Attribution-NonCommercial 3.0 New Zealand License](http://creativecommons.org/licenses/by-nc/3.0/nz/).
