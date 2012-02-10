@@ -8,9 +8,9 @@ class WikiQuery {
 	private $curl;
 	private $api_url;
 	
-	function __construct( Curl $curl, $api_url ) {
+	function __construct( Curl &$curl, $api_url ) {
 		
-		$this->curl = $curl;
+		$this->curl = &$curl;
 		$this->api_url = $api_url;
 	}
 	
