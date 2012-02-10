@@ -62,7 +62,7 @@ class WikiQuery {
 		
 		// Check for errors
 		if ( isset( $response['error'] ) )
-			throw new WikiQueryException();
+			throw new WikiQueryException("Failed to get page data for '$title' because {$response['error']}");
 
 		return array_pop( $response['query']['pages'] ); // get the page (there should only be one)
 	}
@@ -77,6 +77,6 @@ class WikiQuery {
 		$response = $this->edit( $data );
 		
 		if ( $response['edit']['result'] != "Success" )
-			throw new WikiQueryPageSaveException();
+			throw new WikiQueryPageSaveException("Failed to save page data for {$data['title']}");
 	}
 }
