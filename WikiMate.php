@@ -24,4 +24,23 @@ class WikiMate {
 		
 		return new WikiPage( $title, $this->query );
 	}
+	
+	/**
+	 * Prints a debug message along with any data given
+	 * Debugging can be turned on by setting the WIKIMATE_DEBUG
+	 * constant.
+	 * @param string $message a debug message
+	 * @param array $data array data to be printed out
+	 * @return boolean false if debugging is turned off
+	 */
+	static function print_debug( $message, $data=array() ) {
+		
+		if ( !defined('WIKIMATE_DEBUG') )
+			return false;
+		
+		echo "$message\n";
+		
+		if ( count( $data ) > 0 )
+			echo "<pre>", print_r( $data, 1 ), "</pre>\n";
+	}
 }
