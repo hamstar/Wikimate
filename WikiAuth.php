@@ -34,7 +34,7 @@ class WikiAuth {
 			'format' => 'json'
 		);
 
-		//print_debug("Login details", $data );
+		WikiMate::print_debug("Using login details:", $data );
 
 		// Send the login request
 		$response = $this->curl->post( $this->api, $data )->body;
@@ -50,7 +50,7 @@ class WikiAuth {
 		// Now we know its not an error we can decode the json
 		$response = json_decode( $response );
 		
-		//print_debug("Login response", $response );
+		WikiMate::print_debug("Login response", $response );
 		
 		if ( $response->login->result != "Success" ) {
 			// Some more comprehensive error checking
@@ -59,7 +59,7 @@ class WikiAuth {
 		                throw new WikiAuthException("The username does not exist");
 		                break;
 		            default:
-		                throw new WikiAuthException('The API result was: '. $loginResult->login->result);
+		                throw new WikiAuthException('The API result was: '. $response->login->result);
 		                break;
 			}
 		}
