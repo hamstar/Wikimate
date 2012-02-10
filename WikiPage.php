@@ -24,7 +24,7 @@ class WikiPage {
 	function __construct($title, WikiQuery $query) {
 		
 		$page = $query->get_page_data( $title );
-		$this->check_page_response( $page );
+		$this->process_page_response( $page );
 	}
 	
 	/**
@@ -35,7 +35,7 @@ class WikiPage {
 	private function process_page_response( $page ) {
 		
 		if ( isset( $page['invalid'] ) )
-			throw new WikiQueryInvalidPageException("Invalid page");
+			throw new WikiPageInvalidPageException("Invalid page");
 			
 		if ( !isset( $page['missing'] ) ) {
 			$this->exists = true;
