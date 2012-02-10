@@ -3,6 +3,14 @@
 class WikiQueryException extends Exception{}
 class WikiQueryPageSaveException extends Exception{}
 
+/**
+ * This object handles all queries to and from the API exception for
+ * logon queries.  Provides methods to get and save page data as well
+ * as more generic edit and query operations.
+ * @author	Robert McLeod
+ * @since	Febuary 10th 2012
+ * @licence	http://creativecommons.org/licenses/by-nc/3.0/nz/
+ */
 class WikiQuery {
 	
 	private $curl;
