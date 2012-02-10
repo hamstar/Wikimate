@@ -45,5 +45,8 @@ Tests to be done:
 
 # Licence
 
-![CC BY-NC 3.0 NZ](http://i.creativecommons.org/l/by-nc/3.0/nz/88x31.png)
 This work is licensed under a [Creative Commons Attribution-NonCommercial 3.0 New Zealand License](http://creativecommons.org/licenses/by-nc/3.0/nz/).
+
+![CC BY-NC 3.0 NZ](http://i.creativecommons.org/l/by-nc/3.0/nz/88x31.png)
+
+If you would like to use this commercially please contact me at <robert.mcleod@itpeople.co.nz>
