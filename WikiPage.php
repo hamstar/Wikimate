@@ -2,6 +2,14 @@
 
 class WikiPageInvalidPageException extends Exception{}
 
+/**
+ * A wiki page modeled as an object.  Handles the removal and addition
+ * of categories, page text in wiki code and saving and getting data
+ * pertinent to the page
+ * @author	Robert McLeod
+ * @since	Febuary 10th 2012
+ * @licence	http://creativecommons.org/licenses/by-nc/3.0/nz/
+ */
 class WikiPage {
 	
 	private $query;
