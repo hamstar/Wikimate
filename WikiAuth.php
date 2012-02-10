@@ -2,6 +2,14 @@
 
 class WikiAuthException extends Exception{};
 
+/**
+ * This object authenticates with the wiki api using a shared curl
+ * object.  Cookies generated with this class are used by other
+ * classes because the curl object is passed by reference.
+ * @author	Robert McLeod
+ * @since	Febuary 10th 2012
+ * @licence	http://creativecommons.org/licenses/by-nc/3.0/nz/
+ */
 class WikiAuth {
 	
 	private $api_url;
