@@ -12,16 +12,20 @@ I'm working on it... the login system is not yet done
 
 Basic usage is almost like before:
 
-    $wikimate = new WikiMate();
-    $page = $wikimate->get_page("Toyota Hilux");
-    
-    if ( $page->exists() )
-      echo $page->get_text(); // notice this has no categories in the print out
-      
-    print_r( $page->get_categories() );
-    
-    $page->add_category("Indestructible Vehicles")->save(); // adds the category and saves the page
-    $page->set_text( "blah" )->refresh(); // this text won't be saved
+    try {
+        $wikimate = new WikiMate();
+        $page = $wikimate->get_page("Toyota Hilux");
+        
+        if ( $page->exists() )
+          echo $page->get_text(); // notice this has no categories in the print out
+          
+        print_r( $page->get_categories() );
+        
+        $page->add_category("Indestructible Vehicles")->save(); // adds the category and saves the page
+        $page->set_text( "blah" )->refresh(); // this text won't be saved
+    } catch ( Exception $e ) {
+        echo "<pre>$e</pre>";
+    }
   
 ## Tests
 
