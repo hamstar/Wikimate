@@ -6,14 +6,12 @@ class WikiQueryPageSaveException extends Exception{}
 class WikiQuery {
 	
 	private $curl;
-	private $auth;
 	private $api_url;
 	
-	function __construct( WikiAuth $auth, Curl $curl ) {
+	function __construct( Curl $curl, $api_url ) {
 		
-		$this->auth = $auth;
 		$this->curl = $curl;
-		$this->api_url = $auth->get_api_url();
+		$this->api_url = $api_url;
 	}
 	
 	function query( $data ) {
