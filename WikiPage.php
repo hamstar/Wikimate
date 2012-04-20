@@ -46,7 +46,25 @@ class WikiPage {
 		$this->starttimestamp = $page['starttimestamp'];
 	}
 	
+	/**
+	 * Saves the page to the wiki
+	 *
+	 * @return WikiPage this
+	 */
 	function save() {
+		
+		$this->query->set_page_data( $this->build_page_data() );
+		$this->refresh(); // update the page
+		
+		return $this;
+	}
+	
+	/**
+	 * Puts the new page data into an array to send to the API
+	 *
+	 * @return array of data
+	 */
+	private function build_page_data() {
 		
 		$text = $this->text . $this->build_categories();
 		
@@ -62,11 +80,8 @@ class WikiPage {
 		} else {
 			$data['nocreate'] = "true"; // don't create, it should exist
 		}
-
-		$this->query->set_page_data( $data );
-		$this->refresh(); // update the page
 		
-		return $this;
+		return $data;
 	}
 	
 	/**
