@@ -179,6 +179,21 @@ class Wikimate {
 		return unserialize($apiResult);
 		
     }
+    
+    /**
+     * Performs a parse query to the wiki API.
+     * @param array $array array of details to be passed in the query.
+     * @return array unserialized php output from the wiki API.
+     */
+    public function parse( $array )
+    {
+        $array['action'] = 'parse';
+        $array['format'] = 'php';
+
+        $apiResult = $this->c->get( $this->api, $array );
+
+        return unserialize( $apiResult );
+    }
 
     /**
      * Perfoms an edit query to the wiki api
