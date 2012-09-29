@@ -406,16 +406,16 @@ class WikiPage {
 			unset( $page );
 
 			// Now we need to get the section information
-			preg_match_all('/((\r|\n)={1,5}.*={1,5}(\r|\n))/', $this->text, $m ); // TODO: improve regexp if possible
+			preg_match_all('/={1,6}.*={1,6}\n/', $this->text, $m ); // TODO: improve regexp if possible
 			
 			// Set the intro section (between title and first section)
 			$this->sections->byIndex[0]['offset'] = 0;
 			$this->sections->byName['intro']['offset'] = 0;
 			
-			if ( !empty( $m[1] ) ) {
+			if ( !empty( $m[0] ) ) {
 				
 				// Array of section names
-				$sections = $m[1];
+				$sections = $m[0];
 				
 				// Setup the current section
 				$currIndex = 0;
