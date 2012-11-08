@@ -27,7 +27,7 @@ Include the `globals.php` file and create a new Wikimate object with username, p
 			echo 'user logged in .' ;
 		else {
 			$error = $wiki->getError();
-			$echo $error['login'];
+			echo $error['login'];
 		}
 	}
 	catch ( Exception $e )
