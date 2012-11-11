@@ -104,6 +104,13 @@ Here's some easier functions for editing sections
 	$page->setSection( $text, $section, $summary, $minor );
 	$page->newSection( $sectionTitle, $text );
 
+### Deleting...
+
+If the account you're using has delete permissions, you can delete entire pages with `delete()`:
+
+    $page->delete("The page was created accidentally in the first place."); // returns true if the delete was successful
+
+If you pass in a message argument, it will be recorded as a reason for the deletion.
 
 ### Other stuff
 
