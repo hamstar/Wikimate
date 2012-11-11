@@ -211,6 +211,23 @@ class Wikimate {
 
 		return unserialize($apiResult);
     }
+
+    /**
+     * Perfoms a delete query to the wiki api
+     * @param array $array array of details to be passed in the query
+     * @return array unserialized php output from the wiki
+     */
+    public function delete( $array ) {
+		$c = $this->c;
+		$c->headers['Content-Type'] = "application/x-www-form-urlencoded";
+
+		$array['action'] = 'delete';
+		$array['format'] = 'php';
+
+		$apiResult = $c->post( $this->api, $array );
+
+		return unserialize($apiResult);
+    }
     public function getError(){
     	return $this->error;
     }
@@ -619,6 +636,32 @@ class WikiPage {
      */
     function newSection( $name, $text ) {
 		return $this->setSection( $text, $section='new', $summary=$name, $minor=false);
+    }
+
+    function delete( $reason ) {
+
+    	$data = array(
+			'title' => $this->title,
+			'token' => $this->edittoken
+		);
+
+    	// set options from arguments
+    	if ( !is_null($reason) ) $data['reason'] = $reason;
+
+		$r = $this->wikimate->delete( $data ); // the delete query
+
+		// Check if it worked
+		if ( $r['delete'] ) {
+			
+			$this->exists = false; // the page was deleted
+
+			$this->error = null; // reset the error
+			return true;
+		}
+
+		$this->error = $r;
+		return false;    	
+
     }
 
 }
