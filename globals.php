@@ -1,4 +1,4 @@
 <?php
 
-include 'curl.php';
+include 'vendor/curl/curl.php';
 include 'Wikimate.php';
