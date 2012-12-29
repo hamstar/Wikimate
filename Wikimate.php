@@ -10,41 +10,41 @@
 
 class Wikimate {
 
-    const SECTIONLIST_BY_NAME = 1;
-    const SECTIONLIST_BY_INDEX = 2;
-    
-    private $api;
-    private $username;
-    private $password;
+	const SECTIONLIST_BY_NAME = 1;
+	const SECTIONLIST_BY_INDEX = 2;
+	
+	private $api;
+	private $username;
+	private $password;
 
-    private $c = null;
-    private $error = array();
-    private $debugMode = false;
+	private $c = null;
+	private $error = array();
+	private $debugMode = false;
 
-    /**
-     * Creates a curl object and logs in
-     * If it can't login the class will exit and return null
-     */
-    function __construct( $api ) {
-    	
-    		$this->api = $api;
-    		
+	/**
+	 * Creates a curl object and logs in
+	 * If it can't login the class will exit and return null
+	 */
+	function __construct( $api ) {
+		
+		$this->api = $api;
+			
 		$this->initCurl();		
 		$this->checkCookieFileIsWritable();
-    }
-    
-    private function initCurl() {
-    	
-    	if ( !class_exists('Curl') || !class_exists('CurlResponse') )
+	}
+	
+	private function initCurl() {
+		
+		if ( !class_exists('Curl') || !class_exists('CurlResponse') )
 		throw new Exception("Failed to create Wikimate - could not find the Curl class");
 		
 	$this->c = new Curl();
 	$this->c->user_agent = "Wikimate 0.5";
 	$this->c->cookie_file = "wikimate_cookie.txt";
-    }
-    
-    private function checkCookieFileIsWritable() {
-    	
+	}
+	
+	private function checkCookieFileIsWritable() {
+		
 	if ( !file_exists( $this->c->cookie_file ) )
 		if ( file_put_contents( $this->c->cookie_file, "" ) === FALSE )
 			throw new Exception("Could not write to cookie file, please check that the web server can write to ".dirname(__SCRIPT__));
@@ -52,13 +52,13 @@ class Wikimate {
 	if ( file_exists( $this->c->cookie_file ) )
 		if ( !is_writable( $this->c->cookie_file ) )
 			throw new Exception("The cookie file is not writable, please check that the web server can write to ".dirname(__SCRIPT__));
-    }
+	}
 
-    /**
-     * Logs in to the wiki
-     * @return boolean true if logged in
-     */
-    public function login($username,$password) {
+	/**
+	 * Logs in to the wiki
+	 * @return boolean true if logged in
+	 */
+	public function login($username,$password) {
 
 		//Logger::log("Logging in");
 
@@ -74,8 +74,8 @@ class Wikimate {
 
 		// Check if we got an API result or the API doc page (invalid request)
 		if ( strstr( $loginResult, "This is an auto-generated MediaWiki API documentation page" ) ) {
-		        $this->error['login'] = "The API could not understand the first login request";
-		        return false;
+				$this->error['login'] = "The API could not understand the first login request";
+				return false;
 		}
 
 		$loginResult = json_decode( $loginResult );
@@ -96,8 +96,8 @@ class Wikimate {
 			
 			// Check if we got an API result or the API doc page (invalid request)
 			if ( strstr( $loginResult, "This is an auto-generated MediaWiki API documentation page" ) ) {
-			        $this->error['login'] = "The API could not understand the confirm token request";
-			        return false;
+					$this->error['login'] = "The API could not understand the confirm token request";
+					return false;
 			}
 
 			$loginResult = json_decode( $loginResult );
@@ -112,13 +112,13 @@ class Wikimate {
 			if ( $loginResult->login->result != "Success" ) {
 				// Some more comprehensive error checking
 				switch ($loginResult->login->result) {
-			            case 'NotExists':
-			                $this->error['login'] = 'The username does not exist';
-			                break;
-			            default:
-			                $this->error['login'] = 'The API result was: '. $loginResult->login->result;
-			                break;
-			        }
+						case 'NotExists':
+							$this->error['login'] = 'The username does not exist';
+							break;
+						default:
+							$this->error['login'] = 'The API result was: '. $loginResult->login->result;
+							break;
+					}
 				return false;
 			}
 		}
@@ -126,50 +126,50 @@ class Wikimate {
 		//Logger::log("Logged in");
 		return true;
 
-    }
+	}
 
-    /**
-     * Sets the debug mode
-     *
-     * @param boolean $debugMode true to turn debugging on
-     * @return Wikimate this object
-     */
-    public function setDebugMode( $b ) {
+	/**
+	 * Sets the debug mode
+	 *
+	 * @param boolean $debugMode true to turn debugging on
+	 * @return Wikimate this object
+	 */
+	public function setDebugMode( $b ) {
 	$this->debugMode = $b;
 	return $this;
-    }
+	}
 
-    /**
-     * Either return or print the curl settings.
-     *
-     * @param boolean $echo True to echo the configuration
-     * @return mixed Array of config if $echo is false, (boolean)true if echo is true
-     */
-    public function debugCurlConfig( $echo=false ) {
-        if ( $echo ) {
-            echo "Curl Configuration:\n";
-            echo "<pre>",print_r($this->c->options,1),"</pre>";
-            return true;
-        }
-        
-        return $this->c->options;
-    }        
+	/**
+	 * Either return or print the curl settings.
+	 *
+	 * @param boolean $echo True to echo the configuration
+	 * @return mixed Array of config if $echo is false, (boolean)true if echo is true
+	 */
+	public function debugCurlConfig( $echo=false ) {
+		if ( $echo ) {
+			echo "Curl Configuration:\n";
+			echo "<pre>",print_r($this->c->options,1),"</pre>";
+			return true;
+		}
+		
+		return $this->c->options;
+	}		
 
-    /**
-     * Returns a WikiPage object populated with the page data
-     * @param string $title The name of the wiki article
-     * @return WikiPage the page object
-     */
-    public function getPage( $title ) {
+	/**
+	 * Returns a WikiPage object populated with the page data
+	 * @param string $title The name of the wiki article
+	 * @return WikiPage the page object
+	 */
+	public function getPage( $title ) {
 		return new WikiPage( $title, $this );
-    }
+	}
 
-    /**
-     * Performs a query to the wiki api with the given details
-     * @param array $array array of details to be passed in the query
-     * @return array unserialized php output from the wiki
-     */
-    public function query( $array ) {
+	/**
+	 * Performs a query to the wiki api with the given details
+	 * @param array $array array of details to be passed in the query
+	 * @return array unserialized php output from the wiki
+	 */
+	public function query( $array ) {
 
 		$array['action'] = 'query';
 		$array['format'] = 'php';
@@ -178,29 +178,29 @@ class Wikimate {
 
 		return unserialize($apiResult);
 		
-    }
-    
-    /**
-     * Performs a parse query to the wiki API.
-     * @param array $array array of details to be passed in the query.
-     * @return array unserialized php output from the wiki API.
-     */
-    public function parse( $array )
-    {
-        $array['action'] = 'parse';
-        $array['format'] = 'php';
+	}
+	
+	/**
+	 * Performs a parse query to the wiki API.
+	 * @param array $array array of details to be passed in the query.
+	 * @return array unserialized php output from the wiki API.
+	 */
+	public function parse( $array )
+	{
+		$array['action'] = 'parse';
+		$array['format'] = 'php';
 
-        $apiResult = $this->c->get( $this->api, $array );
+		$apiResult = $this->c->get( $this->api, $array );
 
-        return unserialize( $apiResult );
-    }
+		return unserialize( $apiResult );
+	}
 
-    /**
-     * Perfoms an edit query to the wiki api
-     * @param array $array array of details to be passed in the query
-     * @return array unserialized php output from the wiki
-     */
-    public function edit( $array ) {
+	/**
+	 * Perfoms an edit query to the wiki api
+	 * @param array $array array of details to be passed in the query
+	 * @return array unserialized php output from the wiki
+	 */
+	public function edit( $array ) {
 		$c = $this->c;
 		$c->headers['Content-Type'] = "application/x-www-form-urlencoded";
 
@@ -210,14 +210,14 @@ class Wikimate {
 		$apiResult = $c->post( $this->api, $array );
 
 		return unserialize($apiResult);
-    }
+	}
 
-    /**
-     * Perfoms a delete query to the wiki api
-     * @param array $array array of details to be passed in the query
-     * @return array unserialized php output from the wiki
-     */
-    public function delete( $array ) {
+	/**
+	 * Perfoms a delete query to the wiki api
+	 * @param array $array array of details to be passed in the query
+	 * @return array unserialized php output from the wiki
+	 */
+	public function delete( $array ) {
 		$c = $this->c;
 		$c->headers['Content-Type'] = "application/x-www-form-urlencoded";
 
@@ -227,10 +227,10 @@ class Wikimate {
 		$apiResult = $c->post( $this->api, $array );
 
 		return unserialize($apiResult);
-    }
-    public function getError(){
-    	return $this->error;
-    }
+	}
+	public function getError(){
+		return $this->error;
+	}
 }
 
 /**
@@ -241,33 +241,33 @@ class Wikimate {
  */
 class WikiPage {
 
-    const SECTIONLIST_BY_INDEX = 1;
-    const SECTIONLIST_BY_NAME = 2;
-    const SECTIONLIST_BY_NUMBER = 3;
+	const SECTIONLIST_BY_INDEX = 1;
+	const SECTIONLIST_BY_NAME = 2;
+	const SECTIONLIST_BY_NUMBER = 3;
 
-    private $title = null;
-    private $exists = false;
-    private $text = null;
-    private $edittoken = null;
-    private $starttimestamp = null;
-    private $wikimate = null;
-    private $error = null;
-    private $invalid = false;
-    private $sections = null;
+	private $title = null;
+	private $exists = false;
+	private $text = null;
+	private $edittoken = null;
+	private $starttimestamp = null;
+	private $wikimate = null;
+	private $error = null;
+	private $invalid = false;
+	private $sections = null;
 
-    /*
-     *
-     * Magic methods
-     *
-     */
+	/*
+	 *
+	 * Magic methods
+	 *
+	 */
 
-    /**
-     * Constructs a WikiPage object from the title given and adds
-     * a wikibot object
-     * @param string $title name of the wiki article
-     * @param WikiBot $wikibot WikiBot object
-     */
-    function __construct( $title, $wikimate ) {
+	/**
+	 * Constructs a WikiPage object from the title given and adds
+	 * a wikibot object
+	 * @param string $title name of the wiki article
+	 * @param WikiBot $wikibot WikiBot object
+	 */
+	function __construct( $title, $wikimate ) {
 
 		$this->wikimate = $wikimate;
 		$this->title = $title;
@@ -278,13 +278,13 @@ class WikiPage {
 			return null;
 		}
 
-    }
+	}
 
-    /**
-     *
-     * @return <type> Destructor
-     */
-    function  __destruct() {
+	/**
+	 *
+	 * @return <type> Destructor
+	 */
+	function  __destruct() {
 		$this->title = null;
 		$this->exists = false;
 		$this->text = null;
@@ -294,75 +294,75 @@ class WikiPage {
 		$this->error = null;
 		$this->invalid = false;
 		return null;
-    }
+	}
 
-    /**
-     * Returns the wikicode of the page
-     * @return string of wikicode
-     */
-    function __toString() {
+	/**
+	 * Returns the wikicode of the page
+	 * @return string of wikicode
+	 */
+	function __toString() {
 		return $this->text;
-    }
+	}
 
-    /**
-     * Returns an array sections with the section name as the key and the text
-     * as the element e.g.
-     *
-     * array(
-     *   'intro' => 'this text is the introduction',
-     *   'History' => 'this is text under the history section'
-     * )
-     *
-     * @return array of sections
-     */
-    function __invoke() {
+	/**
+	 * Returns an array sections with the section name as the key and the text
+	 * as the element e.g.
+	 *
+	 * array(
+	 *   'intro' => 'this text is the introduction',
+	 *   'History' => 'this is text under the history section'
+	 * )
+	 *
+	 * @return array of sections
+	 */
+	function __invoke() {
 		return $this->getAllSections( false, self::SECTIONLIST_BY_NAME );
-    }
+	}
 
-    /**
-     * Returns the page existance status
-     * @return boolean true if page exists
-     */
-    function exists() {
+	/**
+	 * Returns the page existance status
+	 * @return boolean true if page exists
+	 */
+	function exists() {
 		return $this->exists;
-    }
+	}
 
-    /**
-     * Alias of self::__destruct()
-     */
-    function destroy() {
+	/**
+	 * Alias of self::__destruct()
+	 */
+	function destroy() {
 		$this->__destruct();
-    }
+	}
 
-    /*
-     *
-     * Page meta functions
-     *
-     */
+	/*
+	 *
+	 * Page meta functions
+	 *
+	 */
 
-    /**
-     * Returns an error if there is one, null shows no error
-     * @return mixed null for no errors or an error array object
-     */
-    function getError() {
+	/**
+	 * Returns an error if there is one, null shows no error
+	 * @return mixed null for no errors or an error array object
+	 */
+	function getError() {
 		return $this->error;
-    }
+	}
 
-    /**
-     * Returns the title of this page
-     * @return string the title of this page
-     */
-    function getTitle() {
+	/**
+	 * Returns the title of this page
+	 * @return string the title of this page
+	 */
+	function getTitle() {
 		return $this->title;
-    }
+	}
 
-    /**
-     * Returns the number of sections in this page
-     * @return integer the number of sections in this page
-     */
-    function getNumSections() {
+	/**
+	 * Returns the number of sections in this page
+	 * @return integer the number of sections in this page
+	 */
+	function getNumSections() {
 		return count( $this->sections->byIndex );
-    }
+	}
 	
 	/**
 	 * Returns the sections offsets and lengths
@@ -372,19 +372,19 @@ class WikiPage {
 		return $this->sections;
 	}
 
-    /*
-     *
-     * Getting functions
-     *
-     */
+	/*
+	 *
+	 * Getting functions
+	 *
+	 */
 
-    /**
-     * Gets the text of the page.  If refesh is true then this method will
-     * query the wiki api again for the page details
-     * @param boolean $refresh true to query the wiki api again
-     * @return string the text of the page
-     */
-    function getText($refresh=false) {
+	/**
+	 * Gets the text of the page.  If refesh is true then this method will
+	 * query the wiki api again for the page details
+	 * @param boolean $refresh true to query the wiki api again
+	 * @return string the text of the page
+	 */
+	function getText($refresh=false) {
 
 		if ( $refresh ) { // we want to query the api
 
@@ -473,18 +473,18 @@ class WikiPage {
 
 		return $this->text; // return the text in any case
 
-    }
+	}
 
-    /**
-     * Returns the section requested, section can be the following:
-     * - section name (string:"History")
-     * - section index (int:3)
-     * 
-     * @param mixed $section the section to get
-     * @param boolan $includeHeading false to get section text only
-     * @return string wikitext of the section on the page 
-     */
-    function getSection( $section, $includeHeading=false ) {
+	/**
+	 * Returns the section requested, section can be the following:
+	 * - section name (string:"History")
+	 * - section index (int:3)
+	 * 
+	 * @param mixed $section the section to get
+	 * @param boolan $includeHeading false to get section text only
+	 * @return string wikitext of the section on the page 
+	 */
+	function getSection( $section, $includeHeading=false ) {
 		// Check if we have a section name or index
 		if ( is_int($section) ) {
 			$coords = $this->sections->byIndex[$section];
@@ -507,19 +507,19 @@ class WikiPage {
 		
 		return $text;
 	
-    }
+	}
 
-    /**
-     * Return all the sections of the page in an array - the key names can be
-     * set to name or index by using the following for the second param
-     * - self::SECTIONLIST_BY_NAME
-     * - self::SECTIONLIST_BY_INDEX
-     *
-     * @param boolean $includeHeading false to get section text only
-     * @param integer $keyNames modifier for the array key names
-     * @return array of sections
-     */
-    function getAllSections($includeHeading=false, $keyNames=self::SECTIONLIST_BY_INDEX ) {
+	/**
+	 * Return all the sections of the page in an array - the key names can be
+	 * set to name or index by using the following for the second param
+	 * - self::SECTIONLIST_BY_NAME
+	 * - self::SECTIONLIST_BY_INDEX
+	 *
+	 * @param boolean $includeHeading false to get section text only
+	 * @param integer $keyNames modifier for the array key names
+	 * @return array of sections
+	 */
+	function getAllSections($includeHeading=false, $keyNames=self::SECTIONLIST_BY_INDEX ) {
 
 		$sections = array();
 
@@ -541,22 +541,22 @@ class WikiPage {
 
 		return $sections;
 
-    }
+	}
 
-    /*
-     *
-     * Setting functions
-     *
-     */
+	/*
+	 *
+	 * Setting functions
+	 *
+	 */
 
-    /**
-     * Sets the text in the page.  Updates the starttimestamp to the timestamp
-     * after the page edit (if the edit is successful)
-     * @param string $text the article text
-     * @param string $section the section to edit (null for whole page)
-     * @return boolean true if page was edited successfully
-     */
-    function setText( $text, $section=null, $minor=false, $summary=null ) {
+	/**
+	 * Sets the text in the page.  Updates the starttimestamp to the timestamp
+	 * after the page edit (if the edit is successful)
+	 * @param string $text the article text
+	 * @param string $section the section to edit (null for whole page)
+	 * @return boolean true if page was edited successfully
+	 */
+	function setText( $text, $section=null, $minor=false, $summary=null ) {
 
 		$data = array(
 			'title' => $this->title,
@@ -610,43 +610,43 @@ class WikiPage {
 
 		$this->error = $r;
 		return false;
-    }
+	}
 
-    /**
-     * Sets the text of the given section.
-     * Essentially an alias of WikiPage:setText() with the summary and minor
-     * parameters switched.
-     *
-     * @param string $text The text of the section
-     * @param mixed $section section index, new by default
-     * @param string $summary summary text
-     * @param boolean $minor true for minor edit
-     * @return boolean true if the section was saved
-     */
-    function setSection( $text, $section=0, $summary=null, $minor=false ) {
+	/**
+	 * Sets the text of the given section.
+	 * Essentially an alias of WikiPage:setText() with the summary and minor
+	 * parameters switched.
+	 *
+	 * @param string $text The text of the section
+	 * @param mixed $section section index, new by default
+	 * @param string $summary summary text
+	 * @param boolean $minor true for minor edit
+	 * @return boolean true if the section was saved
+	 */
+	function setSection( $text, $section=0, $summary=null, $minor=false ) {
 		$this->setText( $text, $section, $minor, $summary );
-    }
+	}
 
-    /**
-     * Alias of WikiPage::setSection() specifically for creating new sections
-     *
-     * @param string $name the heading name for the new section
-     * @param string $text The text of the new section
-     * @return boolean true if the section was saved
-     */
-    function newSection( $name, $text ) {
+	/**
+	 * Alias of WikiPage::setSection() specifically for creating new sections
+	 *
+	 * @param string $name the heading name for the new section
+	 * @param string $text The text of the new section
+	 * @return boolean true if the section was saved
+	 */
+	function newSection( $name, $text ) {
 		return $this->setSection( $text, $section='new', $summary=$name, $minor=false);
-    }
+	}
 
-    function delete( $reason ) {
+	function delete( $reason ) {
 
-    	$data = array(
+		$data = array(
 			'title' => $this->title,
 			'token' => $this->edittoken
 		);
 
-    	// set options from arguments
-    	if ( !is_null($reason) ) $data['reason'] = $reason;
+		// set options from arguments
+		if ( !is_null($reason) ) $data['reason'] = $reason;
 
 		$r = $this->wikimate->delete( $data ); // the delete query
 
@@ -660,8 +660,8 @@ class WikiPage {
 		}
 
 		$this->error = $r;
-		return false;    	
+		return false;		
 
-    }
+	}
 
 }
