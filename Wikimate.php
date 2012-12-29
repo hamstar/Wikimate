@@ -59,10 +59,10 @@ class Wikimate {
 		//Logger::log("Logging in");
 		
 		$details = array(
-			 'action' => 'login',
+			'action' => 'login',
 			'lgname' => $username,
 			'lgpassword' => $password,
-			'format' => 'json' 
+			'format' => 'json'
 		);
 		
 		// Send the login request
@@ -380,7 +380,7 @@ class WikiPage {
 		if ( $refresh ) { // we want to query the api
 			
 			$data = array(
-				 'prop' => 'info|revisions',
+				'prop' => 'info|revisions',
 				'intoken' => 'edit',
 				'titles' => $this->title,
 				'rvprop' => 'content' // need to get page text
@@ -455,7 +455,6 @@ class WikiPage {
 						$this->sections->byIndex[$currIndex]['length'] = $length;
 						$this->sections->byName[$currName]['length']   = $length;
 					}
-					
 				}
 			}
 		}
@@ -546,7 +545,7 @@ class WikiPage {
 	 */
 	function setText( $text, $section = null, $minor = false, $summary = null ) {
 		$data = array(
-			 'title' => $this->title,
+			'title' => $this->title,
 			'text' => $text,
 			'md5' => md5( $text ),
 			'bot' => "true",
@@ -582,7 +581,7 @@ class WikiPage {
 			
 			// Get the new starttimestamp
 			$data = array(
-				 'prop' => 'info',
+				'prop' => 'info',
 				'intoken' => 'edit',
 				'titles' => $this->title 
 			);
@@ -629,7 +628,7 @@ class WikiPage {
 	
 	function delete( $reason ) {
 		$data = array(
-			 'title' => $this->title,
+			'title' => $this->title,
 			'token' => $this->edittoken 
 		);
 		
