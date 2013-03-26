@@ -58,7 +58,7 @@ You can get the text of the page by using the `getText()` method which returns t
 
 You can get sections from the page as well, via the section index, or the section heading name
 
-    $wikiCode = $page->getSection(0); // get the part between the title and the first section
+	$wikiCode = $page->getSection(0); // get the part between the title and the first section
 	$wikiCode = $page->getSection('intro'); // get the part between the title and the first section
 	$wikiCode = $page->getSection(4); // get the 4th section on the page
 	$wikiCode = $page->getSection('History'); // get the section called History
@@ -122,7 +122,7 @@ Wanna run your own queries?  You can use the edit and query commands in Wikimate
 
 	$data = array(
 		'prop' => 'info|revisions',
-		'intoken' = 'edit',
+		'intoken' => 'edit',
 		'titles' => 'this|that|other'
 	);
 	
