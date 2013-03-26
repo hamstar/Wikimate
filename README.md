@@ -24,7 +24,7 @@ is also downloaded, use git's --recursive option:
     git clone --recursive git@github.com:hamstar/Wikimate.git
 
 Now you need to allow the server to write to the cookie file.
-Create a wikimate_cookie.txt file in the same directory as the wikimate files
+Create a `wikimate_cookie.txt` file in the same directory as the wikimate files
 and give the server write access to that.
 If you don't do this you won't be able to login and Wikimate will throw an exception.
 
