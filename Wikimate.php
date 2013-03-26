@@ -42,13 +42,10 @@ class Wikimate {
 	}
 	
 	private function checkCookieFileIsWritable() {
-		if ( !file_exists( $this->c->cookie_file ) )
-			if ( file_put_contents( $this->c->cookie_file, "" ) === FALSE )
-				throw new Exception( "Could not write to cookie file, please check that the web server can write to " . dirname( __SCRIPT__ ) );
-		
-		if ( file_exists( $this->c->cookie_file ) )
-			if ( !is_writable( $this->c->cookie_file ) )
-				throw new Exception( "The cookie file is not writable, please check that the web server can write to " . dirname( __SCRIPT__ ) );
+		if ( ( !file_exists( $this->c->cookie_file ) && !is_writable( "." ) ) ||
+         (  file_exists( $this->c->cookie_file ) && !is_writable( $this->c->cookie_file ) ) )
+		  throw new Exception( "The cookie file is not writable. Please check that the web server can write to " .
+                           getcwd() . DIRECTORY_SEPARATOR . $this->c->cookie_file );
 	}
 	
 	/**
