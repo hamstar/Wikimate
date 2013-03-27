@@ -6,7 +6,7 @@ It consists of two classes currently:
 
 ## Installation
 
-*Note:* The commands below apply to Ubuntu. You might need to adjust them for other systems.
+* **Note:** *The commands below apply to Ubuntu. You might need to adjust them for other systems.*
 
 Before anything else, since Wikimate is written in PHP, a server-side language,
 you will need a web server such as Apache to run it (and of course, PHP).
@@ -19,14 +19,14 @@ You will also need cURL; Install it if you don't have it yet.
 
 Then, download Wikimate.
 To make sure the [curl wrapper submodule](http://github.com/shuber/curl)
-is also downloaded, use git's --recursive option:
+is also downloaded, use git's `--recursive` option:
 
     git clone --recursive git@github.com:hamstar/Wikimate.git
 
 Now you need to allow the server to write to the cookie file.
 Create a `wikimate_cookie.txt` file in the same directory as the wikimate files
 and give the server write access to that.
-If you don't do this you won't be able to login and Wikimate will throw an exception.
+If you don't do this you won't be able to login, and Wikimate will throw an exception.
 
     cd Wikimate
     touch wikimate_cookie.txt
@@ -36,7 +36,9 @@ If you don't do this you won't be able to login and Wikimate will throw an excep
 ## Usage
 
 In your script file (e.g. `index.php`), include the `globals.php` file
-and create a new `Wikimate` object with username, password and the API address.
+and create a new `Wikimate` object with the target wiki's API address.
+Then provide a username and password to Wikimate's `login` method,
+to login to that wiki.
 
 ```php
 include 'globals.php';
@@ -61,12 +63,16 @@ catch ( Exception $e )
 }
 ```
 
-On creating a new Wikimate object it will log into the wiki api.
-**If it fails to authenticate, your `$wiki` object will be null**.
-You should get a meaningful error message telling you why it didn't authenticate.
+This example uses echo statements to output any potential errors.
+You should get a meaningful error message if the authentication fails.
 
-You can also enable/disable debugging with the `$wiki->debugMode($boolean)` method.
+Instead of using echo statements, you can enable/disable debugging
+with the `$wiki->debugMode($boolean)` method.
 Currently only output from the logon process is printed for debugging.
+
+Assuming you were able to login, you're now ready to fully use the API.
+The next sections provide example code for several common tasks.
+
 
 ### Getting a page object
 
@@ -78,7 +84,7 @@ If the title given to the WikiPage object is invalid, your `$page` object will b
 $page = $wiki->getPage('Sausages');
 // check if the page exists or not
 if ( $page->exists() ) die();
-// get the title
+// get the page title
 echo $page->getTitle();
 // get the number of sections on the page
 echo $page->getNumSections();
