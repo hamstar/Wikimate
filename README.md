@@ -35,7 +35,7 @@ If you don't do this you won't be able to login, and Wikimate will throw an exce
 
 ## Usage
 
-In your script file (e.g. `index.php`), include the `globals.php` file
+In your script file (e.g. `index.php`), include the `globals.php` file,
 and create a new `Wikimate` object with the target wiki's API address.
 Then provide a username and password to Wikimate's `login` method,
 to login to that wiki.
@@ -54,12 +54,12 @@ try
 		echo 'Success: user logged in.' ;
 	else {
 		$error = $wiki->getError();
-		echo $error['login'];
+		echo "<b>Wikimate error</b>: ".$error['login'];
 	}
 }
 catch ( Exception $e )
 {
-	echo "An error occured: ".$e->getMessage();
+	echo "<b>Wikimate error</b>: ".$e->getMessage();
 }
 ```
 
