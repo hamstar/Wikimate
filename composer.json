@@ -1,0 +1,21 @@
+{
+    "name"        : "hamstar/Wikimate",
+    "type"        : "library",
+    "description" : "Wikimate is a wrapper for the MediaWiki API that aims to be very easy to use.",
+
+    "authors" : [
+        {
+            "homepage" : "https://github.com/hamstar"
+        }
+    ],
+
+    "autoload" : {
+        "classmap" : [
+            "Wikimate.php"
+        ]
+    },
+
+    "require" : {
+        "shuber/curl" : "dev-master"
+    }
+}
