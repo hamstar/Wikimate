@@ -37,7 +37,7 @@ class Wikimate {
 			throw new Exception( "Failed to create Wikimate - could not find the Curl class" );
 		
 		$this->c              = new Curl();
-		$this->c->user_agent  = "Wikimate 0.5";
+		$this->c->user_agent  = "Wikimate 0.5 (https://github.com/hamstar/Wikimate)";
 		$this->c->cookie_file = "wikimate_cookie.txt";
 	}
 	
