@@ -5,7 +5,7 @@
  *
  * @author Robert McLeod
  * @since December 2010
- * @version 0.5
+ * @version 0.9
  */
 
 class Wikimate {
