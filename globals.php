@@ -1,4 +1,3 @@
 <?php
 
-include 'vendor/curl/curl.php';
-include 'Wikimate.php';
+require __DIR__.'/vendor/autoload.php';
