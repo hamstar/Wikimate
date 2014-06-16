@@ -32,7 +32,7 @@ echo "Fetching 'Sausages'...\n";
 $page = $wiki->getPage('Sausages');
 
 // check if the page exists or not
-if ( $page->exists() ) {
+if (!$page->exists() ) {
 	echo "'Sausages' doesn't exist.\n";
 
 } else {
