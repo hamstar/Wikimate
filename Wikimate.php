@@ -133,18 +133,17 @@ class Wikimate {
 	 * Either return or print the curl settings.
 	 *
 	 * @todo Update this for Requests?
-	 *
+	 * @deprecated since version 0.10.0
 	 * @param boolean $echo True to echo the configuration
 	 * @return mixed Array of config if $echo is false, (boolean)true if echo is true
 	 */
 	public function debugCurlConfig( $echo = false ) {
 		if ( $echo ) {
-			echo "Curl Configuration:\n";
-			echo "<pre>", print_r( $this->c->options, 1 ), "</pre>";
+			echo "ERROR: Curl is no longer used by Wikimate.\n";
 			return true;
 		}
 		
-		return $this->c->options;
+		return FALSE;
 	}
 	
 	/**
