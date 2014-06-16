@@ -2,10 +2,11 @@
     "name": "hamstar/wikimate",
     "type": "library",
     "description": "Wikimate is a wrapper for the MediaWiki API that aims to be very easy to use.",
+    "license": "MIT",
     "homepage": "https://github.com/hamstar/Wikimate",
     "authors": [
         {
-            "name": "Robert",
+            "name": "Robert McLeod",
             "email": "hamstar@telescum.co.nz",
             "homepage": "https://github.com/hamstar"
         }
