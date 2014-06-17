@@ -5,7 +5,12 @@
 
     "authors" : [
         {
-            "homepage" : "https://github.com/hamstar"
+            "name"      : "hamstar/Wikimate",
+            "homepage"  : "https://github.com/hamstar"
+        },
+        {
+            "name"      : "Contributors",
+            "homepage"  : "https://github.com/hamstar/Wikimate/graphs/contributors"
         }
     ],
 
