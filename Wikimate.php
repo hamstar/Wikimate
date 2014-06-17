@@ -1,18 +1,21 @@
 <?php
 /**
- * Provides an interface over wiki api objects such as pages
- * Logs into the wiki on construction
+ * Provides an interface over wiki API objects such as pages.
  *
  * @author Robert McLeod
  * @since December 2010
- * @version 0.9
+ * @version 0.10.0
  */
-
 class Wikimate {
 	
 	const SECTIONLIST_BY_NAME = 1;
 	const SECTIONLIST_BY_INDEX = 2;
-	
+
+	/**
+	 * @var string The current version number (conforms to http://semver.org/).
+	 */
+	const VERSION = '0.10.0';
+
 	private $api;
 	private $username;
 	private $password;
@@ -43,7 +46,7 @@ class Wikimate {
 	 */
 	private function initRequests() {
 		$this->session = new Requests_Session($this->api);
-		$this->useragent  = "Wikimate 0.5 (https://github.com/hamstar/Wikimate)";
+		$this->useragent  = "Wikimate ".self::VERSION." (https://github.com/hamstar/Wikimate)";
 	}
 
 	/**
