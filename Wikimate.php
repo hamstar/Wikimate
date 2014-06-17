@@ -17,7 +17,7 @@ class Wikimate {
 	private $username;
 	private $password;
 
-	/* @var Requests_Session */
+	/** @var Requests_Session */
 	private $session;
 
 	private $error = array();
@@ -128,11 +128,11 @@ class Wikimate {
 		$this->debugMode = $b;
 		return $this;
 	}
-	
+
 	/**
-	 * Either return or print the curl settings.
+	 * Used to return or print the curl settings, but now prints an error and
+	 * returns Wikimate::getRequestsConfig()
 	 *
-	 * @todo Update this for Requests?
 	 * @deprecated since version 0.10.0
 	 * @param boolean $echo True to echo the configuration
 	 * @return mixed Array of config if $echo is false, (boolean)true if echo is true
@@ -140,12 +140,29 @@ class Wikimate {
 	public function debugCurlConfig( $echo = false ) {
 		if ( $echo ) {
 			echo "ERROR: Curl is no longer used by Wikimate.\n";
+		}
+		return $this->getRequestsConfig();
+	}
+
+	/**
+	 * Get or print the Requests configuration.
+	 *
+	 * @param boolean $echo Whether to echo the options
+	 * @return array Options if $echo is FALSE
+	 * @return TRUE If options have been echoed to STDOUT
+	 */
+	public function debugRequestsConfig($echo = FALSE) {
+		if ( $echo ) {
+			echo "<pre>Requests options:\n";
+			print_r($this->session->options);
+			echo "Requests headers:\n";
+			print_r($this->session->headers);
+			echo "</pre>";
 			return true;
 		}
-		
-		return FALSE;
+		return $this->session->options;
 	}
-	
+
 	/**
 	 * Returns a WikiPage object populated with the page data
 	 * @param string $title The name of the wiki article
