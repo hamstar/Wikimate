@@ -9,6 +9,10 @@
             "name": "Robert McLeod",
             "email": "hamstar@telescum.co.nz",
             "homepage": "https://github.com/hamstar"
+        },
+        {
+            "name"      : "Contributors",
+            "homepage"  : "https://github.com/hamstar/Wikimate/graphs/contributors"
         }
     ],
     "autoload": {
