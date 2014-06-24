@@ -1,53 +1,54 @@
 <?php
 /**
- * Provides an interface over wiki api objects such as pages
- * Logs into the wiki on construction
+ * Provides an interface over wiki API objects such as pages.
  *
  * @author Robert McLeod
  * @since December 2010
- * @version 0.9
+ * @version 0.10.0
  */
-
 class Wikimate {
 	
 	const SECTIONLIST_BY_NAME = 1;
 	const SECTIONLIST_BY_INDEX = 2;
-	
+
+	/**
+	 * @var string The current version number (conforms to http://semver.org/).
+	 */
+	const VERSION = '0.10.0';
+
 	private $api;
 	private $username;
 	private $password;
-	
-	private $c = null;
+
+	/** @var Requests_Session */
+	private $session;
+
 	private $error = array();
 	private $debugMode = false;
 	
 	/**
-	 * Creates a curl object and logs in
-	 * If it can't login the class will exit and return null
+	 * Create a new Wikimate object.
+	 * 
+	 * @return Wikimate
 	 */
 	function __construct( $api ) {
 		$this->api = $api;
 		
-		$this->initCurl();
-		$this->checkCookieFileIsWritable();
+		$this->initRequests();
 	}
-	
-	private function initCurl() {
-		if ( !class_exists( 'Curl' ) || !class_exists( 'CurlResponse' ) )
-			throw new Exception( "Failed to create Wikimate - could not find the Curl class" );
-		
-		$this->c              = new Curl();
-		$this->c->user_agent  = "Wikimate 0.5 (https://github.com/hamstar/Wikimate)";
-		$this->c->cookie_file = "wikimate_cookie.txt";
+
+	/**
+	 * Set up a Requests_Session with appropriate user agent.
+	 *
+	 * @todo Pull version number from elsewhere.
+	 *
+	 * @return void
+	 */
+	private function initRequests() {
+		$this->session = new Requests_Session($this->api);
+		$this->useragent  = "Wikimate ".self::VERSION." (https://github.com/hamstar/Wikimate)";
 	}
-	
-	private function checkCookieFileIsWritable() {
-		if ( ( !file_exists( $this->c->cookie_file ) && !is_writable( "." ) ) ||
-         (  file_exists( $this->c->cookie_file ) && !is_writable( $this->c->cookie_file ) ) )
-		  throw new Exception( "The cookie file is not writable. Please check that the web server can write to " .
-                           getcwd() . DIRECTORY_SEPARATOR . $this->c->cookie_file );
-	}
-	
+
 	/**
 	 * Logs in to the wiki
 	 * @return boolean true if logged in
@@ -63,15 +64,14 @@ class Wikimate {
 		);
 		
 		// Send the login request
-		$loginResult = $this->c->post( $this->api, $details )->body;
-		
+		$response = $this->session->post($this->api, array(), $details);
 		// Check if we got an API result or the API doc page (invalid request)
-		if ( strstr( $loginResult, "This is an auto-generated MediaWiki API documentation page" ) ) {
+		if ( strstr( $response->body, "This is an auto-generated MediaWiki API documentation page" ) ) {
 			$this->error['login'] = "The API could not understand the first login request";
 			return false;
 		}
-		
-		$loginResult = json_decode( $loginResult );
+
+		$loginResult = json_decode( $response->body );
 		
 		if ( $this->debugMode ) {
 			echo "Login request:\n";
@@ -83,9 +83,9 @@ class Wikimate {
 		if ( $loginResult->login->result == "NeedToken" ) {
 			//Logger::log("Sending token {$loginResult->login->token}");
 			$details['lgtoken'] = strtolower( trim( $loginResult->login->token ) );
-			
+
 			// Send the confirm token request
-			$loginResult = $this->c->post( $this->api, $details )->body;
+			$loginResult = $this->session->post($this->api, array(), $details)->body;
 			
 			// Check if we got an API result or the API doc page (invalid request)
 			if ( strstr( $loginResult, "This is an auto-generated MediaWiki API documentation page" ) ) {
@@ -131,23 +131,41 @@ class Wikimate {
 		$this->debugMode = $b;
 		return $this;
 	}
-	
+
 	/**
-	 * Either return or print the curl settings.
+	 * Used to return or print the curl settings, but now prints an error and
+	 * returns Wikimate::getRequestsConfig()
 	 *
+	 * @deprecated since version 0.10.0
 	 * @param boolean $echo True to echo the configuration
 	 * @return mixed Array of config if $echo is false, (boolean)true if echo is true
 	 */
 	public function debugCurlConfig( $echo = false ) {
 		if ( $echo ) {
-			echo "Curl Configuration:\n";
-			echo "<pre>", print_r( $this->c->options, 1 ), "</pre>";
+			echo "ERROR: Curl is no longer used by Wikimate.\n";
+		}
+		return $this->getRequestsConfig();
+	}
+
+	/**
+	 * Get or print the Requests configuration.
+	 *
+	 * @param boolean $echo Whether to echo the options
+	 * @return array Options if $echo is FALSE
+	 * @return TRUE If options have been echoed to STDOUT
+	 */
+	public function debugRequestsConfig($echo = FALSE) {
+		if ( $echo ) {
+			echo "<pre>Requests options:\n";
+			print_r($this->session->options);
+			echo "Requests headers:\n";
+			print_r($this->session->headers);
+			echo "</pre>";
 			return true;
 		}
-		
-		return $this->c->options;
+		return $this->session->options;
 	}
-	
+
 	/**
 	 * Returns a WikiPage object populated with the page data
 	 * @param string $title The name of the wiki article
@@ -166,12 +184,10 @@ class Wikimate {
 		$array['action'] = 'query';
 		$array['format'] = 'php';
 		
-		$apiResult = $this->c->get( $this->api, $array );
-		
-		return unserialize( $apiResult );
-		
+		$apiResult = $this->session->get( $this->api.'?'.http_build_query($array) );
+		return unserialize( $apiResult->body );
 	}
-	
+
 	/**
 	 * Performs a parse query to the wiki API.
 	 * @param array $array array of details to be passed in the query.
@@ -181,9 +197,9 @@ class Wikimate {
 		$array['action'] = 'parse';
 		$array['format'] = 'php';
 		
-		$apiResult = $this->c->get( $this->api, $array );
+		$apiResult = $this->session->get( $this->api.'?'.http_build_query($array));
 		
-		return unserialize( $apiResult );
+		return unserialize( $apiResult->body );
 	}
 	
 	/**
@@ -192,15 +208,16 @@ class Wikimate {
 	 * @return array unserialized php output from the wiki
 	 */
 	public function edit( $array ) {
-		$c                          = $this->c;
-		$c->headers['Content-Type'] = "application/x-www-form-urlencoded";
+		$headers = array(
+			'Content-Type' => "application/x-www-form-urlencoded"
+		);
 		
 		$array['action'] = 'edit';
 		$array['format'] = 'php';
 		
-		$apiResult = $c->post( $this->api, $array );
+		$apiResult = $this->session->post( $this->api, $headers, $array );
 		
-		return unserialize( $apiResult );
+		return unserialize( $apiResult->body );
 	}
 	
 	/**
@@ -209,13 +226,14 @@ class Wikimate {
 	 * @return array unserialized php output from the wiki
 	 */
 	public function delete( $array ) {
-		$c                          = $this->c;
-		$c->headers['Content-Type'] = "application/x-www-form-urlencoded";
+		$headers = array(
+			'Content-Type' => "application/x-www-form-urlencoded"
+		);
 		
 		$array['action'] = 'delete';
 		$array['format'] = 'php';
 		
-		$apiResult = $c->post( $this->api, $array );
+		$apiResult = $this->session->post( $this->api, $headers, $array );
 		
 		return unserialize( $apiResult );
 	}

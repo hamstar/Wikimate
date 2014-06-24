@@ -6,32 +6,22 @@ It consists of two classes currently:
 
 ## Installation
 
-* **Note:** *The commands below apply to Ubuntu. You might need to adjust them for other systems.*
+**Requirements: [PHP](http://php.net), and [Composer](http://getcomposer.org).**
 
 Before anything else, since Wikimate is written in PHP, a server-side language,
-you will need a web server such as Apache to run it (and of course, PHP).
+you will need to have PHP installed to run it. Install it with your preferred
+package management tool (for example, on Ubuntu Linux you can run:
+`sudo apt-get install php5`)
 
-    sudo apt-get install apache2 php5
+Install Composer by following the instructions at https://getcomposer.org/doc/00-intro.md
 
-You will also need cURL; Install it if you don't have it yet.
+Then, download Wikimate, and initialise it by running `composer install` (or
+`composer.bat install` if you're on Windows).
 
-    sudo apt-get install curl php5-curl
+To use Wikimate within another project, you can add it as a composer dependency
+by adding the following to your `composer.json` file:
 
-Then, download Wikimate.
-To make sure the [curl wrapper submodule](http://github.com/shuber/curl)
-is also downloaded, use git's `--recursive` option:
-
-    git clone --recursive git@github.com:hamstar/Wikimate.git
-
-Now you need to allow the server to write to the cookie file.
-Create a `wikimate_cookie.txt` file in the same directory as the wikimate files
-and give the server write access to that.
-If you don't do this you won't be able to login, and Wikimate will throw an exception.
-
-    cd Wikimate
-    touch wikimate_cookie.txt
-    sudo chown www-data wikimate_cookie.txt
-
+    "hamstar/Wikimate": "0.10.0"
 
 ## Usage
 
@@ -231,6 +221,10 @@ $array_result = $wiki->edit( $data );
 Both methods return an array of the MediaWiki API result.
 
 ## Changelog
+
+### Version 0.10.0
+
+* Switched to using the *Requests* library instead of Curl
 
 ### Version 0.5
 
