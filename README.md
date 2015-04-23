@@ -32,14 +32,17 @@ to login to that wiki.
 
 ```php
 include 'globals.php';
-	
+
 $api_url = 'http://example.com/api.php';
 $username = 'bot';
 $password = 'password';
-	
+
 try
 {
 	$wiki = new Wikimate($api_url);
+
+    // You can pass the domain name either
+    // $wiki->login($username,$password, $domainName)
 	if ($wiki->login($username,$password))
 		echo 'Success: user logged in.' ;
 	else {
@@ -204,16 +207,16 @@ $data = array(
 	'intoken' => 'edit',
 	'titles' => 'this|that|other'
 );
-	
+
 // Send data as a query
 $array_result = $wiki->query( $data );
-	
+
 $data = array(
 	'title' => 'this',
 	'token' => '+\', // this is urlencoded automatically
 	'etc' => 'stuff'
 );
-	
+
 // Send as an edit query with content-type of application/x-www-form-urlencoded
 $array_result = $wiki->edit( $data );
 ```
