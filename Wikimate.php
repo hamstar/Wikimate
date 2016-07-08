@@ -16,15 +16,15 @@ class Wikimate {
 	 */
 	const VERSION = '0.10.0';
 
-	private $api;
-	private $username;
-	private $password;
+	protected $api;
+	protected $username;
+	protected $password;
 
 	/** @var Requests_Session */
-	private $session;
+	protected $session;
 
-	private $error = array();
-	private $debugMode = false;
+	protected $error = array();
+	protected $debugMode = false;
 	
 	/**
 	 * Create a new Wikimate object.
@@ -44,7 +44,7 @@ class Wikimate {
 	 *
 	 * @return void
 	 */
-	private function initRequests() {
+	protected function initRequests() {
 		$this->session = new Requests_Session($this->api);
 		$this->useragent  = "Wikimate ".self::VERSION." (https://github.com/hamstar/Wikimate)";
 	}
@@ -253,15 +253,15 @@ class WikiPage {
 	const SECTIONLIST_BY_NAME = 2;
 	const SECTIONLIST_BY_NUMBER = 3;
 	
-	private $title = null;
-	private $exists = false;
-	private $text = null;
-	private $edittoken = null;
-	private $starttimestamp = null;
-	private $wikimate = null;
-	private $error = null;
-	private $invalid = false;
-	private $sections = null;
+	protected $title = null;
+	protected $exists = false;
+	protected $text = null;
+	protected $edittoken = null;
+	protected $starttimestamp = null;
+	protected $wikimate = null;
+	protected $error = null;
+	protected $invalid = false;
+	protected $sections = null;
 	
 	/*
 	 *
