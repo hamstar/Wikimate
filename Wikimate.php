@@ -45,7 +45,7 @@ class Wikimate {
 	 * @return void
 	 */
 	protected function initRequests() {
-		$this->session = new Requests_Session($this->api);
+		$this->session = new Requests_Session( $this->api );
 		$this->useragent  = "Wikimate ".self::VERSION." (https://github.com/hamstar/Wikimate)";
 	}
 
@@ -54,7 +54,7 @@ class Wikimate {
 	 * @return boolean true if logged in
 	 */
 	public function login( $username, $password, $domain = NULL ) {
-		//Logger::log("Logging in");
+		//Logger::log( "Logging in" );
 		
 		$details = array(
 			'action' => 'login',
@@ -63,15 +63,14 @@ class Wikimate {
 			'format' => 'json'
 		);
 
-		// If $domain is informed, sets the correspondant detail in the request information array
-		if( $domain )
+		// If $domain is provided, set the corresponding detail in the request information array
+		if( is_string( $domain ) )
 		{
 			$details['lgdomain'] = $domain;
-
 		}
 		
 		// Send the login request
-		$response = $this->session->post($this->api, array(), $details);
+		$response = $this->session->post( $this->api, array(), $details );
 		// Check if we got an API result or the API doc page (invalid request)
 		if ( strstr( $response->body, "This is an auto-generated MediaWiki API documentation page" ) ) {
 			$this->error['login'] = "The API could not understand the first login request";
@@ -88,11 +87,11 @@ class Wikimate {
 		}
 		
 		if ( $loginResult->login->result == "NeedToken" ) {
-			//Logger::log("Sending token {$loginResult->login->token}");
+			//Logger::log( "Sending token {$loginResult->login->token}" );
 			$details['lgtoken'] = strtolower( trim( $loginResult->login->token ) );
 
 			// Send the confirm token request
-			$loginResult = $this->session->post($this->api, array(), $details)->body;
+			$loginResult = $this->session->post( $this->api, array(), $details )->body;
 			
 			// Check if we got an API result or the API doc page (invalid request)
 			if ( strstr( $loginResult, "This is an auto-generated MediaWiki API documentation page" ) ) {
@@ -123,7 +122,7 @@ class Wikimate {
 			}
 		}
 		
-		//Logger::log("Logged in");
+		//Logger::log( "Logged in" );
 		return true;
 		
 	}
@@ -161,12 +160,12 @@ class Wikimate {
 	 * @return array Options if $echo is FALSE
 	 * @return TRUE If options have been echoed to STDOUT
 	 */
-	public function debugRequestsConfig($echo = FALSE) {
+	public function debugRequestsConfig( $echo = FALSE ) {
 		if ( $echo ) {
 			echo "<pre>Requests options:\n";
-			print_r($this->session->options);
+			print_r( $this->session->options );
 			echo "Requests headers:\n";
-			print_r($this->session->headers);
+			print_r( $this->session->headers );
 			echo "</pre>";
 			return true;
 		}
@@ -191,7 +190,7 @@ class Wikimate {
 		$array['action'] = 'query';
 		$array['format'] = 'php';
 		
-		$apiResult = $this->session->get( $this->api.'?'.http_build_query($array) );
+		$apiResult = $this->session->get( $this->api.'?'.http_build_query( $array ) );
 		return unserialize( $apiResult->body );
 	}
 
@@ -204,7 +203,7 @@ class Wikimate {
 		$array['action'] = 'parse';
 		$array['format'] = 'php';
 		
-		$apiResult = $this->session->get( $this->api.'?'.http_build_query($array));
+		$apiResult = $this->session->get( $this->api.'?'.http_build_query( $array ) );
 		
 		return unserialize( $apiResult->body );
 	}
@@ -399,25 +398,25 @@ class WikiPage {
 	 * @return string the text of the page
 	 */
 	function getText( $refresh = false ) {
-		if ( $refresh ) { // we want to query the api
+		if ( $refresh ) { // We want to query the api
 			
 			$data = array(
 				'prop' => 'info|revisions',
 				'intoken' => 'edit',
 				'titles' => $this->title,
-				'rvprop' => 'content' // need to get page text
+				'rvprop' => 'content' // Need to get page text
 			);
 			
-			$r = $this->wikimate->query( $data ); // run the query
+			$r = $this->wikimate->query( $data ); // Run the query
 			
 			// Check for errors
 			if ( isset( $r['error'] ) ) {
-				$this->error = $r; // set the error if there was one
+				$this->error = $r; // Set the error if there was one
 			} else {
-				$this->error = null; // reset the error status
+				$this->error = null; // Reset the error status
 			}
 			
-			$page = array_pop( $r['query']['pages'] ); // get the page (there should only be one)
+			$page = array_pop( $r['query']['pages'] ); // Get the page (there should only be one)
 			
 			unset( $r, $data );
 			
@@ -429,8 +428,8 @@ class WikiPage {
 			$this->starttimestamp = $page['starttimestamp'];
 			
 			if ( !isset( $page['missing'] ) ) {
-				$this->exists = true; // update the existance if the page is there
-				$this->text   = $page['revisions'][0]['*']; // put the content into text
+				$this->exists = true; // Update the existance if the page is there
+				$this->text   = $page['revisions'][0]['*']; // Put the content into text
 			}
 			
 			unset( $page );
@@ -470,8 +469,8 @@ class WikiPage {
 					
 					// If there is a section after this, set the length of this one
 					if ( isset( $sections[$currIndex] ) ) {
-						$nextOffset = strpos( $this->text, $sections[$currIndex] ); // get the offset of the next section
-						$length     = $nextOffset - $currOffset; // calculate the length of this one
+						$nextOffset = strpos( $this->text, $sections[$currIndex] ); // Get the offset of the next section
+						$length     = $nextOffset - $currOffset; // Calculate the length of this one
 						
 						// Set the length of this section
 						$this->sections->byIndex[$currIndex]['length'] = $length;
@@ -481,7 +480,7 @@ class WikiPage {
 			}
 		}
 		
-		return $this->text; // return the text in any case
+		return $this->text; // Return the text in any case
 		
 	}
 	
@@ -512,7 +511,7 @@ class WikiPage {
 		
 		// Whack of the heading if need be
 		if ( !$includeHeading && $offset > 0 ) {
-			$text = substr( $text, strpos( trim( $text ), "\n" ) ); // chop off the first line
+			$text = substr( $text, strpos( trim( $text ), "\n" ) ); // Chop off the first line
 		}
 		
 		return $text;
@@ -575,7 +574,7 @@ class WikiPage {
 			'starttimestamp' => $this->starttimestamp 
 		);
 		
-		// set options from arguments
+		// Set options from arguments
 		if ( !is_null( $section ) )
 			$data['section'] = $section;
 		if ( $minor )
@@ -587,10 +586,10 @@ class WikiPage {
 		if ( !$this->exists ) {
 			$data['createonly'] = "true"; // createonly if not exists
 		} else {
-			$data['nocreate'] = "true"; // don't create, it should exist
+			$data['nocreate'] = "true"; // Don't create, it should exist
 		}
 		
-		$r = $this->wikimate->edit( $data ); // the edit query
+		$r = $this->wikimate->edit( $data ); // The edit query
 		
 		// Check if it worked
 		if ( $r['edit']['result'] == "Success" ) {
@@ -610,11 +609,11 @@ class WikiPage {
 			
 			$r = $this->wikimate->query( $data );
 			
-			$page = array_pop( $r['query']['pages'] ); // get the page
+			$page = array_pop( $r['query']['pages'] ); // Get the page
 			
-			$this->starttimestamp = $page['starttimestamp']; // update the starttimestamp
+			$this->starttimestamp = $page['starttimestamp']; // Update the starttimestamp
 			
-			$this->error = null; // reset the error
+			$this->error = null; // Reset the error
 			return true;
 		}
 		
@@ -654,17 +653,17 @@ class WikiPage {
 			'token' => $this->edittoken 
 		);
 		
-		// set options from arguments
+		// Set options from arguments
 		if ( !is_null( $reason ) )
 			$data['reason'] = $reason;
 		
-		$r = $this->wikimate->delete( $data ); // the delete query
+		$r = $this->wikimate->delete( $data ); // The delete query
 		
 		// Check if it worked
 		if ( $r['delete'] ) {
-			$this->exists = false; // the page was deleted
+			$this->exists = false; // The page was deleted
 			
-			$this->error = null; // reset the error
+			$this->error = null; // Reset the error
 			return true;
 		}
 		
