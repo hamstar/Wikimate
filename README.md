@@ -41,9 +41,9 @@ try
 {
 	$wiki = new Wikimate($api_url);
 
-    // You can pass the domain name either
-    // $wiki->login($username,$password, $domainName)
-	if ($wiki->login($username,$password))
+	// You can also pass the domain name:
+	// $wiki->login($username, $password, $domainName)
+	if ($wiki->login($username, $password))
 		echo 'Success: user logged in.' ;
 	else {
 		$error = $wiki->getError();
