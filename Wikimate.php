@@ -53,7 +53,7 @@ class Wikimate {
 	 * Logs in to the wiki
 	 * @return boolean true if logged in
 	 */
-	public function login( $username, $password ) {
+	public function login( $username, $password, $domain = NULL ) {
 		//Logger::log("Logging in");
 		
 		$details = array(
@@ -62,6 +62,13 @@ class Wikimate {
 			'lgpassword' => $password,
 			'format' => 'json'
 		);
+
+		// If $domain is informed, sets the correspondant detail in the request information array
+		if( $domain )
+		{
+			$details['lgdomain'] = $domain;
+
+		}
 		
 		// Send the login request
 		$response = $this->session->post($this->api, array(), $details);
