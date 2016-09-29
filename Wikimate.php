@@ -560,6 +560,8 @@ class WikiPage {
 	 * after the page edit (if the edit is successful)
 	 * @param string $text the article text
 	 * @param string $section the section to edit (null for whole page)
+	 * @param boolean $minor true for minor edit
+	 * @param string $summary summary text
 	 * @return boolean true if page was edited successfully
 	 */
 	function setText( $text, $section = null, $minor = false, $summary = null ) {
@@ -631,7 +633,7 @@ class WikiPage {
 	 * @return boolean true if the section was saved
 	 */
 	function setSection( $text, $section = 0, $summary = null, $minor = false ) {
-		$this->setText( $text, $section, $minor, $summary );
+		return $this->setText( $text, $section, $minor, $summary );
 	}
 	
 	/**
