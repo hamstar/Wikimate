@@ -28,7 +28,7 @@ class Wikimate {
 	
 	/**
 	 * Create a new Wikimate object.
-	 * 
+	 *
 	 * @return Wikimate
 	 */
 	function __construct( $api ) {
@@ -46,7 +46,7 @@ class Wikimate {
 	 */
 	protected function initRequests() {
 		$this->session = new Requests_Session( $this->api );
-		$this->useragent  = "Wikimate ".self::VERSION." (https://github.com/hamstar/Wikimate)";
+		$this->useragent = "Wikimate ".self::VERSION." (https://github.com/hamstar/Wikimate)";
 	}
 
 	/**
@@ -124,7 +124,6 @@ class Wikimate {
 		
 		//Logger::log( "Logged in" );
 		return true;
-		
 	}
 	
 	/**
@@ -243,6 +242,7 @@ class Wikimate {
 		
 		return unserialize( $apiResult );
 	}
+	
 	public function getError() {
 		return $this->error;
 	}
@@ -277,9 +277,9 @@ class WikiPage {
 	
 	/**
 	 * Constructs a WikiPage object from the title given and adds
-	 * a wikibot object
+	 * a Wikimate object
 	 * @param string $title name of the wiki article
-	 * @param WikiBot $wikibot WikiBot object
+	 * @param Wikimate $wikimate Wikimate object
 	 */
 	function __construct( $title, $wikimate ) {
 		$this->wikimate = $wikimate;
@@ -290,7 +290,6 @@ class WikiPage {
 			echo "Invalid page title - cannot create WikiPage";
 			return null;
 		}
-		
 	}
 	
 	/**
@@ -481,17 +480,16 @@ class WikiPage {
 		}
 		
 		return $this->text; // Return the text in any case
-		
 	}
 	
 	/**
 	 * Returns the section requested, section can be the following:
 	 * - section name (string:"History")
 	 * - section index (int:3)
-	 * 
+	 *
 	 * @param mixed $section the section to get
 	 * @param boolan $includeHeading false to get section text only
-	 * @return string wikitext of the section on the page 
+	 * @return string wikitext of the section on the page
 	 */
 	function getSection( $section, $includeHeading = false ) {
 		// Check if we have a section name or index
@@ -509,13 +507,12 @@ class WikiPage {
 			$text = substr( $this->text, $offset );
 		}
 		
-		// Whack of the heading if need be
+		// Whack off the heading if need be
 		if ( !$includeHeading && $offset > 0 ) {
 			$text = substr( $text, strpos( trim( $text ), "\n" ) ); // Chop off the first line
 		}
 		
 		return $text;
-		
 	}
 	
 	/**
@@ -548,7 +545,6 @@ class WikiPage {
 		}
 		
 		return $sections;
-		
 	}
 	
 	/*
@@ -571,7 +567,7 @@ class WikiPage {
 			'md5' => md5( $text ),
 			'bot' => "true",
 			'token' => $this->edittoken,
-			'starttimestamp' => $this->starttimestamp 
+			'starttimestamp' => $this->starttimestamp
 		);
 		
 		// Set options from arguments
@@ -604,7 +600,7 @@ class WikiPage {
 			$data = array(
 				'prop' => 'info',
 				'intoken' => 'edit',
-				'titles' => $this->title 
+				'titles' => $this->title
 			);
 			
 			$r = $this->wikimate->query( $data );
@@ -650,7 +646,7 @@ class WikiPage {
 	function delete( $reason ) {
 		$data = array(
 			'title' => $this->title,
-			'token' => $this->edittoken 
+			'token' => $this->edittoken
 		);
 		
 		// Set options from arguments
@@ -669,7 +665,5 @@ class WikiPage {
 		
 		$this->error = $r;
 		return false;
-		
 	}
-	
 }
