@@ -4,7 +4,7 @@
  *
  * @author Robert McLeod
  * @since December 2010
- * @version 0.10.0
+ * @version 0.10.1
  */
 class Wikimate {
 	
@@ -14,7 +14,7 @@ class Wikimate {
 	/**
 	 * @var string The current version number (conforms to http://semver.org/).
 	 */
-	const VERSION = '0.10.0';
+	const VERSION = '0.10.1';
 
 	protected $api;
 	protected $username;
@@ -251,9 +251,9 @@ class Wikimate {
 
 /**
  * Models a wiki article page that can have its text altered and retrieved.
+ *
  * @author Robert McLeod
  * @since December 2010
- * @version 0.5
  */
 class WikiPage {
 	const SECTIONLIST_BY_INDEX = 1;
