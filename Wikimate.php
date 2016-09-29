@@ -22,6 +22,7 @@ class Wikimate {
 
 	/** @var Requests_Session */
 	protected $session;
+	protected $useragent;
 
 	protected $error = array();
 	protected $debugMode = false;
@@ -139,7 +140,7 @@ class Wikimate {
 
 	/**
 	 * Used to return or print the curl settings, but now prints an error and
-	 * returns Wikimate::getRequestsConfig()
+	 * returns Wikimate::debugRequestsConfig()
 	 *
 	 * @deprecated since version 0.10.0
 	 * @param boolean $echo True to echo the configuration
@@ -149,7 +150,7 @@ class Wikimate {
 		if ( $echo ) {
 			echo "ERROR: Curl is no longer used by Wikimate.\n";
 		}
-		return $this->getRequestsConfig();
+		return $this->debugRequestsConfig( $echo );
 	}
 
 	/**
@@ -293,7 +294,7 @@ class WikiPage {
 	}
 	
 	/**
-	 *
+	 * Forget all object properties
 	 * @return <type> Destructor
 	 */
 	function __destruct() {
@@ -305,6 +306,7 @@ class WikiPage {
 		$this->wikimate       = null;
 		$this->error          = null;
 		$this->invalid        = false;
+		$this->sections       = null;
 		return null;
 	}
 	
