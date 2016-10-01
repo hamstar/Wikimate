@@ -21,7 +21,7 @@ Then, download Wikimate, and initialise it by running `composer install` (or
 To use Wikimate within another project, you can add it as a composer dependency
 by adding the following to your `composer.json` file:
 
-    "hamstar/Wikimate": "0.10.0"
+    "hamstar/Wikimate": "0.10.1"
 
 ## Usage
 
@@ -224,6 +224,12 @@ $array_result = $wiki->edit( $data );
 Both methods return an array of the MediaWiki API result.
 
 ## Changelog
+
+### Version 0.10.1
+
+* Supports optional domain at authentication
+* Bug fix: pass return value in setSection
+* Bug fix: correct call to debugRequestsConfig
 
 ### Version 0.10.0
 

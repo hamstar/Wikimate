@@ -4,7 +4,7 @@
  *
  * @author Robert McLeod
  * @since December 2010
- * @version 0.10.0
+ * @version 0.10.1
  */
 class Wikimate {
 	
@@ -14,7 +14,7 @@ class Wikimate {
 	/**
 	 * @var string The current version number (conforms to http://semver.org/).
 	 */
-	const VERSION = '0.10.0';
+	const VERSION = '0.10.1';
 
 	protected $api;
 	protected $username;
@@ -22,13 +22,14 @@ class Wikimate {
 
 	/** @var Requests_Session */
 	protected $session;
+	protected $useragent;
 
 	protected $error = array();
 	protected $debugMode = false;
 	
 	/**
 	 * Create a new Wikimate object.
-	 * 
+	 *
 	 * @return Wikimate
 	 */
 	function __construct( $api ) {
@@ -46,7 +47,7 @@ class Wikimate {
 	 */
 	protected function initRequests() {
 		$this->session = new Requests_Session( $this->api );
-		$this->useragent  = "Wikimate ".self::VERSION." (https://github.com/hamstar/Wikimate)";
+		$this->useragent = "Wikimate ".self::VERSION." (https://github.com/hamstar/Wikimate)";
 	}
 
 	/**
@@ -124,7 +125,6 @@ class Wikimate {
 		
 		//Logger::log( "Logged in" );
 		return true;
-		
 	}
 	
 	/**
@@ -140,7 +140,7 @@ class Wikimate {
 
 	/**
 	 * Used to return or print the curl settings, but now prints an error and
-	 * returns Wikimate::getRequestsConfig()
+	 * returns Wikimate::debugRequestsConfig()
 	 *
 	 * @deprecated since version 0.10.0
 	 * @param boolean $echo True to echo the configuration
@@ -150,7 +150,7 @@ class Wikimate {
 		if ( $echo ) {
 			echo "ERROR: Curl is no longer used by Wikimate.\n";
 		}
-		return $this->getRequestsConfig();
+		return $this->debugRequestsConfig( $echo );
 	}
 
 	/**
@@ -243,6 +243,7 @@ class Wikimate {
 		
 		return unserialize( $apiResult );
 	}
+	
 	public function getError() {
 		return $this->error;
 	}
@@ -250,9 +251,9 @@ class Wikimate {
 
 /**
  * Models a wiki article page that can have its text altered and retrieved.
+ *
  * @author Robert McLeod
  * @since December 2010
- * @version 0.5
  */
 class WikiPage {
 	const SECTIONLIST_BY_INDEX = 1;
@@ -277,9 +278,9 @@ class WikiPage {
 	
 	/**
 	 * Constructs a WikiPage object from the title given and adds
-	 * a wikibot object
+	 * a Wikimate object
 	 * @param string $title name of the wiki article
-	 * @param WikiBot $wikibot WikiBot object
+	 * @param Wikimate $wikimate Wikimate object
 	 */
 	function __construct( $title, $wikimate ) {
 		$this->wikimate = $wikimate;
@@ -290,11 +291,10 @@ class WikiPage {
 			echo "Invalid page title - cannot create WikiPage";
 			return null;
 		}
-		
 	}
 	
 	/**
-	 *
+	 * Forget all object properties
 	 * @return <type> Destructor
 	 */
 	function __destruct() {
@@ -306,6 +306,7 @@ class WikiPage {
 		$this->wikimate       = null;
 		$this->error          = null;
 		$this->invalid        = false;
+		$this->sections       = null;
 		return null;
 	}
 	
@@ -481,17 +482,16 @@ class WikiPage {
 		}
 		
 		return $this->text; // Return the text in any case
-		
 	}
 	
 	/**
 	 * Returns the section requested, section can be the following:
 	 * - section name (string:"History")
 	 * - section index (int:3)
-	 * 
+	 *
 	 * @param mixed $section the section to get
 	 * @param boolan $includeHeading false to get section text only
-	 * @return string wikitext of the section on the page 
+	 * @return string wikitext of the section on the page
 	 */
 	function getSection( $section, $includeHeading = false ) {
 		// Check if we have a section name or index
@@ -509,13 +509,12 @@ class WikiPage {
 			$text = substr( $this->text, $offset );
 		}
 		
-		// Whack of the heading if need be
+		// Whack off the heading if need be
 		if ( !$includeHeading && $offset > 0 ) {
 			$text = substr( $text, strpos( trim( $text ), "\n" ) ); // Chop off the first line
 		}
 		
 		return $text;
-		
 	}
 	
 	/**
@@ -548,7 +547,6 @@ class WikiPage {
 		}
 		
 		return $sections;
-		
 	}
 	
 	/*
@@ -562,6 +560,8 @@ class WikiPage {
 	 * after the page edit (if the edit is successful)
 	 * @param string $text the article text
 	 * @param string $section the section to edit (null for whole page)
+	 * @param boolean $minor true for minor edit
+	 * @param string $summary summary text
 	 * @return boolean true if page was edited successfully
 	 */
 	function setText( $text, $section = null, $minor = false, $summary = null ) {
@@ -571,7 +571,7 @@ class WikiPage {
 			'md5' => md5( $text ),
 			'bot' => "true",
 			'token' => $this->edittoken,
-			'starttimestamp' => $this->starttimestamp 
+			'starttimestamp' => $this->starttimestamp
 		);
 		
 		// Set options from arguments
@@ -604,7 +604,7 @@ class WikiPage {
 			$data = array(
 				'prop' => 'info',
 				'intoken' => 'edit',
-				'titles' => $this->title 
+				'titles' => $this->title
 			);
 			
 			$r = $this->wikimate->query( $data );
@@ -633,7 +633,7 @@ class WikiPage {
 	 * @return boolean true if the section was saved
 	 */
 	function setSection( $text, $section = 0, $summary = null, $minor = false ) {
-		$this->setText( $text, $section, $minor, $summary );
+		return $this->setText( $text, $section, $minor, $summary );
 	}
 	
 	/**
@@ -650,7 +650,7 @@ class WikiPage {
 	function delete( $reason ) {
 		$data = array(
 			'title' => $this->title,
-			'token' => $this->edittoken 
+			'token' => $this->edittoken
 		);
 		
 		// Set options from arguments
@@ -669,7 +669,5 @@ class WikiPage {
 		
 		$this->error = $r;
 		return false;
-		
 	}
-	
 }
