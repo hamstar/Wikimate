@@ -137,8 +137,8 @@ class Wikimate {
 	/**
 	 * Sets the debug mode
 	 *
-	 * @param  boolean $debugMode true to turn debugging on
-	 * @return  Wikimate this object
+	 * @param   boolean  $debugMode  True to turn debugging on
+	 * @return  Wikimate             This object
 	 */
 	public function setDebugMode( $b ) {
 		$this->debugMode = $b;
@@ -193,7 +193,7 @@ class Wikimate {
 	 * Performs a query to the wiki api with the given details
 	 *
 	 * @param   array  $array  Array of details to be passed in the query
-	 * @return  array          Unserialized php output from the wiki
+	 * @return  array          Unserialized php output from the wiki API
 	 */
 	public function query( $array ) {
 		$array['action'] = 'query';
@@ -206,8 +206,8 @@ class Wikimate {
 	/**
 	 * Performs a parse query to the wiki API.
 	 *
-	 * @param   array  $array  Array of details to be passed in the query.
-	 * @return  array          Unserialized php output from the wiki API.
+	 * @param   array  $array  Array of details to be passed in the query
+	 * @return  array          Unserialized php output from the wiki API
 	 */
 	public function parse( $array ) {
 		$array['action'] = 'parse';
@@ -222,7 +222,7 @@ class Wikimate {
 	 * Perfoms an edit query to the wiki API
 	 *
 	 * @param   array  $array  Array of details to be passed in the query
-	 * @return  array          Unserialized php output from the wiki
+	 * @return  array          Unserialized php output from the wiki API
 	 */
 	public function edit( $array ) {
 		$headers = array(
@@ -241,7 +241,7 @@ class Wikimate {
 	 * Perfoms a delete query to the wiki API
 	 *
 	 * @param   array  $array  Array of details to be passed in the query
-	 * @return  array          Unserialized php output from the wiki
+	 * @return  array          Unserialized php output from the wiki API
 	 */
 	public function delete( $array ) {
 		$headers = array(
@@ -413,8 +413,8 @@ class WikiPage {
 	 */
 	
 	/**
-	 * Gets the text of the page. If refesh is true,
-	 * then this method will query the wiki api again for the page details
+	 * Gets the text of the page. If refresh is true,
+	 * then this method will query the wiki api again for the page details.
 	 *
 	 * @param   boolean  $refresh  True to query the wiki api again
 	 * @return  string             The text of the page
@@ -544,9 +544,9 @@ class WikiPage {
 	 * - self::SECTIONLIST_BY_NAME
 	 * - self::SECTIONLIST_BY_INDEX
 	 *
-	 * @param  boolean  $includeHeading  False to get section text only
-	 * @param  integer  $keyNames        Modifier for the array key names
-	 * @return  array of sections
+	 * @param   boolean  $includeHeading  False to get section text only
+	 * @param   integer  $keyNames        Modifier for the array key names
+	 * @return  array                     Array of sections
 	 */
 	function getAllSections( $includeHeading = false, $keyNames = self::SECTIONLIST_BY_INDEX ) {
 		$sections = array();
@@ -669,7 +669,13 @@ class WikiPage {
 		return $this->setSection( $text, $section = 'new', $summary = $name, $minor = false );
 	}
 	
-	function delete( $reason ) {
+	/**
+	 * Delete the page
+	 *
+	 * @param   string   $reason  Reason for the deletion
+	 * @return  boolean           True if page was deleted successfully
+	 */
+	function delete( $reason = null ) {
 		$data = array(
 			'title' => $this->title,
 			'token' => $this->edittoken
