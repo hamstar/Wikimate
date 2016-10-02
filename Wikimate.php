@@ -498,6 +498,11 @@ class WikiPage {
 						$this->sections->byIndex[$currIndex]['length'] = $length;
 						$this->sections->byName[$currName]['length']   = $length;
 					}
+					else {
+						// Set the length of last section
+						$this->sections->byIndex[$currIndex]['length'] = strlen($this->text) - $currOffset;
+						$this->sections->byName[$currName]['length']   = strlen($this->text) - $currOffset;
+					}
 				}
 			}
 		}
@@ -524,15 +529,12 @@ class WikiPage {
 		
 		// Extract the text
 		@extract( $coords );
-		if ( isset( $length ) ) {
-			$text = substr( $this->text, $offset, $length );
-		} else {
-			$text = substr( $this->text, $offset );
-		}
+		$text = substr( $this->text, $offset, $length );
 		
 		// Whack off the heading if need be
 		if ( !$includeHeading && $offset > 0 ) {
-			$text = substr( $text, strpos( trim( $text ), "\n" ) ); // Chop off the first line
+			// Chop off the first line
+			$text = substr( $text, strpos( trim( $text ), "\n" ) );
 		}
 		
 		return $text;
