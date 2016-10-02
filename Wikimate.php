@@ -471,9 +471,9 @@ class WikiPage {
 				$currIndex = 0;
 				$currName  = 'intro';
 				
-				foreach ( $sections as $i => $section ) {
+				foreach ( $sections as $section ) {
 					// Get the current offset
-					$currOffset = strpos( $this->text, $section );
+					$currOffset = strpos( $this->text, $section, $this->sections->byIndex[$currIndex]['offset'] );
 					
 					// Are we still on the first section?
 					if ( $currIndex == 0 ) {
@@ -485,13 +485,22 @@ class WikiPage {
 					$currName = trim( str_replace( '=', '', $section ) );
 					$currIndex++;
 					
+					// Search for existing name and create unique one
+					$cName = $currName;
+					for ($seq = 2; array_key_exists($cName, $this->sections->byName); $seq++) {
+						$cName = $currName . '_' . $seq;
+					}
+					if ($seq > 2) {
+						$currName = $cName;
+					}
+
 					// Set the offset for the current section
 					$this->sections->byIndex[$currIndex]['offset'] = $currOffset;
 					$this->sections->byName[$currName]['offset']   = $currOffset;
 					
 					// If there is a section after this, set the length of this one
 					if ( isset( $sections[$currIndex] ) ) {
-						$nextOffset = strpos( $this->text, $sections[$currIndex] ); // Get the offset of the next section
+						$nextOffset = strpos( $this->text, $sections[$currIndex], $currOffset ); // Get the offset of the next section
 						$length     = $nextOffset - $currOffset; // Calculate the length of this one
 						
 						// Set the length of this section
