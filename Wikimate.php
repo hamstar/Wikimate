@@ -457,7 +457,7 @@ class WikiPage {
 			unset( $page );
 			
 			// Now we need to get the section information
-			preg_match_all( '/={1,6}.*={1,6}\n/', $this->text, $m ); // TODO: improve regexp if possible
+			preg_match_all( '/(={1,6}).*?\1 *\n/', $this->text, $m );
 			
 			// Set the intro section (between title and first section)
 			$this->sections->byIndex[0]['offset']      = 0;
