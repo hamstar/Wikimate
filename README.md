@@ -4,6 +4,10 @@ It consists of two classes currently:
 * **Wikimate** – Serves as a loader and manager for different wiki objects (e.g. pages).
 * **WikiPage** – The only object made so far. Provides an interface to getting/editing pages.
 
+The [latest released version](https://github.com/hamstar/Wikimate/releases) of Wikimate
+is v0.10.0, released on Jun 24, 2014.
+See [CHANGELOG.md](CHANGELOG.md) for the detailed version history.
+
 ## Installation
 
 **Requirements: [PHP](http://php.net), and [Composer](http://getcomposer.org).**
