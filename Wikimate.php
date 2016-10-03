@@ -186,7 +186,7 @@ class Wikimate {
 	}
 	
 	/**
-	 * Performs a query to the wiki api with the given details
+	 * Performs a query to the wiki API with the given details
 	 *
 	 * @param   array  $array  Array of details to be passed in the query
 	 * @return  array          Unserialized php output from the wiki API
@@ -410,9 +410,9 @@ class WikiPage {
 	
 	/**
 	 * Gets the text of the page. If refresh is true,
-	 * then this method will query the wiki api again for the page details.
+	 * then this method will query the wiki API again for the page details.
 	 *
-	 * @param   boolean  $refresh  True to query the wiki api again
+	 * @param   boolean  $refresh  True to query the wiki API again
 	 * @return  string             The text of the page
 	 */
 	function getText( $refresh = false ) {
