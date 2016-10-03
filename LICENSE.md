@@ -1,4 +1,6 @@
-Copyright (c) 2014 Robert McLeod
+## MIT License
+
+Copyright (c) 2014 Robert McLeod and [contributors](https://github.com/hamstar/Wikimate/graphs/contributors)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
