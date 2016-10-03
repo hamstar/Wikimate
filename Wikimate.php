@@ -466,7 +466,11 @@ class WikiPage {
 			$this->sections->byIndex[0]['offset']      = 0;
 			$this->sections->byName['intro']['offset'] = 0;
 			
-			if ( !empty( $m[0] ) ) {
+			if ( empty( $m[0] ) ) {
+				// Define lengths for page without sections
+				$this->sections->byIndex[0]['length']      = strlen( $this->text );
+				$this->sections->byName['intro']['length'] = strlen( $this->text );
+			} else {
 				// Array of section names
 				$sections = $m[0];
 				
