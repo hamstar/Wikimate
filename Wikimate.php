@@ -2,7 +2,7 @@
 /// =============================================================================
 /// Wikimate is a wrapper for the MediaWiki API that aims to be very easy to use.
 /// 
-/// @version    0.10.1
+/// @version    0.11.0
 /// @copyright  SPDX-License-Identifier: MIT
 /// =============================================================================
 
@@ -20,7 +20,7 @@ class Wikimate {
 	/**
 	 * @var  string  The current version number (conforms to http://semver.org/).
 	 */
-	const VERSION = '0.10.1';
+	const VERSION = '0.11.0';
 
 	protected $api;
 	protected $username;
@@ -420,7 +420,7 @@ class WikiPage {
 	 * @return  string             The text of the page
 	 */
 	function getText( $refresh = false ) {
-		if ( $refresh ) { // We want to query the api
+		if ( $refresh ) { // We want to query the API
 			
 			$data = array(
 				'prop' => 'info|revisions',
@@ -438,7 +438,8 @@ class WikiPage {
 				$this->error = null; // Reset the error status
 			}
 			
-			$page = array_pop( $r['query']['pages'] ); // Get the page (there should only be one)
+			// Get the page (there should only be one)
+			$page = array_pop( $r['query']['pages'] );
 			
 			unset( $r, $data );
 			
@@ -450,14 +451,16 @@ class WikiPage {
 			$this->starttimestamp = $page['starttimestamp'];
 			
 			if ( !isset( $page['missing'] ) ) {
-				$this->exists = true; // Update the existance if the page is there
-				$this->text   = $page['revisions'][0]['*']; // Put the content into text
+				// Update the existance if the page is there
+				$this->exists = true;
+				// Put the content into text
+				$this->text   = $page['revisions'][0]['*'];
 			}
 			
 			unset( $page );
 			
 			// Now we need to get the section information
-			preg_match_all( '/={1,6}.*={1,6}\n/', $this->text, $m ); // TODO: improve regexp if possible
+			preg_match_all( '/(={1,6}).*?\1 *\n/', $this->text, $m );
 			
 			// Set the intro section (between title and first section)
 			$this->sections->byIndex[0]['offset']      = 0;
@@ -471,9 +474,9 @@ class WikiPage {
 				$currIndex = 0;
 				$currName  = 'intro';
 				
-				foreach ( $sections as $i => $section ) {
+				foreach ( $sections as $section ) {
 					// Get the current offset
-					$currOffset = strpos( $this->text, $section );
+					$currOffset = strpos( $this->text, $section, $this->sections->byIndex[$currIndex]['offset'] );
 					
 					// Are we still on the first section?
 					if ( $currIndex == 0 ) {
@@ -485,18 +488,34 @@ class WikiPage {
 					$currName = trim( str_replace( '=', '', $section ) );
 					$currIndex++;
 					
+					// Search for existing name and create unique one
+					$cName = $currName;
+					for ($seq = 2; array_key_exists($cName, $this->sections->byName); $seq++) {
+						$cName = $currName . '_' . $seq;
+					}
+					if ($seq > 2) {
+						$currName = $cName;
+					}
+
 					// Set the offset for the current section
 					$this->sections->byIndex[$currIndex]['offset'] = $currOffset;
 					$this->sections->byName[$currName]['offset']   = $currOffset;
 					
 					// If there is a section after this, set the length of this one
 					if ( isset( $sections[$currIndex] ) ) {
-						$nextOffset = strpos( $this->text, $sections[$currIndex] ); // Get the offset of the next section
-						$length     = $nextOffset - $currOffset; // Calculate the length of this one
+						// Get the offset of the next section
+						$nextOffset = strpos( $this->text, $sections[$currIndex], $currOffset );
+						// Calculate the length of this one
+						$length     = $nextOffset - $currOffset;
 						
 						// Set the length of this section
 						$this->sections->byIndex[$currIndex]['length'] = $length;
 						$this->sections->byName[$currName]['length']   = $length;
+					}
+					else {
+						// Set the length of last section
+						$this->sections->byIndex[$currIndex]['length'] = strlen($this->text) - $currOffset;
+						$this->sections->byName[$currName]['length']   = strlen($this->text) - $currOffset;
 					}
 				}
 			}
@@ -524,15 +543,12 @@ class WikiPage {
 		
 		// Extract the text
 		@extract( $coords );
-		if ( isset( $length ) ) {
-			$text = substr( $this->text, $offset, $length );
-		} else {
-			$text = substr( $this->text, $offset );
-		}
+		$text = substr( $this->text, $offset, $length );
 		
 		// Whack off the heading if need be
 		if ( !$includeHeading && $offset > 0 ) {
-			$text = substr( $text, strpos( trim( $text ), "\n" ) ); // Chop off the first line
+			// Chop off the first line
+			$text = substr( $text, strpos( trim( $text ), "\n" ) );
 		}
 		
 		return $text;

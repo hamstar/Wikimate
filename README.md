@@ -225,6 +225,10 @@ Both methods return an array of the MediaWiki API result.
 
 ## Changelog
 
+### Version 0.11.0
+
+* Improved section processing in getText
+
 ### Version 0.10.1
 
 * Supports optional domain at authentication
