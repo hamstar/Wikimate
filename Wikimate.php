@@ -13,10 +13,6 @@
  * @since   December 2010
  */
 class Wikimate {
-	
-	const SECTIONLIST_BY_NAME = 1;
-	const SECTIONLIST_BY_INDEX = 2;
-
 	/**
 	 * @var  string  The current version number (conforms to http://semver.org/).
 	 */
