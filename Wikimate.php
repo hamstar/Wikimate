@@ -2,7 +2,7 @@
 /// =============================================================================
 /// Wikimate is a wrapper for the MediaWiki API that aims to be very easy to use.
 /// 
-/// @version    0.10.1
+/// @version    0.11.0
 /// @copyright  SPDX-License-Identifier: MIT
 /// =============================================================================
 
@@ -20,7 +20,7 @@ class Wikimate {
 	/**
 	 * @var  string  The current version number (conforms to http://semver.org/).
 	 */
-	const VERSION = '0.10.1';
+	const VERSION = '0.11.0';
 
 	protected $api;
 	protected $username;
@@ -420,7 +420,7 @@ class WikiPage {
 	 * @return  string             The text of the page
 	 */
 	function getText( $refresh = false ) {
-		if ( $refresh ) { // We want to query the api
+		if ( $refresh ) { // We want to query the API
 			
 			$data = array(
 				'prop' => 'info|revisions',
@@ -438,7 +438,8 @@ class WikiPage {
 				$this->error = null; // Reset the error status
 			}
 			
-			$page = array_pop( $r['query']['pages'] ); // Get the page (there should only be one)
+			// Get the page (there should only be one)
+			$page = array_pop( $r['query']['pages'] );
 			
 			unset( $r, $data );
 			
@@ -450,8 +451,10 @@ class WikiPage {
 			$this->starttimestamp = $page['starttimestamp'];
 			
 			if ( !isset( $page['missing'] ) ) {
-				$this->exists = true; // Update the existance if the page is there
-				$this->text   = $page['revisions'][0]['*']; // Put the content into text
+				// Update the existance if the page is there
+				$this->exists = true;
+				// Put the content into text
+				$this->text   = $page['revisions'][0]['*'];
 			}
 			
 			unset( $page );
@@ -500,8 +503,10 @@ class WikiPage {
 					
 					// If there is a section after this, set the length of this one
 					if ( isset( $sections[$currIndex] ) ) {
-						$nextOffset = strpos( $this->text, $sections[$currIndex], $currOffset ); // Get the offset of the next section
-						$length     = $nextOffset - $currOffset; // Calculate the length of this one
+						// Get the offset of the next section
+						$nextOffset = strpos( $this->text, $sections[$currIndex], $currOffset );
+						// Calculate the length of this one
+						$length     = $nextOffset - $currOffset;
 						
 						// Set the length of this section
 						$this->sections->byIndex[$currIndex]['length'] = $length;
