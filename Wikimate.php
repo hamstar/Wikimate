@@ -13,10 +13,6 @@
  * @since   December 2010
  */
 class Wikimate {
-	
-	const SECTIONLIST_BY_NAME = 1;
-	const SECTIONLIST_BY_INDEX = 2;
-
 	/**
 	 * @var  string  The current version number (conforms to http://semver.org/).
 	 */
@@ -164,10 +160,10 @@ class Wikimate {
 	 * Get or print the Requests configuration.
 	 *
 	 * @param   boolean  $echo  Whether to echo the options
-	 * @return  array           Options if $echo is FALSE
+	 * @return  array           Options if $echo is false
 	 * @return  boolean         True if options have been echoed to STDOUT
 	 */
-	public function debugRequestsConfig( $echo = FALSE ) {
+	public function debugRequestsConfig( $echo = false ) {
 		if ( $echo ) {
 			echo "<pre>Requests options:\n";
 			print_r( $this->session->options );
@@ -190,7 +186,7 @@ class Wikimate {
 	}
 	
 	/**
-	 * Performs a query to the wiki api with the given details
+	 * Performs a query to the wiki API with the given details
 	 *
 	 * @param   array  $array  Array of details to be passed in the query
 	 * @return  array          Unserialized php output from the wiki API
@@ -414,9 +410,9 @@ class WikiPage {
 	
 	/**
 	 * Gets the text of the page. If refresh is true,
-	 * then this method will query the wiki api again for the page details.
+	 * then this method will query the wiki API again for the page details.
 	 *
-	 * @param   boolean  $refresh  True to query the wiki api again
+	 * @param   boolean  $refresh  True to query the wiki API again
 	 * @return  string             The text of the page
 	 */
 	function getText( $refresh = false ) {
@@ -459,21 +455,27 @@ class WikiPage {
 			
 			unset( $page );
 			
-			// Now we need to get the section information
-			preg_match_all( '/(={1,6}).*?\1 *\n/', $this->text, $m );
+			// Now we need to get the section headers, if any
+			preg_match_all( '/(={1,6}).*?\1 *\n/', $this->text, $matches );
 			
 			// Set the intro section (between title and first section)
 			$this->sections->byIndex[0]['offset']      = 0;
 			$this->sections->byName['intro']['offset'] = 0;
 			
-			if ( !empty( $m[0] ) ) {
-				// Array of section names
-				$sections = $m[0];
+			// Check for section header matches
+			if ( empty( $matches[0] ) ) {
+				// Define lengths for page consisting only of intro section
+				$this->sections->byIndex[0]['length']      = strlen( $this->text );
+				$this->sections->byName['intro']['length'] = strlen( $this->text );
+			} else {
+				// Array of section header matches
+				$sections = $matches[0];
 				
-				// Setup the current section
+				// Set up the current section
 				$currIndex = 0;
 				$currName  = 'intro';
 				
+				// Collect offsets and lengths from section header matches
 				foreach ( $sections as $section ) {
 					// Get the current offset
 					$currOffset = strpos( $this->text, $section, $this->sections->byIndex[$currIndex]['offset'] );
@@ -490,10 +492,10 @@ class WikiPage {
 					
 					// Search for existing name and create unique one
 					$cName = $currName;
-					for ($seq = 2; array_key_exists($cName, $this->sections->byName); $seq++) {
+					for ( $seq = 2; array_key_exists( $cName, $this->sections->byName ); $seq++ ) {
 						$cName = $currName . '_' . $seq;
 					}
-					if ($seq > 2) {
+					if ( $seq > 2 ) {
 						$currName = $cName;
 					}
 
@@ -514,8 +516,8 @@ class WikiPage {
 					}
 					else {
 						// Set the length of last section
-						$this->sections->byIndex[$currIndex]['length'] = strlen($this->text) - $currOffset;
-						$this->sections->byName[$currName]['length']   = strlen($this->text) - $currOffset;
+						$this->sections->byIndex[$currIndex]['length'] = strlen( $this->text ) - $currOffset;
+						$this->sections->byName[$currName]['length']   = strlen( $this->text ) - $currOffset;
 					}
 				}
 			}
