@@ -2,7 +2,7 @@
 /// =============================================================================
 /// Wikimate is a wrapper for the MediaWiki API that aims to be very easy to use.
 /// 
-/// @version    0.11.0
+/// @version    0.11.1
 /// @copyright  SPDX-License-Identifier: MIT
 /// =============================================================================
 
@@ -16,7 +16,7 @@ class Wikimate {
 	/**
 	 * @var  string  The current version number (conforms to http://semver.org/).
 	 */
-	const VERSION = '0.11.0';
+	const VERSION = '0.11.1';
 
 	protected $api;
 	protected $username;
@@ -533,13 +533,22 @@ class WikiPage {
 	 *
 	 * @param   mixed    $section         The section to get
 	 * @param   boolean  $includeHeading  False to get section text only
-	 * @return  string                    Wikitext of the section on the page
+	 * @return  string                    Wikitext of the section on the page,
+	 *                                    or false if section is undefined
 	 */
 	function getSection( $section, $includeHeading = false ) {
 		// Check if we have a section name or index
 		if ( is_int( $section ) ) {
+			if ( !isset( $this->sections->byIndex[$section] ) )
+			{
+				return false;
+			}
 			$coords = $this->sections->byIndex[$section];
 		} else if ( is_string( $section ) ) {
+			if ( !isset( $this->sections->byName[$section] ) )
+			{
+				return false;
+			}
 			$coords = $this->sections->byName[$section];
 		}
 		
