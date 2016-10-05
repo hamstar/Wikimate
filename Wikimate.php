@@ -531,13 +531,22 @@ class WikiPage {
 	 *
 	 * @param   mixed    $section         The section to get
 	 * @param   boolean  $includeHeading  False to get section text only
-	 * @return  string                    Wikitext of the section on the page
+	 * @return  string                    Wikitext of the section on the page,
+	 *                                    or false if section is undefined
 	 */
 	function getSection( $section, $includeHeading = false ) {
 		// Check if we have a section name or index
 		if ( is_int( $section ) ) {
+			if ( !isset( $this->sections->byIndex[$section] ) )
+			{
+				return false;
+			}
 			$coords = $this->sections->byIndex[$section];
 		} else if ( is_string( $section ) ) {
+			if ( !isset( $this->sections->byName[$section] ) )
+			{
+				return false;
+			}
 			$coords = $this->sections->byName[$section];
 		}
 		
