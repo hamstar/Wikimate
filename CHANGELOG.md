@@ -1,14 +1,18 @@
 ## Changelog
 
+### Version 0.11.1
+
+* Bug fix: handle unknown section parameter correctly in `WikiPage::getSection()`
+
 ### Version 0.11.0
 
-* Improved section processing in getText
+* Improved section processing in `WikiPage::getText()`
 
 ### Version 0.10.1
 
 * Supports optional domain at authentication
-* Bug fix: pass return value in setSection
-* Bug fix: correct call to debugRequestsConfig
+* Bug fix: pass return value in `WikiPage::setSection()`
+* Bug fix: correct call to `Wikimate::debugRequestsConfig()`
 
 ### Version 0.10.0
 
