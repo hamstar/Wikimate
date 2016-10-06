@@ -624,12 +624,19 @@ class WikiPage {
 		);
 		
 		// Set options from arguments
-		if ( !is_null( $section ) )
-			$data['section'] = $section;
-		if ( $minor )
+		if ( !is_null( $section ) ) {
+			// Obtain section index in case it is a name
+			$data['section'] = $this->findSection( $section );
+			if ( $data['section'] == -1 ) {
+				return false;
+			}
+		}
+		if ( $minor ) {
 			$data['minor'] = $minor;
-		if ( !is_null( $summary ) )
+		}
+		if ( !is_null( $summary ) ) {
 			$data['summary'] = $summary;
+		}
 		
 		// Make sure we don't create a page by accident or overwrite another one
 		if ( !$this->exists ) {
@@ -724,5 +731,39 @@ class WikiPage {
 		
 		$this->error = $r;
 		return false;
+	}
+
+	/*
+	 *
+	 * Private methods
+	 *
+	 */
+	
+	/**
+	 * Find a section's index by name.
+	 * If a section index or 'new' is passed, it is returned directly.
+	 *
+	 * @param   mixed  $section  The section name or index to find
+	 * @return  mixed            The section index, or -1 if not found
+	 */
+	private function findSection($section)
+	{
+		// Check section type
+		if ( is_int( $section ) || $section === 'new' ) {
+			return $section;
+		} else if ( is_string( $section ) ) {
+			// Search section names for related index
+			$sections = array_keys( $this->sections->byName );
+			$index = array_search( $section, $sections );
+
+			// Return index if found
+			if ($index !== false) {
+				return $index;
+			}
+		}
+
+		// Return error message and value
+		$this->error['section'] = "The section is not found on this page";
+		return -1;
 	}
 }
