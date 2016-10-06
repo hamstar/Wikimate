@@ -68,8 +68,7 @@ class Wikimate {
 		);
 
 		// If $domain is provided, set the corresponding detail in the request information array
-		if( is_string( $domain ) )
-		{
+		if ( is_string( $domain ) ) {
 			$details['lgdomain'] = $domain;
 		}
 		
@@ -249,7 +248,7 @@ class Wikimate {
 		
 		$apiResult = $this->session->post( $this->api, $headers, $array );
 		
-		return unserialize( $apiResult );
+		return unserialize( $apiResult->body );
 	}
 	
 	public function getError() {
@@ -539,14 +538,12 @@ class WikiPage {
 	function getSection( $section, $includeHeading = false ) {
 		// Check if we have a section name or index
 		if ( is_int( $section ) ) {
-			if ( !isset( $this->sections->byIndex[$section] ) )
-			{
+			if ( !isset( $this->sections->byIndex[$section] ) ) {
 				return false;
 			}
 			$coords = $this->sections->byIndex[$section];
 		} else if ( is_string( $section ) ) {
-			if ( !isset( $this->sections->byName[$section] ) )
-			{
+			if ( !isset( $this->sections->byName[$section] ) ) {
 				return false;
 			}
 			$coords = $this->sections->byName[$section];
@@ -641,7 +638,7 @@ class WikiPage {
 		$r = $this->wikimate->edit( $data ); // The edit query
 		
 		// Check if it worked
-		if ( $r['edit']['result'] == "Success" ) {
+		if ( isset( $r['edit']['result'] ) && $r['edit']['result'] == "Success" ) {
 			$this->exists = true;
 			
 			if ( is_null( $section ) ) {
@@ -666,7 +663,7 @@ class WikiPage {
 			return true;
 		}
 		
-		$this->error = $r;
+		$this->error = $r; // Return error response
 		return false;
 	}
 	
@@ -715,14 +712,14 @@ class WikiPage {
 		$r = $this->wikimate->delete( $data ); // The delete query
 		
 		// Check if it worked
-		if ( $r['delete'] ) {
+		if ( isset( $r['delete'] ) ) {
 			$this->exists = false; // The page was deleted
 			
 			$this->error = null; // Reset the error
 			return true;
 		}
 		
-		$this->error = $r;
+		$this->error = $r; // Return error response
 		return false;
 	}
 }
