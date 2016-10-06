@@ -605,12 +605,19 @@ class WikiPage {
 	
 	/**
 	 * Sets the text in the page.  Updates the starttimestamp to the timestamp
-	 * after the page edit (if the edit is successful)
+	 * after the page edit (if the edit is successful).
+	 *
+	 * Section can be the following:
+	 * - section name (string:"History")
+	 * - section index (int:3)
+	 * - a new section (string:"new")
+	 * - the whole page (null)
 	 *
 	 * @param   string   $text     The article text
-	 * @param   string   $section  The section to edit (null for whole page)
+	 * @param   string   $section  The section to edit (whole page by default)
 	 * @param   boolean  $minor    True for minor edit
-	 * @param   string   $summary  Summary text
+	 * @param   string   $summary  Summary text, and section header in case
+	 *                             of new section
 	 * @return  boolean            True if page was edited successfully
 	 */
 	function setText( $text, $section = null, $minor = false, $summary = null ) {
@@ -682,9 +689,16 @@ class WikiPage {
 	 * Essentially an alias of WikiPage:setText()
 	 * with the summary and minor parameters switched.
 	 *
+	 * Section can be the following:
+	 * - section name (string:"History")
+	 * - section index (int:3)
+	 * - a new section (string:"new")
+	 * - the whole page (null)
+	 *
 	 * @param   string   $text     The text of the section
-	 * @param   mixed    $section  Section index, new by default
-	 * @param   string   $summary  Summary text
+	 * @param   mixed    $section  The section to edit (intro by default)
+	 * @param   string   $summary  Summary text, and section header in case
+	 *                             of new section
 	 * @param   boolean  $minor    True for minor edit
 	 * @return  boolean            True if the section was saved
 	 */
