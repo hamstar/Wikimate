@@ -1,8 +1,8 @@
 <?php
 /// =============================================================================
 /// Wikimate is a wrapper for the MediaWiki API that aims to be very easy to use.
-/// 
-/// @version    0.11.1
+///
+/// @version    0.12.0
 /// @copyright  SPDX-License-Identifier: MIT
 /// =============================================================================
 
@@ -16,7 +16,7 @@ class Wikimate {
 	/**
 	 * @var  string  The current version number (conforms to http://semver.org/).
 	 */
-	const VERSION = '0.11.1';
+	const VERSION = '0.12.0';
 
 	protected $api;
 	protected $username;
@@ -196,6 +196,7 @@ class Wikimate {
 		$array['format'] = 'php';
 		
 		$apiResult = $this->session->get( $this->api.'?'.http_build_query( $array ) );
+
 		return unserialize( $apiResult->body );
 	}
 
@@ -259,7 +260,7 @@ class Wikimate {
 
 /**
  * Models a wiki article page that can have its text altered and retrieved.
- * 
+ *
  * @author  Robert McLeod
  * @since   December 2010
  */
@@ -331,7 +332,7 @@ class WikiPage {
 	
 	/**
 	 * Returns an array sections with the section name as the key
-	 *  and the text as the element, e.g.
+	 * and the text as the element, e.g.
 	 *
 	 * array(
 	 *   'intro' => 'this text is the introduction',
@@ -368,7 +369,7 @@ class WikiPage {
 	
 	/**
 	 * Returns an error if there is one, null shows no error
-	 * 
+	 *
 	 * @return  mixed  Null for no errors, or an error array object
 	 */
 	function getError() {
@@ -527,7 +528,9 @@ class WikiPage {
 	}
 	
 	/**
-	 * Returns the section requested. Section can be the following:
+	 * Returns the section requested.
+	 *
+	 * Section can be the following:
 	 * - section name (string:"History")
 	 * - section index (int:3)
 	 *
@@ -567,7 +570,7 @@ class WikiPage {
 	
 	/**
 	 * Return all the sections of the page in an array - the key names can be
-	 * set to name or index by using the following for the second param
+	 * set to name or index by using the following for the second param:
 	 * - self::SECTIONLIST_BY_NAME
 	 * - self::SECTIONLIST_BY_INDEX
 	 *
