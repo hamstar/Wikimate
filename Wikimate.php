@@ -641,7 +641,7 @@ class WikiPage {
 		$r = $this->wikimate->edit( $data ); // The edit query
 		
 		// Check if it worked
-		if ( $r['edit']['result'] == "Success" ) {
+		if ( isset( $r['edit']['result'] ) && $r['edit']['result'] == "Success" ) {
 			$this->exists = true;
 			
 			if ( is_null( $section ) ) {
@@ -715,7 +715,7 @@ class WikiPage {
 		$r = $this->wikimate->delete( $data ); // The delete query
 		
 		// Check if it worked
-		if ( $r['delete'] ) {
+		if ( isset( $r['delete'] ) ) {
 			$this->exists = false; // The page was deleted
 			
 			$this->error = null; // Reset the error
