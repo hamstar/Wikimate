@@ -90,7 +90,7 @@ $sections = $page->getAllSections();
 // get all the sections (by index number) with the section heading names
 $sections = $page->getAllSections(true);
 // get all the sections (by section name)
-$sections = $page->getAllSections(false, WikiPage:SECTIONLIST_BY_NAME);
+$sections = $page->getAllSections(false, WikiPage::SECTIONLIST_BY_NAME);
 // get all the sections (by section name)
 $sections = $page->getAllSections(false, 2);
 ```
@@ -108,6 +108,8 @@ Array
 	[References] => <references/>
 )
 ```
+
+An Exception is thrown if an unsupported value is supplied for the $keyNames parameter.
 
 ### Writing...
 

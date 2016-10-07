@@ -571,6 +571,7 @@ class WikiPage {
 	 * @param   boolean  $includeHeading  False to get section text only
 	 * @param   integer  $keyNames        Modifier for the array key names
 	 * @return  array                     Array of sections
+	 * @throw   Exception                 If $keyNames is not a supported constant
 	 */
 	function getAllSections( $includeHeading = false, $keyNames = self::SECTIONLIST_BY_INDEX ) {
 		$sections = array();
