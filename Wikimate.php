@@ -12,7 +12,8 @@
  * @author  Robert McLeod
  * @since   December 2010
  */
-class Wikimate {
+class Wikimate
+{
 	/**
 	 * @var  string  The current version number (conforms to http://semver.org/).
 	 */
@@ -34,7 +35,8 @@ class Wikimate {
 	 *
 	 * @return  Wikimate
 	 */
-	function __construct( $api ) {
+	public function __construct( $api )
+	{
 		$this->api = $api;
 		
 		$this->initRequests();
@@ -47,7 +49,8 @@ class Wikimate {
 	 *
 	 * @return  void
 	 */
-	protected function initRequests() {
+	protected function initRequests()
+	{
 		$this->session = new Requests_Session( $this->api );
 		$this->useragent = "Wikimate ".self::VERSION." (https://github.com/hamstar/Wikimate)";
 	}
@@ -57,7 +60,8 @@ class Wikimate {
 	 *
 	 * @return  boolean  True if logged in
 	 */
-	public function login( $username, $password, $domain = NULL ) {
+	public function login( $username, $password, $domain = NULL )
+	{
 		//Logger::log( "Logging in" );
 		
 		$details = array(
@@ -135,7 +139,8 @@ class Wikimate {
 	 * @param   boolean  $debugMode  True to turn debugging on
 	 * @return  Wikimate             This object
 	 */
-	public function setDebugMode( $b ) {
+	public function setDebugMode( $b )
+	{
 		$this->debugMode = $b;
 		return $this;
 	}
@@ -148,7 +153,8 @@ class Wikimate {
 	 * @param       boolean  $echo  True to echo the configuration
 	 * @return      mixed           Array of config if $echo is false, (boolean) true if echo is true
 	 */
-	public function debugCurlConfig( $echo = false ) {
+	public function debugCurlConfig( $echo = false )
+	{
 		if ( $echo ) {
 			echo "ERROR: Curl is no longer used by Wikimate.\n";
 		}
@@ -162,7 +168,8 @@ class Wikimate {
 	 * @return  array           Options if $echo is false
 	 * @return  boolean         True if options have been echoed to STDOUT
 	 */
-	public function debugRequestsConfig( $echo = false ) {
+	public function debugRequestsConfig( $echo = false )
+	{
 		if ( $echo ) {
 			echo "<pre>Requests options:\n";
 			print_r( $this->session->options );
@@ -180,7 +187,8 @@ class Wikimate {
 	 * @param   string   $title  The name of the wiki article
 	 * @return  WikiPage         The page object
 	 */
-	public function getPage( $title ) {
+	public function getPage( $title )
+	{
 		return new WikiPage( $title, $this );
 	}
 	
@@ -190,7 +198,8 @@ class Wikimate {
 	 * @param   array  $array  Array of details to be passed in the query
 	 * @return  array          Unserialized php output from the wiki API
 	 */
-	public function query( $array ) {
+	public function query( $array )
+	{
 		$array['action'] = 'query';
 		$array['format'] = 'php';
 		
@@ -204,7 +213,8 @@ class Wikimate {
 	 * @param   array  $array  Array of details to be passed in the query
 	 * @return  array          Unserialized php output from the wiki API
 	 */
-	public function parse( $array ) {
+	public function parse( $array )
+	{
 		$array['action'] = 'parse';
 		$array['format'] = 'php';
 		
@@ -219,7 +229,8 @@ class Wikimate {
 	 * @param   array  $array  Array of details to be passed in the query
 	 * @return  array          Unserialized php output from the wiki API
 	 */
-	public function edit( $array ) {
+	public function edit( $array )
+	{
 		$headers = array(
 			'Content-Type' => "application/x-www-form-urlencoded"
 		);
@@ -238,7 +249,8 @@ class Wikimate {
 	 * @param   array  $array  Array of details to be passed in the query
 	 * @return  array          Unserialized php output from the wiki API
 	 */
-	public function delete( $array ) {
+	public function delete( $array )
+	{
 		$headers = array(
 			'Content-Type' => "application/x-www-form-urlencoded"
 		);
@@ -251,7 +263,8 @@ class Wikimate {
 		return unserialize( $apiResult->body );
 	}
 	
-	public function getError() {
+	public function getError()
+	{
 		return $this->error;
 	}
 }
@@ -262,7 +275,8 @@ class Wikimate {
  * @author  Robert McLeod
  * @since   December 2010
  */
-class WikiPage {
+class WikiPage
+{
 	const SECTIONLIST_BY_INDEX = 1;
 	const SECTIONLIST_BY_NAME = 2;
 	const SECTIONLIST_BY_NUMBER = 3;
@@ -290,7 +304,8 @@ class WikiPage {
 	 * @param  string    $title     Name of the wiki article
 	 * @param  Wikimate  $wikimate  Wikimate object
 	 */
-	function __construct( $title, $wikimate ) {
+	public function __construct( $title, $wikimate )
+	{
 		$this->wikimate = $wikimate;
 		$this->title    = $title;
 		$this->text     = $this->getText( true );
@@ -306,7 +321,8 @@ class WikiPage {
 	 *
 	 * @return  <type> Destructor
 	 */
-	function __destruct() {
+	public function __destruct()
+	{
 		$this->title          = null;
 		$this->exists         = false;
 		$this->text           = null;
@@ -324,7 +340,8 @@ class WikiPage {
 	 *
 	 * @return  string  String of wikicode
 	 */
-	function __toString() {
+	public function __toString()
+	{
 		return $this->text;
 	}
 	
@@ -339,7 +356,8 @@ class WikiPage {
 	 *
 	 * @return  array  Array of sections
 	 */
-	function __invoke() {
+	public function __invoke()
+	{
 		return $this->getAllSections( false, self::SECTIONLIST_BY_NAME );
 	}
 	
@@ -348,14 +366,16 @@ class WikiPage {
 	 *
 	 * @return  boolean  True if page exists
 	 */
-	function exists() {
+	public function exists()
+	{
 		return $this->exists;
 	}
 	
 	/**
 	 * Alias of self::__destruct()
 	 */
-	function destroy() {
+	public function destroy()
+	{
 		$this->__destruct();
 	}
 	
@@ -370,7 +390,8 @@ class WikiPage {
 	 * 
 	 * @return  mixed  Null for no errors, or an error array object
 	 */
-	function getError() {
+	public function getError()
+	{
 		return $this->error;
 	}
 	
@@ -379,7 +400,8 @@ class WikiPage {
 	 *
 	 * @return  string  The title of this page
 	 */
-	function getTitle() {
+	public function getTitle()
+	{
 		return $this->title;
 	}
 	
@@ -388,7 +410,8 @@ class WikiPage {
 	 *
 	 * @return  integer  The number of sections in this page
 	 */
-	function getNumSections() {
+	public function getNumSections()
+	{
 		return count( $this->sections->byIndex );
 	}
 	
@@ -397,7 +420,8 @@ class WikiPage {
 	 *
 	 * @return  StdClass  Section class
 	 */
-	function getSectionOffsets() {
+	public function getSectionOffsets()
+	{
 		return $this->sections;
 	}
 	
@@ -414,7 +438,8 @@ class WikiPage {
 	 * @param   boolean  $refresh  True to query the wiki API again
 	 * @return  string             The text of the page
 	 */
-	function getText( $refresh = false ) {
+	public function getText( $refresh = false )
+	{
 		if ( $refresh ) { // We want to query the API
 			
 			$data = array(
@@ -535,7 +560,8 @@ class WikiPage {
 	 * @return  string                    Wikitext of the section on the page,
 	 *                                    or false if section is undefined
 	 */
-	function getSection( $section, $includeHeading = false ) {
+	public function getSection( $section, $includeHeading = false )
+	{
 		// Check if we have a section name or index
 		if ( is_int( $section ) ) {
 			if ( !isset( $this->sections->byIndex[$section] ) ) {
@@ -572,7 +598,8 @@ class WikiPage {
 	 * @param   integer  $keyNames        Modifier for the array key names
 	 * @return  array                     Array of sections
 	 */
-	function getAllSections( $includeHeading = false, $keyNames = self::SECTIONLIST_BY_INDEX ) {
+	public function getAllSections( $includeHeading = false, $keyNames = self::SECTIONLIST_BY_INDEX )
+	{
 		$sections = array();
 		
 		switch ( $keyNames ) {
@@ -610,7 +637,8 @@ class WikiPage {
 	 * @param   string   $summary  Summary text
 	 * @return  boolean            True if page was edited successfully
 	 */
-	function setText( $text, $section = null, $minor = false, $summary = null ) {
+	public function setText( $text, $section = null, $minor = false, $summary = null )
+	{
 		$data = array(
 			'title' => $this->title,
 			'text' => $text,
@@ -678,7 +706,8 @@ class WikiPage {
 	 * @param   boolean  $minor    True for minor edit
 	 * @return  boolean            True if the section was saved
 	 */
-	function setSection( $text, $section = 0, $summary = null, $minor = false ) {
+	public function setSection( $text, $section = 0, $summary = null, $minor = false )
+	{
 		return $this->setText( $text, $section, $minor, $summary );
 	}
 	
@@ -689,7 +718,8 @@ class WikiPage {
 	 * @param   string   $text  The text of the new section
 	 * @return  boolean         True if the section was saved
 	 */
-	function newSection( $name, $text ) {
+	public function newSection( $name, $text )
+	{
 		return $this->setSection( $text, $section = 'new', $summary = $name, $minor = false );
 	}
 	
@@ -699,7 +729,8 @@ class WikiPage {
 	 * @param   string   $reason  Reason for the deletion
 	 * @return  boolean           True if page was deleted successfully
 	 */
-	function delete( $reason = null ) {
+	public function delete( $reason = null )
+	{
 		$data = array(
 			'title' => $this->title,
 			'token' => $this->edittoken
