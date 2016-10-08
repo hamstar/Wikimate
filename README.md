@@ -1,5 +1,5 @@
 Wikimate is a wrapper for the MediaWiki API that aims to be very easy to use.
-It consists of two classes currently:
+It currently consists of two classes:
 
 * **Wikimate** – Serves as a loader and manager for different wiki objects (e.g. pages).
 * **WikiPage** – The only object made so far. Provides an interface to getting/editing pages.
@@ -41,22 +41,15 @@ $api_url = 'http://example.com/api.php';
 $username = 'bot';
 $password = 'password';
 
-try
-{
-	$wiki = new Wikimate($api_url);
+$wiki = new Wikimate($api_url);
 
-	// You can also pass the domain name:
-	// $wiki->login($username, $password, $domainName)
-	if ($wiki->login($username, $password))
-		echo 'Success: user logged in.' ;
-	else {
-		$error = $wiki->getError();
-		echo "<b>Wikimate error</b>: ".$error['login'];
-	}
-}
-catch ( Exception $e )
-{
-	echo "<b>Wikimate error</b>: ".$e->getMessage();
+// You can also pass the domain name:
+// $wiki->login($username, $password, $domainName)
+if ($wiki->login($username, $password))
+	echo 'Success: user logged in.' ;
+else {
+	$error = $wiki->getError();
+	echo "<b>Wikimate error</b>: ".$error['login'];
 }
 ```
 

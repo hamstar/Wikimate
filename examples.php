@@ -14,17 +14,12 @@ $password = trim(fread(STDIN, 100));
 $wiki = new Wikimate($api_url);
 #$wiki->setDebugMode(TRUE);
 
-try {
-	echo "Attempting to log in . . . ";
-	if ($wiki->login($username, $password)) {
-		echo "Success.\n";
-	} else {
-		$error = $wiki->getError();
-		echo "\nWikimate error: ".$error['login']."\n";
-		exit(1);
-	}
-} catch (Exception $e) {
-	echo "\nWikimate exception: ".$e->getMessage()."\n";
+echo "Attempting to log in . . . ";
+if ($wiki->login($username, $password)) {
+	echo "Success.\n";
+} else {
+	$error = $wiki->getError();
+	echo "\nWikimate error: ".$error['login']."\n";
 	exit(1);
 }
 

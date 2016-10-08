@@ -12,22 +12,15 @@ $api_url = 'http://example.com/api.php';
 $username = 'bot';
 $password = 'password';
 
-try
-{
-	$wiki = new Wikimate($api_url);
+$wiki = new Wikimate($api_url);
 
-	// You can also pass the domain name:
-	// $wiki->login($username, $password, $domainName)
-	if ($wiki->login($username, $password))
-		echo 'Success: user logged in.' ;
-	else {
-		$error = $wiki->getError();
-		echo "<b>Wikimate error</b>: ".$error['login'];
-	}
-}
-catch ( Exception $e )
-{
-	echo "<b>Wikimate error</b>: ".$e->getMessage();
+// You can also pass the domain name:
+// $wiki->login($username, $password, $domainName)
+if ($wiki->login($username, $password))
+	echo 'Success: user logged in.' ;
+else {
+	$error = $wiki->getError();
+	echo "<b>Wikimate error</b>: ".$error['login'];
 }
 ```
 
@@ -74,7 +67,7 @@ $wikiCode = $page->getText();
 $wikiCode = $page->getText(true);
 ```
 
-You can get sections from the page as well, via the section index, or the section heading name
+You can get sections from the page as well, via the section index, or the section heading name:
 
 ```php
 // get the part between the title and the first section
@@ -89,7 +82,7 @@ $wikiCode = $page->getSection('History');
 $wikiCode = $page->getSection(4, true);
 ```
 
-You can even get an array with all the sections in it by either index or name
+You can even get an array with all the sections in it by either index or name:
 
 ```php
 // get all the sections (by index number)
@@ -97,7 +90,7 @@ $sections = $page->getAllSections();
 // get all the sections (by index number) with the section heading names
 $sections = $page->getAllSections(true);
 // get all the sections (by section name)
-$sections = $page->getAllSections(false, WikiPage:SECTIONLIST_BY_NAME);
+$sections = $page->getAllSections(false, WikiPage::SECTIONLIST_BY_NAME);
 // get all the sections (by section name)
 $sections = $page->getAllSections(false, 2);
 ```
@@ -116,6 +109,8 @@ Array
 )
 ```
 
+An Exception is thrown if an unsupported value is supplied for the $keyNames parameter.
+
 ### Writing...
 
 You can modify the whole article using the `setText()` method:
@@ -129,29 +124,33 @@ $page->setText("==Changed==\n\n I just changed the whole page");
 
 You can modify only sections of the article
 by adding a second parameter to the `setText()` method.
-Please note you can't use section names here; **you must use section indexes**.
+You can use both section names and section indexes here.
 
 ```php
 // provide a section number to overwrite only that section
 $page->setText("==Section 4==\n\nThis will appear in section 4", 4 );
+// ... or overwrite a section by name
+$page->setText("==History==\n\nThis will appear in the history section", 'History' );
 // ...or make a new section
 $page->setText("==New section==\n\nStuff", 'new' )
 // ...zero is the very first section
 $page->setText("Sausages are cylindrical packages of meat.", 0 )
 ```
 
-The minor edit switch and the summary description are the third and fourth arguments:
+The minor edit switch and the edit summary description are the third and fourth arguments:
 
 ```php
 $page->setText( $text, $section, true, "removing spam!");
 ```
 
-Here are some easier functions for editing sections:
+Here are some easier methods for editing sections:
 
 ```php
 $page->setSection( $text, $section, $summary, $minor );
 $page->newSection( $sectionTitle, $text );
 ```
+
+For the latter method, the $sectionTitle is also used as part of the edit summary description.
 
 ### Deleting...
 
@@ -188,7 +187,7 @@ $array_result = $wiki->query( $data );
 
 $data = array(
 	'title' => 'this',
-	'token' => '+\', // this is urlencoded automatically
+	'token' => '+\\', // this is urlencoded automatically
 	'etc' => 'stuff'
 );
 
