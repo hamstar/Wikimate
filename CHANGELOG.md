@@ -2,17 +2,18 @@
 
 ### Version 0.12.0
 
-* Supports a section name (in addition to an index) in `WikiPage::setText()` and `WikiPage::setSection()`
-* Improved section processing in `WikiPage::getText()`
-* Supports optional domain at authentication
-* Bug fix: prevent PHP Notices in several methods
-* Bug fix: handle unknown section parameter correctly in `WikiPage::getSection()`
-* Bug fix: pass return value in `WikiPage::setSection()`
-* Bug fix: correct call to `Wikimate::debugRequestsConfig()`
+* Supports a section name (in addition to an index) in `WikiPage::setText()` and `WikiPage::setSection()` (#45)
+* Improved section processing in `WikiPage::getText()` (#33, #35)
+* Supports optional domain at authentication (#28)
+* Restructured and improved documentation (#32, #34, #47)
+* Bug fix: prevent PHP Notices in several methods (#43)
+* Bug fix: handle unknown section parameter correctly in `WikiPage::getSection()` (#41)
+* Bug fix: pass return value in `WikiPage::setSection()` (#30)
+* Bug fix: correct call to `Wikimate::debugRequestsConfig()` (#30)
 
 ### Version 0.10.0
 
-* Switched to using the *Requests* library instead of Curl
+* Switched to using the *Requests* library instead of Curl (#25)
 
 ### Version 0.5
 
