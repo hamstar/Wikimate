@@ -1,5 +1,10 @@
 ## Changelog
 
+### Version 0.12.0
+
+* Supports a section name (in addition to an index) in `WikiPage::setText()` and `WikiPage::setSection()`
+* Bug fix: prevent PHP Notices in several methods
+
 ### Version 0.11.1
 
 * Bug fix: handle unknown section parameter correctly in `WikiPage::getSection()`

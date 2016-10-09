@@ -1,8 +1,8 @@
 <?php
 /// =============================================================================
 /// Wikimate is a wrapper for the MediaWiki API that aims to be very easy to use.
-/// 
-/// @version    0.11.1
+///
+/// @version    0.12.0
 /// @copyright  SPDX-License-Identifier: MIT
 /// =============================================================================
 
@@ -17,7 +17,7 @@ class Wikimate
 	/**
 	 * @var  string  The current version number (conforms to http://semver.org/).
 	 */
-	const VERSION = '0.11.1';
+	const VERSION = '0.12.0';
 
 	protected $api;
 	protected $username;
@@ -204,6 +204,7 @@ class Wikimate
 		$array['format'] = 'php';
 		
 		$apiResult = $this->session->get( $this->api.'?'.http_build_query( $array ) );
+
 		return unserialize( $apiResult->body );
 	}
 
@@ -271,7 +272,7 @@ class Wikimate
 
 /**
  * Models a wiki article page that can have its text altered and retrieved.
- * 
+ *
  * @author  Robert McLeod
  * @since   December 2010
  */
@@ -347,7 +348,7 @@ class WikiPage
 	
 	/**
 	 * Returns an array sections with the section name as the key
-	 *  and the text as the element, e.g.
+	 * and the text as the element, e.g.
 	 *
 	 * array(
 	 *   'intro' => 'this text is the introduction',
@@ -387,7 +388,7 @@ class WikiPage
 	
 	/**
 	 * Returns an error if there is one, null shows no error
-	 * 
+	 *
 	 * @return  mixed  Null for no errors, or an error array object
 	 */
 	public function getError()
@@ -551,7 +552,9 @@ class WikiPage
 	}
 	
 	/**
-	 * Returns the section requested. Section can be the following:
+	 * Returns the section requested.
+	 *
+	 * Section can be the following:
 	 * - section name (string:"History")
 	 * - section index (int:3)
 	 *
@@ -590,7 +593,7 @@ class WikiPage
 	
 	/**
 	 * Return all the sections of the page in an array - the key names can be
-	 * set to name or index by using the following for the second param
+	 * set to name or index by using the following for the second param:
 	 * - self::SECTIONLIST_BY_NAME
 	 * - self::SECTIONLIST_BY_INDEX
 	 *
@@ -630,12 +633,19 @@ class WikiPage
 	
 	/**
 	 * Sets the text in the page.  Updates the starttimestamp to the timestamp
-	 * after the page edit (if the edit is successful)
+	 * after the page edit (if the edit is successful).
+	 *
+	 * Section can be the following:
+	 * - section name (string:"History")
+	 * - section index (int:3)
+	 * - a new section (string:"new")
+	 * - the whole page (null)
 	 *
 	 * @param   string   $text     The article text
-	 * @param   string   $section  The section to edit (null for whole page)
+	 * @param   string   $section  The section to edit (whole page by default)
 	 * @param   boolean  $minor    True for minor edit
-	 * @param   string   $summary  Summary text
+	 * @param   string   $summary  Summary text, and section header in case
+	 *                             of new section
 	 * @return  boolean            True if page was edited successfully
 	 */
 	public function setText( $text, $section = null, $minor = false, $summary = null )
@@ -650,12 +660,19 @@ class WikiPage
 		);
 		
 		// Set options from arguments
-		if ( !is_null( $section ) )
-			$data['section'] = $section;
-		if ( $minor )
+		if ( !is_null( $section ) ) {
+			// Obtain section index in case it is a name
+			$data['section'] = $this->findSection( $section );
+			if ( $data['section'] == -1 ) {
+				return false;
+			}
+		}
+		if ( $minor ) {
 			$data['minor'] = $minor;
-		if ( !is_null( $summary ) )
+		}
+		if ( !is_null( $summary ) ) {
 			$data['summary'] = $summary;
+		}
 		
 		// Make sure we don't create a page by accident or overwrite another one
 		if ( !$this->exists ) {
@@ -701,9 +718,16 @@ class WikiPage
 	 * Essentially an alias of WikiPage:setText()
 	 * with the summary and minor parameters switched.
 	 *
+	 * Section can be the following:
+	 * - section name (string:"History")
+	 * - section index (int:3)
+	 * - a new section (string:"new")
+	 * - the whole page (null)
+	 *
 	 * @param   string   $text     The text of the section
-	 * @param   mixed    $section  Section index, new by default
-	 * @param   string   $summary  Summary text
+	 * @param   mixed    $section  The section to edit (intro by default)
+	 * @param   string   $summary  Summary text, and section header in case
+	 *                             of new section
 	 * @param   boolean  $minor    True for minor edit
 	 * @return  boolean            True if the section was saved
 	 */
@@ -753,5 +777,39 @@ class WikiPage
 		
 		$this->error = $r; // Return error response
 		return false;
+	}
+
+	/*
+	 *
+	 * Private methods
+	 *
+	 */
+	
+	/**
+	 * Find a section's index by name.
+	 * If a section index or 'new' is passed, it is returned directly.
+	 *
+	 * @param   mixed  $section  The section name or index to find
+	 * @return  mixed            The section index, or -1 if not found
+	 */
+	private function findSection($section)
+	{
+		// Check section type
+		if ( is_int( $section ) || $section === 'new' ) {
+			return $section;
+		} else if ( is_string( $section ) ) {
+			// Search section names for related index
+			$sections = array_keys( $this->sections->byName );
+			$index = array_search( $section, $sections );
+
+			// Return index if found
+			if ($index !== false) {
+				return $index;
+			}
+		}
+
+		// Return error message and value
+		$this->error['section'] = "The section is not found on this page";
+		return -1;
 	}
 }
