@@ -481,7 +481,7 @@ class WikiPage
 			unset( $page );
 			
 			// Now we need to get the section headers, if any
-			preg_match_all( '/(={1,6}).*?\1 *\n/', $this->text, $matches );
+			preg_match_all( '/(={1,6}).*?\1 *(?:\n|$)/', $this->text, $matches );
 			
 			// Set the intro section (between title and first section)
 			$this->sections->byIndex[0]['offset']      = 0;
