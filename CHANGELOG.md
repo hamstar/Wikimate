@@ -1,27 +1,19 @@
 ## Changelog
 
-### Version 0.12.0
-
-* Supports a section name (in addition to an index) in `WikiPage::setText()` and `WikiPage::setSection()`
-* Bug fix: prevent PHP Notices in several methods
-
-### Version 0.11.1
-
-* Bug fix: handle unknown section parameter correctly in `WikiPage::getSection()`
-
 ### Version 0.11.0
 
-* Improved section processing in `WikiPage::getText()`
-
-### Version 0.10.1
-
-* Supports optional domain at authentication
-* Bug fix: pass return value in `WikiPage::setSection()`
-* Bug fix: correct call to `Wikimate::debugRequestsConfig()`
+* Supports a section name (in addition to an index) in `WikiPage::setText()` and `WikiPage::setSection()` ([#45])
+* Improved section processing in `WikiPage::getText()` ([#33], [#37], [#50])
+* Supports optional domain at authentication ([#28])
+* Restructured and improved documentation ([#32], [#34], [#47], [#49])
+* Bug fix: prevent PHP Notices in several methods ([#43])
+* Bug fix: handle unknown section parameter correctly in `WikiPage::getSection()` ([#41])
+* Bug fix: pass return value in `WikiPage::setSection()` ([#30])
+* Bug fix: correct call to `Wikimate::debugRequestsConfig()` ([#30])
 
 ### Version 0.10.0
 
-* Switched to using the *Requests* library instead of Curl
+* Switched to using the *Requests* library instead of Curl ([#25])
 
 ### Version 0.5
 
@@ -41,3 +33,18 @@
 ### Version 0.3
 
 * Initial commit
+
+[#25]: https://github.com/hamstar/Wikimate/pull/25
+[#28]: https://github.com/hamstar/Wikimate/pull/28
+[#30]: https://github.com/hamstar/Wikimate/pull/30
+[#32]: https://github.com/hamstar/Wikimate/pull/32
+[#33]: https://github.com/hamstar/Wikimate/pull/33
+[#34]: https://github.com/hamstar/Wikimate/pull/34
+[#37]: https://github.com/hamstar/Wikimate/pull/37
+[#41]: https://github.com/hamstar/Wikimate/pull/41
+[#43]: https://github.com/hamstar/Wikimate/pull/43
+[#45]: https://github.com/hamstar/Wikimate/pull/45
+[#47]: https://github.com/hamstar/Wikimate/pull/47
+[#49]: https://github.com/hamstar/Wikimate/pull/49
+[#50]: https://github.com/hamstar/Wikimate/pull/50
+
