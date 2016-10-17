@@ -6,6 +6,7 @@
 * Improved section processing in `WikiPage::getText()` ([#33], [#37], [#50])
 * Supports optional domain at authentication ([#28])
 * Restructured and improved documentation ([#32], [#34], [#47], [#49])
+* Bug fix: return empty section without header in `WikiPage::getSection()` ([#52])
 * Bug fix: prevent PHP Notices in several methods ([#43])
 * Bug fix: handle unknown section parameter correctly in `WikiPage::getSection()` ([#41])
 * Bug fix: pass return value in `WikiPage::setSection()` ([#30])
@@ -47,4 +48,5 @@
 [#47]: https://github.com/hamstar/Wikimate/pull/47
 [#49]: https://github.com/hamstar/Wikimate/pull/49
 [#50]: https://github.com/hamstar/Wikimate/pull/50
+[#52]: https://github.com/hamstar/Wikimate/pull/52
 

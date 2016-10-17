@@ -585,7 +585,7 @@ class WikiPage
 		// Whack off the heading if need be
 		if ( !$includeHeading && $offset > 0 ) {
 			// Chop off the first line
-			$text = substr( $text, strpos( trim( $text ), "\n" ) );
+			$text = substr( $text, strpos( $text, "\n" ) );
 		}
 		
 		return $text;
