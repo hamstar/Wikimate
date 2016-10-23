@@ -2,10 +2,11 @@
 
 ### Version 0.11.0
 
+* `WikiPage::getSection()` now includes subsections by default; disabling the new $includeSubsections option reverts to the old behavior of returning only the text until the first subsection ([#55])
 * Supports a section name (in addition to an index) in `WikiPage::setText()` and `WikiPage::setSection()` ([#45])
-* Improved section processing in `WikiPage::getText()` ([#33], [#37], [#50])
+* Improves section processing in `WikiPage::getText()` ([#33], [#37], [#50])
 * Supports optional domain at authentication ([#28])
-* Restructured and improved documentation ([#32], [#34], [#47], [#49])
+* Restructures and improves documentation ([#32], [#34], [#47], [#49])
 * Bug fix: return empty section without header in `WikiPage::getSection()` ([#52])
 * Bug fix: prevent PHP Notices in several methods ([#43])
 * Bug fix: handle unknown section parameter correctly in `WikiPage::getSection()` ([#41])
@@ -49,4 +50,5 @@
 [#49]: https://github.com/hamstar/Wikimate/pull/49
 [#50]: https://github.com/hamstar/Wikimate/pull/50
 [#52]: https://github.com/hamstar/Wikimate/pull/52
+[#55]: https://github.com/hamstar/Wikimate/pull/55
 
