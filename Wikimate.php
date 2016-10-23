@@ -508,7 +508,9 @@ class WikiPage
 					// Are we still on the first section?
 					if ( $currIndex == 0 ) {
 						$this->sections->byIndex[$currIndex]['length'] = $currOffset;
+						$this->sections->byIndex[$currIndex]['depth']  = 0;
 						$this->sections->byName[$currName]['length']   = $currOffset;
+						$this->sections->byName[$currName]['depth']    = 0;
 					}
 					
 					// Get the current name and index
@@ -524,9 +526,11 @@ class WikiPage
 						$currName = $cName;
 					}
 
-					// Set the offset for the current section
+					// Set the offset and depth (from the matched ='s) for the current section
 					$this->sections->byIndex[$currIndex]['offset'] = $currOffset;
+					$this->sections->byIndex[$currIndex]['depth']  = strlen( $matches[1][$currIndex-1] );
 					$this->sections->byName[$currName]['offset']   = $currOffset;
+					$this->sections->byName[$currName]['depth']    = strlen( $matches[1][$currIndex-1] );
 					
 					// If there is a section after this, set the length of this one
 					if ( isset( $sections[$currIndex] ) ) {
