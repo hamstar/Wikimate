@@ -74,10 +74,10 @@ You can get sections from the page as well, via the section index, or the sectio
 $wikiCode = $page->getSection(0);
 // get the part between the title and the first section
 $wikiCode = $page->getSection('intro');
-// get the 4th section on the page and any subsections, but no heading
-$wikiCode = $page->getSection(4);
 // get the section called History and any subsections, but no heading
 $wikiCode = $page->getSection('History');
+// get the 4th section on the page and any subsections, but no heading
+$wikiCode = $page->getSection(4);
 // get the section called History including the heading, and any subsections
 $wikiCode = $page->getSection('History', true);
 // get the 4th section on the page including the heading, without subsections

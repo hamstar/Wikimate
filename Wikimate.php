@@ -556,17 +556,17 @@ class WikiPage
 	}
 	
 	/**
-	 * Returns the section requested, with its subsections, if any.
+	 * Returns the requested section, with its subsections, if any.
 	 *
 	 * Section can be the following:
 	 * - section name (string:"History")
 	 * - section index (int:3)
 	 *
 	 * @param   mixed    $section             The section to get
-	 * @param   boolean  $includeHeading      False to get section text only, true
-	 *                                        to include heading too
-	 * @param   boolean  $includeSubsections  False to get section text only, true
-	 *                                        to include subsections too
+	 * @param   boolean  $includeHeading      False to get section text only,
+	 *                                        true to include heading too
+	 * @param   boolean  $includeSubsections  False to get section text only,
+	 *                                        true to include subsections too
 	 * @return  string                        Wikitext of the section on the page,
 	 *                                        or false if section is undefined
 	 */
