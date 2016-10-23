@@ -556,18 +556,21 @@ class WikiPage
 	}
 	
 	/**
-	 * Returns the section requested.
+	 * Returns the section requested, with its subsections, if any.
 	 *
 	 * Section can be the following:
 	 * - section name (string:"History")
 	 * - section index (int:3)
 	 *
-	 * @param   mixed    $section         The section to get
-	 * @param   boolean  $includeHeading  False to get section text only
-	 * @return  string                    Wikitext of the section on the page,
-	 *                                    or false if section is undefined
+	 * @param   mixed    $section             The section to get
+	 * @param   boolean  $includeHeading      False to get section text only, true
+	 *                                        to include heading too
+	 * @param   boolean  $includeSubsections  False to get section text only, true
+	 *                                        to include subsections too
+	 * @return  string                        Wikitext of the section on the page,
+	 *                                        or false if section is undefined
 	 */
-	public function getSection( $section, $includeHeading = false )
+	public function getSection( $section, $includeHeading = false, $includeSubsections = true )
 	{
 		// Check if we have a section name or index
 		if ( is_int( $section ) ) {
@@ -582,11 +585,32 @@ class WikiPage
 			$coords = $this->sections->byName[$section];
 		}
 		
-		// Extract the text
+		// Extract the offset, depth and (initial) length
 		@extract( $coords );
+		// Find subsections if requested, and not the intro
+		if ( $includeSubsections && $offset > 0 ) {
+			$found = false;
+			foreach ( $this->sections->byName as $section ) {
+				if ($found) {
+					// Include length of this subsection
+					if ($depth < $section['depth']) {
+						$length += $section['length'];
+					// Done if not a subsection
+					} else {
+						break;
+					}
+				} else {
+					// Found our section if same offset
+					if ($offset == $section['offset']) {
+						$found = true;
+					}
+				}
+			}
+		}
+		// Extract text of section, and its subsections if requested
 		$text = substr( $this->text, $offset, $length );
 		
-		// Whack off the heading if need be
+		// Whack off the heading if requested, and not the intro
 		if ( !$includeHeading && $offset > 0 ) {
 			// Chop off the first line
 			$text = substr( $text, strpos( $text, "\n" ) );
