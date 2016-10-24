@@ -444,10 +444,10 @@ class WikiPage
 		if ( $refresh ) { // We want to query the API
 			
 			$data = array(
-				'prop' => 'info|revisions',
-				'intoken' => 'edit',
 				'titles' => $this->title,
-				'rvprop' => 'content' // Need to get page text
+				'prop' => 'info|revisions',
+				'rvprop' => 'content', // Need to get page text
+				'intoken' => 'edit',
 			);
 			
 			$r = $this->wikimate->query( $data ); // Run the query
@@ -508,7 +508,9 @@ class WikiPage
 					// Are we still on the first section?
 					if ( $currIndex == 0 ) {
 						$this->sections->byIndex[$currIndex]['length'] = $currOffset;
+						$this->sections->byIndex[$currIndex]['depth']  = 0;
 						$this->sections->byName[$currName]['length']   = $currOffset;
+						$this->sections->byName[$currName]['depth']    = 0;
 					}
 					
 					// Get the current name and index
@@ -524,9 +526,11 @@ class WikiPage
 						$currName = $cName;
 					}
 
-					// Set the offset for the current section
+					// Set the offset and depth (from the matched ='s) for the current section
 					$this->sections->byIndex[$currIndex]['offset'] = $currOffset;
+					$this->sections->byIndex[$currIndex]['depth']  = strlen( $matches[1][$currIndex-1] );
 					$this->sections->byName[$currName]['offset']   = $currOffset;
+					$this->sections->byName[$currName]['depth']    = strlen( $matches[1][$currIndex-1] );
 					
 					// If there is a section after this, set the length of this one
 					if ( isset( $sections[$currIndex] ) ) {
@@ -552,18 +556,21 @@ class WikiPage
 	}
 	
 	/**
-	 * Returns the section requested.
+	 * Returns the requested section, with its subsections, if any.
 	 *
 	 * Section can be the following:
 	 * - section name (string:"History")
 	 * - section index (int:3)
 	 *
-	 * @param   mixed    $section         The section to get
-	 * @param   boolean  $includeHeading  False to get section text only
-	 * @return  string                    Wikitext of the section on the page,
-	 *                                    or false if section is undefined
+	 * @param   mixed    $section             The section to get
+	 * @param   boolean  $includeHeading      False to get section text only,
+	 *                                        true to include heading too
+	 * @param   boolean  $includeSubsections  False to get section text only,
+	 *                                        true to include subsections too
+	 * @return  string                        Wikitext of the section on the page,
+	 *                                        or false if section is undefined
 	 */
-	public function getSection( $section, $includeHeading = false )
+	public function getSection( $section, $includeHeading = false, $includeSubsections = true )
 	{
 		// Check if we have a section name or index
 		if ( is_int( $section ) ) {
@@ -578,11 +585,32 @@ class WikiPage
 			$coords = $this->sections->byName[$section];
 		}
 		
-		// Extract the text
+		// Extract the offset, depth and (initial) length
 		@extract( $coords );
+		// Find subsections if requested, and not the intro
+		if ( $includeSubsections && $offset > 0 ) {
+			$found = false;
+			foreach ( $this->sections->byName as $section ) {
+				if ($found) {
+					// Include length of this subsection
+					if ($depth < $section['depth']) {
+						$length += $section['length'];
+					// Done if not a subsection
+					} else {
+						break;
+					}
+				} else {
+					// Found our section if same offset
+					if ($offset == $section['offset']) {
+						$found = true;
+					}
+				}
+			}
+		}
+		// Extract text of section, and its subsections if requested
 		$text = substr( $this->text, $offset, $length );
 		
-		// Whack off the heading if need be
+		// Whack off the heading if requested, and not the intro
 		if ( !$includeHeading && $offset > 0 ) {
 			// Chop off the first line
 			$text = substr( $text, strpos( $text, "\n" ) );
@@ -656,7 +684,7 @@ class WikiPage
 			'md5' => md5( $text ),
 			'bot' => "true",
 			'token' => $this->edittoken,
-			'starttimestamp' => $this->starttimestamp
+			'starttimestamp' => $this->starttimestamp,
 		);
 		
 		// Set options from arguments
@@ -694,9 +722,9 @@ class WikiPage
 			
 			// Get the new starttimestamp
 			$data = array(
+				'titles' => $this->title,
 				'prop' => 'info',
 				'intoken' => 'edit',
-				'titles' => $this->title
 			);
 			
 			$r = $this->wikimate->query( $data );
@@ -758,7 +786,7 @@ class WikiPage
 	{
 		$data = array(
 			'title' => $this->title,
-			'token' => $this->edittoken
+			'token' => $this->edittoken,
 		);
 		
 		// Set options from arguments
