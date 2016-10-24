@@ -444,10 +444,10 @@ class WikiPage
 		if ( $refresh ) { // We want to query the API
 			
 			$data = array(
-				'prop' => 'info|revisions',
-				'intoken' => 'edit',
 				'titles' => $this->title,
-				'rvprop' => 'content' // Need to get page text
+				'prop' => 'info|revisions',
+				'rvprop' => 'content', // Need to get page text
+				'intoken' => 'edit',
 			);
 			
 			$r = $this->wikimate->query( $data ); // Run the query
@@ -684,7 +684,7 @@ class WikiPage
 			'md5' => md5( $text ),
 			'bot' => "true",
 			'token' => $this->edittoken,
-			'starttimestamp' => $this->starttimestamp
+			'starttimestamp' => $this->starttimestamp,
 		);
 		
 		// Set options from arguments
@@ -722,9 +722,9 @@ class WikiPage
 			
 			// Get the new starttimestamp
 			$data = array(
+				'titles' => $this->title,
 				'prop' => 'info',
 				'intoken' => 'edit',
-				'titles' => $this->title
 			);
 			
 			$r = $this->wikimate->query( $data );
@@ -786,7 +786,7 @@ class WikiPage
 	{
 		$data = array(
 			'title' => $this->title,
-			'token' => $this->edittoken
+			'token' => $this->edittoken,
 		);
 		
 		// Set options from arguments
