@@ -312,7 +312,7 @@ class WikiPage
 		$this->text     = $this->getText( true );
 		
 		if ( $this->invalid ) {
-			echo "Invalid page title - cannot create WikiPage";
+			$this->error['page'] = "Invalid page title - cannot create WikiPage";
 			return null;
 		}
 	}
@@ -466,6 +466,7 @@ class WikiPage
 			
 			if ( isset( $page['invalid'] ) ) {
 				$this->invalid = true;
+				return null;
 			}
 			
 			$this->edittoken      = $page['edittoken'];
