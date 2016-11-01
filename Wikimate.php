@@ -56,7 +56,7 @@ class Wikimate
 	}
 
 	/**
-	 * Logs in to the wiki
+	 * Logs in to the wiki.
 	 *
 	 * @return  boolean  True if logged in
 	 */
@@ -134,7 +134,7 @@ class Wikimate
 	}
 
 	/**
-	 * Sets the debug mode
+	 * Sets the debug mode.
 	 *
 	 * @param   boolean   $b  True to turn debugging on
 	 * @return  Wikimate      This object
@@ -147,7 +147,7 @@ class Wikimate
 
 	/**
 	 * Used to return or print the curl settings, but now prints an error and
-	 * returns Wikimate::debugRequestsConfig()
+	 * returns Wikimate::debugRequestsConfig().
 	 *
 	 * @deprecated                  Since version 0.10.0
 	 * @param       boolean  $echo  True to echo the configuration
@@ -182,7 +182,7 @@ class Wikimate
 	}
 
 	/**
-	 * Returns a WikiPage object populated with the page data
+	 * Returns a WikiPage object populated with the page data.
 	 *
 	 * @param   string    $title  The name of the wiki article
 	 * @return  WikiPage          The page object
@@ -193,7 +193,7 @@ class Wikimate
 	}
 
 	/**
-	 * Performs a query to the wiki API with the given details
+	 * Performs a query to the wiki API with the given details.
 	 *
 	 * @param   array  $array  Array of details to be passed in the query
 	 * @return  array          Unserialized php output from the wiki API
@@ -225,7 +225,7 @@ class Wikimate
 	}
 
 	/**
-	 * Perfoms an edit query to the wiki API
+	 * Perfoms an edit query to the wiki API.
 	 *
 	 * @param   array  $array  Array of details to be passed in the query
 	 * @return  array          Unserialized php output from the wiki API
@@ -245,7 +245,7 @@ class Wikimate
 	}
 
 	/**
-	 * Perfoms a delete query to the wiki API
+	 * Perfoms a delete query to the wiki API.
 	 *
 	 * @param   array  $array  Array of details to be passed in the query
 	 * @return  array          Unserialized php output from the wiki API
@@ -265,7 +265,7 @@ class Wikimate
 	}
 
 	/**
-	 * Returns an error if there is one, null shows no error
+	 * Returns an error if there is one, null shows no error.
 	 *
 	 * @return  mixed  Null for no errors, or an error array
 	 */
@@ -305,7 +305,7 @@ class WikiPage
 
 	/**
 	 * Constructs a WikiPage object from the title given
-	 * and adds a Wikimate object
+	 * and adds a Wikimate object.
 	 *
 	 * @param  string    $title     Name of the wiki article
 	 * @param  Wikimate  $wikimate  Wikimate object
@@ -323,9 +323,9 @@ class WikiPage
 	}
 
 	/**
-	 * Forget all object properties
+	 * Forget all object properties.
 	 *
-	 * @return  <type> Destructor
+	 * @return  <type>  Destructor
 	 */
 	public function __destruct()
 	{
@@ -342,7 +342,7 @@ class WikiPage
 	}
 
 	/**
-	 * Returns the wikicode of the page
+	 * Returns the wikicode of the page.
 	 *
 	 * @return  string  String of wikicode
 	 */
@@ -368,7 +368,7 @@ class WikiPage
 	}
 
 	/**
-	 * Returns the page existance status
+	 * Returns the page existance status.
 	 *
 	 * @return  boolean  True if page exists
 	 */
@@ -378,7 +378,7 @@ class WikiPage
 	}
 
 	/**
-	 * Alias of self::__destruct()
+	 * Alias of self::__destruct().
 	 */
 	public function destroy()
 	{
@@ -392,7 +392,7 @@ class WikiPage
 	 */
 
 	/**
-	 * Returns an error if there is one, null shows no error
+	 * Returns an error if there is one, null shows no error.
 	 *
 	 * @return  mixed  Null for no errors, or an error array
 	 */
@@ -402,7 +402,7 @@ class WikiPage
 	}
 
 	/**
-	 * Returns the title of this page
+	 * Returns the title of this page.
 	 *
 	 * @return  string  The title of this page
 	 */
@@ -412,7 +412,7 @@ class WikiPage
 	}
 
 	/**
-	 * Returns the number of sections in this page
+	 * Returns the number of sections in this page.
 	 *
 	 * @return  integer  The number of sections in this page
 	 */
@@ -422,7 +422,7 @@ class WikiPage
 	}
 
 	/**
-	 * Returns the sections offsets and lengths
+	 * Returns the sections offsets and lengths.
 	 *
 	 * @return  StdClass  Section class
 	 */
@@ -772,7 +772,7 @@ class WikiPage
 	}
 
 	/**
-	 * Alias of WikiPage::setSection() specifically for creating new sections
+	 * Alias of WikiPage::setSection() specifically for creating new sections.
 	 *
 	 * @param   string   $name  The heading name for the new section
 	 * @param   string   $text  The text of the new section
@@ -784,7 +784,7 @@ class WikiPage
 	}
 
 	/**
-	 * Delete the page
+	 * Delete the page.
 	 *
 	 * @param   string   $reason  Reason for the deletion
 	 * @return  boolean           True if page was deleted successfully
