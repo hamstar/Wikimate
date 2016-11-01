@@ -283,13 +283,13 @@ class WikiPage
 	const SECTIONLIST_BY_NUMBER = 3;
 	
 	protected $title = null;
+	protected $wikimate = null;
 	protected $exists = false;
-	protected $text = null;
+	protected $invalid = false;
+	protected $error = null;
 	protected $edittoken = null;
 	protected $starttimestamp = null;
-	protected $wikimate = null;
-	protected $error = null;
-	protected $invalid = false;
+	protected $text = null;
 	protected $sections = null;
 	
 	/*
@@ -325,13 +325,13 @@ class WikiPage
 	public function __destruct()
 	{
 		$this->title          = null;
+		$this->wikimate       = null;
 		$this->exists         = false;
-		$this->text           = null;
+		$this->invalid        = false;
+		$this->error          = null;
 		$this->edittoken      = null;
 		$this->starttimestamp = null;
-		$this->wikimate       = null;
-		$this->error          = null;
-		$this->invalid        = false;
+		$this->text           = null;
 		$this->sections       = null;
 		return null;
 	}
