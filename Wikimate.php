@@ -136,8 +136,8 @@ class Wikimate
 	/**
 	 * Sets the debug mode
 	 *
-	 * @param   boolean  $debugMode  True to turn debugging on
-	 * @return  Wikimate             This object
+	 * @param   boolean   $debugMode  True to turn debugging on
+	 * @return  Wikimate              This object
 	 */
 	public function setDebugMode( $b )
 	{
@@ -184,8 +184,8 @@ class Wikimate
 	/**
 	 * Returns a WikiPage object populated with the page data
 	 *
-	 * @param   string   $title  The name of the wiki article
-	 * @return  WikiPage         The page object
+	 * @param   string    $title  The name of the wiki article
+	 * @return  WikiPage          The page object
 	 */
 	public function getPage( $title )
 	{
@@ -264,6 +264,11 @@ class Wikimate
 		return unserialize( $apiResult->body );
 	}
 	
+	/**
+	 * Returns an error if there is one, null shows no error
+	 *
+	 * @return  mixed  Null for no errors, or an error array
+	 */
 	public function getError()
 	{
 		return $this->error;
@@ -389,7 +394,7 @@ class WikiPage
 	/**
 	 * Returns an error if there is one, null shows no error
 	 *
-	 * @return  mixed  Null for no errors, or an error array object
+	 * @return  mixed  Null for no errors, or an error array
 	 */
 	public function getError()
 	{
