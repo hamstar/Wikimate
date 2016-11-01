@@ -79,7 +79,7 @@ class Wikimate
 		// Send the login request
 		$response = $this->session->post( $this->api, array(), $details );
 		// Check if we got an API result or the API doc page (invalid request)
-		if ( strstr( $response->body, "This is an auto-generated MediaWiki API documentation page" ) ) {
+		if ( strpos( $response->body, "This is an auto-generated MediaWiki API documentation page" ) !== false ) {
 			$this->error['login'] = "The API could not understand the first login request";
 			return false;
 		}
@@ -101,7 +101,7 @@ class Wikimate
 			$loginResult = $this->session->post( $this->api, array(), $details )->body;
 
 			// Check if we got an API result or the API doc page (invalid request)
-			if ( strstr( $loginResult, "This is an auto-generated MediaWiki API documentation page" ) ) {
+			if ( strpos( $loginResult, "This is an auto-generated MediaWiki API documentation page" ) !== false ) {
 				$this->error['login'] = "The API could not understand the confirm token request";
 				return false;
 			}
