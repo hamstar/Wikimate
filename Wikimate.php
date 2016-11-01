@@ -27,7 +27,7 @@ class Wikimate
 	protected $session;
 	protected $useragent;
 
-	protected $error = array();
+	protected $error = null;
 	protected $debugMode = false;
 
 	/**
@@ -844,6 +844,7 @@ class WikiPage
 		}
 
 		// Return error message and value
+		$this->error = array();
 		$this->error['section'] = "The section is not found on this page";
 		return -1;
 	}
