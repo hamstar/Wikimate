@@ -136,8 +136,8 @@ class Wikimate
 	/**
 	 * Sets the debug mode
 	 *
-	 * @param   boolean   $debugMode  True to turn debugging on
-	 * @return  Wikimate              This object
+	 * @param   boolean   $b  True to turn debugging on
+	 * @return  Wikimate      This object
 	 */
 	public function setDebugMode( $b )
 	{
@@ -469,6 +469,7 @@ class WikiPage
 
 			unset( $r, $data );
 
+			// Abort if invalid page title
 			if ( isset( $page['invalid'] ) ) {
 				$this->invalid = true;
 				return null;
@@ -739,7 +740,7 @@ class WikiPage
 
 			$this->starttimestamp = $page['starttimestamp']; // Update the starttimestamp
 
-			$this->error = null; // Reset the error
+			$this->error = null; // Reset the error status
 			return true;
 		}
 
@@ -805,7 +806,7 @@ class WikiPage
 		if ( isset( $r['delete'] ) ) {
 			$this->exists = false; // The page was deleted
 
-			$this->error = null; // Reset the error
+			$this->error = null; // Reset the error status
 			return true;
 		}
 
