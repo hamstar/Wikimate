@@ -27,7 +27,7 @@ class Wikimate
 	protected $session;
 	protected $useragent;
 
-	protected $error = null;
+	protected $error     = null;
 	protected $debugMode = false;
 
 	/**
@@ -275,6 +275,7 @@ class Wikimate
 	}
 }
 
+
 /**
  * Models a wiki article page that can have its text altered and retrieved.
  *
@@ -287,15 +288,15 @@ class WikiPage
 	const SECTIONLIST_BY_NAME = 2;
 	const SECTIONLIST_BY_NUMBER = 3;
 
-	protected $title = null;
-	protected $wikimate = null;
-	protected $exists = false;
-	protected $invalid = false;
-	protected $error = null;
-	protected $edittoken = null;
+	protected $title          = null;
+	protected $wikimate       = null;
+	protected $exists         = false;
+	protected $invalid        = false;
+	protected $error          = null;
+	protected $edittoken      = null;
 	protected $starttimestamp = null;
-	protected $text = null;
-	protected $sections = null;
+	protected $text           = null;
+	protected $sections       = null;
 
 	/*
 	 *
@@ -447,7 +448,6 @@ class WikiPage
 	public function getText( $refresh = false )
 	{
 		if ( $refresh ) { // We want to query the API
-
 			$data = array(
 				'titles' => $this->title,
 				'prop' => 'info|revisions',
@@ -466,7 +466,6 @@ class WikiPage
 
 			// Get the page (there should only be one)
 			$page = array_pop( $r['query']['pages'] );
-
 			unset( $r, $data );
 
 			// Abort if invalid page title
@@ -484,7 +483,6 @@ class WikiPage
 				// Put the content into text
 				$this->text   = $page['revisions'][0]['*'];
 			}
-
 			unset( $page );
 
 			// Now we need to get the section headers, if any
