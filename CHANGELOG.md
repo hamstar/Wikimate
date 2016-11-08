@@ -1,20 +1,32 @@
 ## Changelog
 
+Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/) and [Keep a Changelog](http://keepachangelog.com/).
+
 ### Version 0.11.0
 
-* `WikiPage::getSection()` now includes subsections by default; disabling the new $includeSubsections option reverts to the old behavior of returning only the text until the first subsection ([#55])
-* Supports a section name (in addition to an index) in `WikiPage::setText()` and `WikiPage::setSection()` ([#45])
-* Improves section processing in `WikiPage::getText()` ([#33], [#37], [#50])
-* Supports optional domain at authentication ([#28])
-* Restructures and improves documentation ([#32], [#34], [#47], [#49])
-* Bug fix: handle invalid page title correctly ([#57])
-* Bug fix: return empty section without header in `WikiPage::getSection()` ([#52])
-* Bug fix: prevent PHP Notices in several methods ([#43])
-* Bug fix: handle unknown section parameter correctly in `WikiPage::getSection()` ([#41])
-* Bug fix: pass return value in `WikiPage::setSection()` ([#30])
-* Bug fix: correct call to `Wikimate::debugRequestsConfig()` ([#30])
+#### Added
+
+* Support for a section name (in addition to an index) in `WikiPage::setText()` and `WikiPage::setSection()` ([#45])
+* Support for optional domain at authentication ([#28])
+
+#### Changed
+
+* Updated `WikiPage::getSection()` to include subsections by default; disabling the new `$includeSubsections` option reverts to the old behavior of returning only the text until the first subsection ([#55])
+* Improved section processing in `WikiPage::getText()` ([#33], [#37], [#50])
+* Restructured and improved documentation ([#32], [#34], [#47], [#49], [#61])
+
+#### Fixed
+
+* Corrected handling an invalid page title ([#57])
+* Fixed returning an empty section without header in `WikiPage::getSection()` ([#52])
+* Prevented PHP Notices in several methods ([#43])
+* Corrected handling an unknown section parameter in `WikiPage::getSection()` ([#41])
+* Fixed passing the return value in `WikiPage::setSection()` ([#30])
+* Corrected call to `Wikimate::debugRequestsConfig()` ([#30])
 
 ### Version 0.10.0
+
+#### Changed
 
 * Switched to using the *Requests* library instead of Curl ([#25])
 
@@ -53,4 +65,5 @@
 [#52]: https://github.com/hamstar/Wikimate/pull/52
 [#55]: https://github.com/hamstar/Wikimate/pull/55
 [#57]: https://github.com/hamstar/Wikimate/pull/57
+[#61]: https://github.com/hamstar/Wikimate/pull/61
 

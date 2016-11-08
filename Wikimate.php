@@ -35,7 +35,7 @@ class Wikimate
 	 *
 	 * @return  Wikimate
 	 */
-	public function __construct( $api )
+	public function __construct($api)
 	{
 		$this->api = $api;
 
@@ -51,7 +51,7 @@ class Wikimate
 	 */
 	protected function initRequests()
 	{
-		$this->session = new Requests_Session( $this->api );
+		$this->session = new Requests_Session($this->api);
 		$this->useragent = "Wikimate ".self::VERSION." (https://github.com/hamstar/Wikimate)";
 	}
 
@@ -60,9 +60,9 @@ class Wikimate
 	 *
 	 * @return  boolean  True if logged in
 	 */
-	public function login( $username, $password, $domain = NULL )
+	public function login($username, $password, $domain = NULL)
 	{
-		//Logger::log( "Logging in" );
+		//Logger::log("Logging in");
 
 		$details = array(
 			'action' => 'login',
@@ -72,52 +72,52 @@ class Wikimate
 		);
 
 		// If $domain is provided, set the corresponding detail in the request information array
-		if ( is_string( $domain ) ) {
+		if (is_string($domain)) {
 			$details['lgdomain'] = $domain;
 		}
 
 		// Send the login request
-		$response = $this->session->post( $this->api, array(), $details );
+		$response = $this->session->post($this->api, array(), $details);
 		// Check if we got an API result or the API doc page (invalid request)
-		if ( strpos( $response->body, "This is an auto-generated MediaWiki API documentation page" ) !== false ) {
+		if (strpos($response->body, "This is an auto-generated MediaWiki API documentation page") !== false) {
 			$this->error['login'] = "The API could not understand the first login request";
 			return false;
 		}
 
-		$loginResult = json_decode( $response->body );
+		$loginResult = json_decode($response->body);
 
-		if ( $this->debugMode ) {
+		if ($this->debugMode) {
 			echo "Login request:\n";
-			print_r( $details );
+			print_r($details);
 			echo "Login request response:\n";
-			print_r( $loginResult );
+			print_r($loginResult);
 		}
 
-		if ( $loginResult->login->result == "NeedToken" ) {
-			//Logger::log( "Sending token {$loginResult->login->token}" );
-			$details['lgtoken'] = strtolower( trim( $loginResult->login->token ) );
+		if ($loginResult->login->result == "NeedToken") {
+			//Logger::log("Sending token {$loginResult->login->token}");
+			$details['lgtoken'] = strtolower(trim($loginResult->login->token));
 
 			// Send the confirm token request
-			$loginResult = $this->session->post( $this->api, array(), $details )->body;
+			$loginResult = $this->session->post($this->api, array(), $details)->body;
 
 			// Check if we got an API result or the API doc page (invalid request)
-			if ( strpos( $loginResult, "This is an auto-generated MediaWiki API documentation page" ) !== false ) {
+			if (strpos($loginResult, "This is an auto-generated MediaWiki API documentation page") !== false) {
 				$this->error['login'] = "The API could not understand the confirm token request";
 				return false;
 			}
 
-			$loginResult = json_decode( $loginResult );
+			$loginResult = json_decode($loginResult);
 
-			if ( $this->debugMode ) {
+			if ($this->debugMode) {
 				echo "Confirm token request:\n";
-				print_r( $details );
+				print_r($details);
 				echo "Confirm token response:\n";
-				print_r( $loginResult );
+				print_r($loginResult);
 			}
 
-			if ( $loginResult->login->result != "Success" ) {
+			if ($loginResult->login->result != "Success") {
 				// Some more comprehensive error checking
-				switch ( $loginResult->login->result ) {
+				switch ($loginResult->login->result) {
 					case 'NotExists':
 						$this->error['login'] = 'The username does not exist';
 						break;
@@ -129,7 +129,7 @@ class Wikimate
 			}
 		}
 
-		//Logger::log( "Logged in" );
+		//Logger::log("Logged in");
 		return true;
 	}
 
@@ -139,7 +139,7 @@ class Wikimate
 	 * @param   boolean   $b  True to turn debugging on
 	 * @return  Wikimate      This object
 	 */
-	public function setDebugMode( $b )
+	public function setDebugMode($b)
 	{
 		$this->debugMode = $b;
 		return $this;
@@ -153,12 +153,12 @@ class Wikimate
 	 * @param       boolean  $echo  True to echo the configuration
 	 * @return      mixed           Array of config if $echo is false, (boolean) true if echo is true
 	 */
-	public function debugCurlConfig( $echo = false )
+	public function debugCurlConfig($echo = false)
 	{
-		if ( $echo ) {
+		if ($echo) {
 			echo "ERROR: Curl is no longer used by Wikimate.\n";
 		}
-		return $this->debugRequestsConfig( $echo );
+		return $this->debugRequestsConfig($echo);
 	}
 
 	/**
@@ -168,13 +168,13 @@ class Wikimate
 	 * @return  array           Options if $echo is false
 	 * @return  boolean         True if options have been echoed to STDOUT
 	 */
-	public function debugRequestsConfig( $echo = false )
+	public function debugRequestsConfig($echo = false)
 	{
-		if ( $echo ) {
+		if ($echo) {
 			echo "<pre>Requests options:\n";
-			print_r( $this->session->options );
+			print_r($this->session->options);
 			echo "Requests headers:\n";
-			print_r( $this->session->headers );
+			print_r($this->session->headers);
 			echo "</pre>";
 			return true;
 		}
@@ -187,9 +187,9 @@ class Wikimate
 	 * @param   string    $title  The name of the wiki article
 	 * @return  WikiPage          The page object
 	 */
-	public function getPage( $title )
+	public function getPage($title)
 	{
-		return new WikiPage( $title, $this );
+		return new WikiPage($title, $this);
 	}
 
 	/**
@@ -198,14 +198,14 @@ class Wikimate
 	 * @param   array  $array  Array of details to be passed in the query
 	 * @return  array          Unserialized php output from the wiki API
 	 */
-	public function query( $array )
+	public function query($array)
 	{
 		$array['action'] = 'query';
 		$array['format'] = 'php';
 
-		$apiResult = $this->session->get( $this->api.'?'.http_build_query( $array ) );
+		$apiResult = $this->session->get($this->api.'?'.http_build_query($array));
 
-		return unserialize( $apiResult->body );
+		return unserialize($apiResult->body);
 	}
 
 	/**
@@ -214,14 +214,14 @@ class Wikimate
 	 * @param   array  $array  Array of details to be passed in the query
 	 * @return  array          Unserialized php output from the wiki API
 	 */
-	public function parse( $array )
+	public function parse($array)
 	{
 		$array['action'] = 'parse';
 		$array['format'] = 'php';
 
-		$apiResult = $this->session->get( $this->api.'?'.http_build_query( $array ) );
+		$apiResult = $this->session->get($this->api.'?'.http_build_query($array));
 
-		return unserialize( $apiResult->body );
+		return unserialize($apiResult->body);
 	}
 
 	/**
@@ -230,7 +230,7 @@ class Wikimate
 	 * @param   array  $array  Array of details to be passed in the query
 	 * @return  array          Unserialized php output from the wiki API
 	 */
-	public function edit( $array )
+	public function edit($array)
 	{
 		$headers = array(
 			'Content-Type' => "application/x-www-form-urlencoded"
@@ -239,9 +239,9 @@ class Wikimate
 		$array['action'] = 'edit';
 		$array['format'] = 'php';
 
-		$apiResult = $this->session->post( $this->api, $headers, $array );
+		$apiResult = $this->session->post($this->api, $headers, $array);
 
-		return unserialize( $apiResult->body );
+		return unserialize($apiResult->body);
 	}
 
 	/**
@@ -250,7 +250,7 @@ class Wikimate
 	 * @param   array  $array  Array of details to be passed in the query
 	 * @return  array          Unserialized php output from the wiki API
 	 */
-	public function delete( $array )
+	public function delete($array)
 	{
 		$headers = array(
 			'Content-Type' => "application/x-www-form-urlencoded"
@@ -259,9 +259,9 @@ class Wikimate
 		$array['action'] = 'delete';
 		$array['format'] = 'php';
 
-		$apiResult = $this->session->post( $this->api, $headers, $array );
+		$apiResult = $this->session->post($this->api, $headers, $array);
 
-		return unserialize( $apiResult->body );
+		return unserialize($apiResult->body);
 	}
 
 	/**
@@ -311,13 +311,13 @@ class WikiPage
 	 * @param  string    $title     Name of the wiki article
 	 * @param  Wikimate  $wikimate  Wikimate object
 	 */
-	public function __construct( $title, $wikimate )
+	public function __construct($title, $wikimate)
 	{
 		$this->wikimate = $wikimate;
 		$this->title    = $title;
-		$this->text     = $this->getText( true );
+		$this->text     = $this->getText(true);
 
-		if ( $this->invalid ) {
+		if ($this->invalid) {
 			$this->error['page'] = "Invalid page title - cannot create WikiPage";
 			return null;
 		}
@@ -359,13 +359,13 @@ class WikiPage
 	 * array(
 	 *   'intro' => 'this text is the introduction',
 	 *   'History' => 'this is text under the history section'
-	 * )
+	 *)
 	 *
 	 * @return  array  Array of sections
 	 */
 	public function __invoke()
 	{
-		return $this->getAllSections( false, self::SECTIONLIST_BY_NAME );
+		return $this->getAllSections(false, self::SECTIONLIST_BY_NAME);
 	}
 
 	/**
@@ -419,7 +419,7 @@ class WikiPage
 	 */
 	public function getNumSections()
 	{
-		return count( $this->sections->byIndex );
+		return count($this->sections->byIndex);
 	}
 
 	/**
@@ -445,9 +445,9 @@ class WikiPage
 	 * @param   boolean  $refresh  True to query the wiki API again
 	 * @return  string             The text of the page
 	 */
-	public function getText( $refresh = false )
+	public function getText($refresh = false)
 	{
-		if ( $refresh ) { // We want to query the API
+		if ($refresh) { // We want to query the API
 			$data = array(
 				'titles' => $this->title,
 				'prop' => 'info|revisions',
@@ -455,21 +455,21 @@ class WikiPage
 				'intoken' => 'edit',
 			);
 
-			$r = $this->wikimate->query( $data ); // Run the query
+			$r = $this->wikimate->query($data); // Run the query
 
 			// Check for errors
-			if ( isset( $r['error'] ) ) {
+			if (isset($r['error'])) {
 				$this->error = $r; // Set the error if there was one
 			} else {
 				$this->error = null; // Reset the error status
 			}
 
 			// Get the page (there should only be one)
-			$page = array_pop( $r['query']['pages'] );
-			unset( $r, $data );
+			$page = array_pop($r['query']['pages']);
+			unset($r, $data);
 
 			// Abort if invalid page title
-			if ( isset( $page['invalid'] ) ) {
+			if (isset($page['invalid'])) {
 				$this->invalid = true;
 				return null;
 			}
@@ -477,26 +477,26 @@ class WikiPage
 			$this->edittoken      = $page['edittoken'];
 			$this->starttimestamp = $page['starttimestamp'];
 
-			if ( !isset( $page['missing'] ) ) {
+			if (!isset($page['missing'])) {
 				// Update the existance if the page is there
 				$this->exists = true;
 				// Put the content into text
 				$this->text   = $page['revisions'][0]['*'];
 			}
-			unset( $page );
+			unset($page);
 
 			// Now we need to get the section headers, if any
-			preg_match_all( '/(={1,6}).*?\1 *(?:\n|$)/', $this->text, $matches );
+			preg_match_all('/(={1,6}).*?\1 *(?:\n|$)/', $this->text, $matches);
 
 			// Set the intro section (between title and first section)
 			$this->sections->byIndex[0]['offset']      = 0;
 			$this->sections->byName['intro']['offset'] = 0;
 
 			// Check for section header matches
-			if ( empty( $matches[0] ) ) {
+			if (empty($matches[0])) {
 				// Define lengths for page consisting only of intro section
-				$this->sections->byIndex[0]['length']      = strlen( $this->text );
-				$this->sections->byName['intro']['length'] = strlen( $this->text );
+				$this->sections->byIndex[0]['length']      = strlen($this->text);
+				$this->sections->byName['intro']['length'] = strlen($this->text);
 			} else {
 				// Array of section header matches
 				$sections = $matches[0];
@@ -506,12 +506,12 @@ class WikiPage
 				$currName  = 'intro';
 
 				// Collect offsets and lengths from section header matches
-				foreach ( $sections as $section ) {
+				foreach ($sections as $section) {
 					// Get the current offset
-					$currOffset = strpos( $this->text, $section, $this->sections->byIndex[$currIndex]['offset'] );
+					$currOffset = strpos($this->text, $section, $this->sections->byIndex[$currIndex]['offset']);
 
 					// Are we still on the first section?
-					if ( $currIndex == 0 ) {
+					if ($currIndex == 0) {
 						$this->sections->byIndex[$currIndex]['length'] = $currOffset;
 						$this->sections->byIndex[$currIndex]['depth']  = 0;
 						$this->sections->byName[$currName]['length']   = $currOffset;
@@ -519,28 +519,28 @@ class WikiPage
 					}
 
 					// Get the current name and index
-					$currName = trim( str_replace( '=', '', $section ) );
+					$currName = trim(str_replace('=', '', $section));
 					$currIndex++;
 
 					// Search for existing name and create unique one
 					$cName = $currName;
-					for ( $seq = 2; array_key_exists( $cName, $this->sections->byName ); $seq++ ) {
+					for ($seq = 2; array_key_exists($cName, $this->sections->byName); $seq++) {
 						$cName = $currName . '_' . $seq;
 					}
-					if ( $seq > 2 ) {
+					if ($seq > 2) {
 						$currName = $cName;
 					}
 
 					// Set the offset and depth (from the matched ='s) for the current section
 					$this->sections->byIndex[$currIndex]['offset'] = $currOffset;
-					$this->sections->byIndex[$currIndex]['depth']  = strlen( $matches[1][$currIndex-1] );
+					$this->sections->byIndex[$currIndex]['depth']  = strlen($matches[1][$currIndex-1]);
 					$this->sections->byName[$currName]['offset']   = $currOffset;
-					$this->sections->byName[$currName]['depth']    = strlen( $matches[1][$currIndex-1] );
+					$this->sections->byName[$currName]['depth']    = strlen($matches[1][$currIndex-1]);
 
 					// If there is a section after this, set the length of this one
-					if ( isset( $sections[$currIndex] ) ) {
+					if (isset($sections[$currIndex])) {
 						// Get the offset of the next section
-						$nextOffset = strpos( $this->text, $sections[$currIndex], $currOffset );
+						$nextOffset = strpos($this->text, $sections[$currIndex], $currOffset);
 						// Calculate the length of this one
 						$length     = $nextOffset - $currOffset;
 
@@ -550,8 +550,8 @@ class WikiPage
 					}
 					else {
 						// Set the length of last section
-						$this->sections->byIndex[$currIndex]['length'] = strlen( $this->text ) - $currOffset;
-						$this->sections->byName[$currName]['length']   = strlen( $this->text ) - $currOffset;
+						$this->sections->byIndex[$currIndex]['length'] = strlen($this->text) - $currOffset;
+						$this->sections->byName[$currName]['length']   = strlen($this->text) - $currOffset;
 					}
 				}
 			}
@@ -575,27 +575,27 @@ class WikiPage
 	 * @return  string                        Wikitext of the section on the page,
 	 *                                        or false if section is undefined
 	 */
-	public function getSection( $section, $includeHeading = false, $includeSubsections = true )
+	public function getSection($section, $includeHeading = false, $includeSubsections = true)
 	{
 		// Check if we have a section name or index
-		if ( is_int( $section ) ) {
-			if ( !isset( $this->sections->byIndex[$section] ) ) {
+		if (is_int($section)) {
+			if (!isset($this->sections->byIndex[$section])) {
 				return false;
 			}
 			$coords = $this->sections->byIndex[$section];
-		} else if ( is_string( $section ) ) {
-			if ( !isset( $this->sections->byName[$section] ) ) {
+		} else if (is_string($section)) {
+			if (!isset($this->sections->byName[$section])) {
 				return false;
 			}
 			$coords = $this->sections->byName[$section];
 		}
 
 		// Extract the offset, depth and (initial) length
-		@extract( $coords );
+		@extract($coords);
 		// Find subsections if requested, and not the intro
-		if ( $includeSubsections && $offset > 0 ) {
+		if ($includeSubsections && $offset > 0) {
 			$found = false;
-			foreach ( $this->sections->byName as $section ) {
+			foreach ($this->sections->byName as $section) {
 				if ($found) {
 					// Include length of this subsection
 					if ($depth < $section['depth']) {
@@ -613,12 +613,12 @@ class WikiPage
 			}
 		}
 		// Extract text of section, and its subsections if requested
-		$text = substr( $this->text, $offset, $length );
+		$text = substr($this->text, $offset, $length);
 
 		// Whack off the heading if requested, and not the intro
-		if ( !$includeHeading && $offset > 0 ) {
+		if (!$includeHeading && $offset > 0) {
 			// Chop off the first line
-			$text = substr( $text, strpos( $text, "\n" ) );
+			$text = substr($text, strpos($text, "\n"));
 		}
 
 		return $text;
@@ -635,24 +635,24 @@ class WikiPage
 	 * @return  array                     Array of sections
 	 * @throw   Exception                 If $keyNames is not a supported constant
 	 */
-	public function getAllSections( $includeHeading = false, $keyNames = self::SECTIONLIST_BY_INDEX )
+	public function getAllSections($includeHeading = false, $keyNames = self::SECTIONLIST_BY_INDEX)
 	{
 		$sections = array();
 
-		switch ( $keyNames ) {
+		switch ($keyNames) {
 			case self::SECTIONLIST_BY_INDEX:
-				$array = array_keys( $this->sections->byIndex );
+				$array = array_keys($this->sections->byIndex);
 				break;
 			case self::SECTIONLIST_BY_NAME:
-				$array = array_keys( $this->sections->byName );
+				$array = array_keys($this->sections->byName);
 				break;
 			default:
-				throw new Exception( 'Unexpected parameter $keyNames given to WikiPage::getAllSections()' );
+				throw new Exception('Unexpected parameter $keyNames given to WikiPage::getAllSections()');
 				break;
 		}
 
-		foreach ( $array as $key ) {
-			$sections[$key] = $this->getSection( $key, $includeHeading );
+		foreach ($array as $key) {
+			$sections[$key] = $this->getSection($key, $includeHeading);
 		}
 
 		return $sections;
@@ -681,46 +681,46 @@ class WikiPage
 	 *                             of new section
 	 * @return  boolean            True if page was edited successfully
 	 */
-	public function setText( $text, $section = null, $minor = false, $summary = null )
+	public function setText($text, $section = null, $minor = false, $summary = null)
 	{
 		$data = array(
 			'title' => $this->title,
 			'text' => $text,
-			'md5' => md5( $text ),
+			'md5' => md5($text),
 			'bot' => "true",
 			'token' => $this->edittoken,
 			'starttimestamp' => $this->starttimestamp,
 		);
 
 		// Set options from arguments
-		if ( !is_null( $section ) ) {
+		if (!is_null($section)) {
 			// Obtain section index in case it is a name
-			$data['section'] = $this->findSection( $section );
-			if ( $data['section'] == -1 ) {
+			$data['section'] = $this->findSection($section);
+			if ($data['section'] == -1) {
 				return false;
 			}
 		}
-		if ( $minor ) {
+		if ($minor) {
 			$data['minor'] = $minor;
 		}
-		if ( !is_null( $summary ) ) {
+		if (!is_null($summary)) {
 			$data['summary'] = $summary;
 		}
 
 		// Make sure we don't create a page by accident or overwrite another one
-		if ( !$this->exists ) {
+		if (!$this->exists) {
 			$data['createonly'] = "true"; // createonly if not exists
 		} else {
 			$data['nocreate'] = "true"; // Don't create, it should exist
 		}
 
-		$r = $this->wikimate->edit( $data ); // The edit query
+		$r = $this->wikimate->edit($data); // The edit query
 
 		// Check if it worked
-		if ( isset( $r['edit']['result'] ) && $r['edit']['result'] == "Success" ) {
+		if (isset($r['edit']['result']) && $r['edit']['result'] == "Success") {
 			$this->exists = true;
 
-			if ( is_null( $section ) ) {
+			if (is_null($section)) {
 				$this->text = $text;
 			} else {
 			}
@@ -732,9 +732,9 @@ class WikiPage
 				'intoken' => 'edit',
 			);
 
-			$r = $this->wikimate->query( $data );
+			$r = $this->wikimate->query($data);
 
-			$page = array_pop( $r['query']['pages'] ); // Get the page
+			$page = array_pop($r['query']['pages']); // Get the page
 
 			$this->starttimestamp = $page['starttimestamp']; // Update the starttimestamp
 
@@ -764,9 +764,9 @@ class WikiPage
 	 * @param   boolean  $minor    True for minor edit
 	 * @return  boolean            True if the section was saved
 	 */
-	public function setSection( $text, $section = 0, $summary = null, $minor = false )
+	public function setSection($text, $section = 0, $summary = null, $minor = false)
 	{
-		return $this->setText( $text, $section, $minor, $summary );
+		return $this->setText($text, $section, $minor, $summary);
 	}
 
 	/**
@@ -776,9 +776,9 @@ class WikiPage
 	 * @param   string   $text  The text of the new section
 	 * @return  boolean         True if the section was saved
 	 */
-	public function newSection( $name, $text )
+	public function newSection($name, $text)
 	{
-		return $this->setSection( $text, $section = 'new', $summary = $name, $minor = false );
+		return $this->setSection($text, $section = 'new', $summary = $name, $minor = false);
 	}
 
 	/**
@@ -787,7 +787,7 @@ class WikiPage
 	 * @param   string   $reason  Reason for the deletion
 	 * @return  boolean           True if page was deleted successfully
 	 */
-	public function delete( $reason = null )
+	public function delete($reason = null)
 	{
 		$data = array(
 			'title' => $this->title,
@@ -795,13 +795,13 @@ class WikiPage
 		);
 
 		// Set options from arguments
-		if ( !is_null( $reason ) )
+		if (!is_null($reason))
 			$data['reason'] = $reason;
 
-		$r = $this->wikimate->delete( $data ); // The delete query
+		$r = $this->wikimate->delete($data); // The delete query
 
 		// Check if it worked
-		if ( isset( $r['delete'] ) ) {
+		if (isset($r['delete'])) {
 			$this->exists = false; // The page was deleted
 
 			$this->error = null; // Reset the error status
@@ -828,12 +828,12 @@ class WikiPage
 	private function findSection($section)
 	{
 		// Check section type
-		if ( is_int( $section ) || $section === 'new' ) {
+		if (is_int($section) || $section === 'new') {
 			return $section;
-		} else if ( is_string( $section ) ) {
+		} else if (is_string($section)) {
 			// Search section names for related index
-			$sections = array_keys( $this->sections->byName );
-			$index = array_search( $section, $sections );
+			$sections = array_keys($this->sections->byName);
+			$index = array_search($section, $sections);
 
 			// Return index if found
 			if ($index !== false) {
