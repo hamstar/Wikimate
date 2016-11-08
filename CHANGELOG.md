@@ -1,5 +1,7 @@
 ## Changelog
 
+Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/) and [Keep a Changelog](http://keepachangelog.com/).
+
 ### Version 0.11.0
 
 #### Added
@@ -11,7 +13,7 @@
 
 * Updated `WikiPage::getSection()` to include subsections by default; disabling the new `$includeSubsections` option reverts to the old behavior of returning only the text until the first subsection ([#55])
 * Improved section processing in `WikiPage::getText()` ([#33], [#37], [#50])
-* Restructured and improved documentation ([#32], [#34], [#47], [#49])
+* Restructured and improved documentation ([#32], [#34], [#47], [#49], [#61])
 
 #### Fixed
 
@@ -23,6 +25,8 @@
 * Corrected call to `Wikimate::debugRequestsConfig()` ([#30])
 
 ### Version 0.10.0
+
+#### Changed
 
 * Switched to using the *Requests* library instead of Curl ([#25])
 
@@ -61,4 +65,5 @@
 [#52]: https://github.com/hamstar/Wikimate/pull/52
 [#55]: https://github.com/hamstar/Wikimate/pull/55
 [#57]: https://github.com/hamstar/Wikimate/pull/57
+[#61]: https://github.com/hamstar/Wikimate/pull/61
 
