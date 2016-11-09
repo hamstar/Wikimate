@@ -80,7 +80,8 @@ class Wikimate
 		$response = $this->session->post($this->api, array(), $details);
 		// Check if we got an API result or the API doc page (invalid request)
 		if (strpos($response->body, "This is an auto-generated MediaWiki API documentation page") !== false) {
-			$this->error['login'] = "The API could not understand the first login request";
+			$this->error = array();
+			$this->error['login'] = 'The API could not understand the first login request';
 			return false;
 		}
 
@@ -93,7 +94,7 @@ class Wikimate
 			print_r($loginResult);
 		}
 
-		if ($loginResult->login->result == "NeedToken") {
+		if ($loginResult->login->result == 'NeedToken') {
 			//Logger::log("Sending token {$loginResult->login->token}");
 			$details['lgtoken'] = strtolower(trim($loginResult->login->token));
 
@@ -102,7 +103,8 @@ class Wikimate
 
 			// Check if we got an API result or the API doc page (invalid request)
 			if (strpos($loginResult, "This is an auto-generated MediaWiki API documentation page") !== false) {
-				$this->error['login'] = "The API could not understand the confirm token request";
+				$this->error = array();
+				$this->error['login'] = 'The API could not understand the confirm token request';
 				return false;
 			}
 
@@ -115,8 +117,9 @@ class Wikimate
 				print_r($loginResult);
 			}
 
-			if ($loginResult->login->result != "Success") {
+			if ($loginResult->login->result != 'Success') {
 				// Some more comprehensive error checking
+				$this->error = array();
 				switch ($loginResult->login->result) {
 					case 'NotExists':
 						$this->error['login'] = 'The username does not exist';
@@ -718,7 +721,7 @@ class WikiPage
 		$r = $this->wikimate->edit($data); // The edit query
 
 		// Check if it worked
-		if (isset($r['edit']['result']) && $r['edit']['result'] == "Success") {
+		if (isset($r['edit']['result']) && $r['edit']['result'] == 'Success') {
 			$this->exists = true;
 
 			if (is_null($section)) {
@@ -850,7 +853,7 @@ class WikiPage
 
 		// Return error message and value
 		$this->error = array();
-		$this->error['section'] = "The section is not found on this page";
+		$this->error['page'] = 'The section is not found on this page';
 		return -1;
 	}
 }
