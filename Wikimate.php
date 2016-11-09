@@ -321,8 +321,7 @@ class WikiPage
 		$this->text     = $this->getText(true);
 
 		if ($this->invalid) {
-			$this->error['page'] = "Invalid page title - cannot create WikiPage";
-			return null;
+			$this->error['page'] = 'Invalid page title - cannot create WikiPage';
 		}
 	}
 
@@ -726,7 +725,6 @@ class WikiPage
 
 			if (is_null($section)) {
 				$this->text = $text;
-			} else {
 			}
 
 			// Get the new starttimestamp
