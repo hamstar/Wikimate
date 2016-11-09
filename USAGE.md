@@ -171,8 +171,12 @@ If you pass in a message argument, it will be recorded as a reason for the delet
 Did something go wrong?  Check the error array:
 
 ```php
-print_r( $this->getError() );
+print_r($page->getError());
 ```
+
+For MediaWiki API errors, the array contains the 'code' and 'info' key/value pairs [defined by the API](https://www.mediawiki.org/wiki/API:Errors_and_warnings#Errors).  For other errors, the following key/value pairs are returned:
+* 'login' for Wikimate authentication problems
+* 'page' for WikiPage errors
 
 Wanna run your own queries?
 You can use the edit and query commands in Wikimate:
