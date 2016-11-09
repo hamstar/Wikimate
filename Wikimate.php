@@ -443,7 +443,7 @@ class WikiPage
 	 * then this method will query the wiki API again for the page details.
 	 *
 	 * @param   boolean  $refresh  True to query the wiki API again
-	 * @return  string             The text of the page
+	 * @return  mixed              The text of the page (string), or null if error
 	 */
 	public function getText($refresh = false)
 	{
@@ -459,7 +459,8 @@ class WikiPage
 
 			// Check for errors
 			if (isset($r['error'])) {
-				$this->error = $r; // Set the error if there was one
+				$this->error = $r['error']; // Set the error if there was one
+				return null;
 			} else {
 				$this->error = null; // Reset the error status
 			}
@@ -742,7 +743,13 @@ class WikiPage
 			return true;
 		}
 
-		$this->error = $r; // Return error response
+		// Return error response
+		if (isset($r['error'])) {
+			$this->error = $r['error'];
+		} else {
+			$this->error = array();
+			$this->error['page'] = 'Unexpected edit response: '.$r['edit']['result'];
+		}
 		return false;
 	}
 
@@ -808,7 +815,7 @@ class WikiPage
 			return true;
 		}
 
-		$this->error = $r; // Return error response
+		$this->error = $r['error']; // Return error response
 		return false;
 	}
 
