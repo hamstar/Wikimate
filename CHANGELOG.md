@@ -17,6 +17,7 @@ Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/) 
 
 #### Fixed
 
+* Ensured use of Wikimate user agent by Requests library ([#64])
 * Corrected handling an invalid page title ([#57])
 * Fixed returning an empty section without header in `WikiPage::getSection()` ([#52])
 * Prevented PHP Notices in several methods ([#43])
@@ -66,4 +67,5 @@ Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/) 
 [#55]: https://github.com/hamstar/Wikimate/pull/55
 [#57]: https://github.com/hamstar/Wikimate/pull/57
 [#61]: https://github.com/hamstar/Wikimate/pull/61
+[#64]: https://github.com/hamstar/Wikimate/pull/64
 
