@@ -69,4 +69,5 @@ Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/) 
 [#57]: https://github.com/hamstar/Wikimate/pull/57
 [#61]: https://github.com/hamstar/Wikimate/pull/61
 [#63]: https://github.com/hamstar/Wikimate/pull/63
+[#64]: https://github.com/hamstar/Wikimate/pull/64
 
