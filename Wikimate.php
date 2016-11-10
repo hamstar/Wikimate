@@ -45,8 +45,6 @@ class Wikimate
 	/**
 	 * Set up a Requests_Session with appropriate user agent.
 	 *
-	 * @todo  Pull version number from elsewhere.
-	 *
 	 * @return  void
 	 */
 	protected function initRequests()
