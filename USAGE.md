@@ -44,7 +44,7 @@ If the title given to the WikiPage object is invalid, your `$page` object will b
 // create a new page object
 $page = $wiki->getPage('Sausages');
 // check if the page exists or not
-if ( $page->exists() ) die();
+if ($page->exists()) die();
 // get the page title
 echo $page->getTitle();
 // get the number of sections on the page
@@ -130,26 +130,26 @@ You can use both section names and section indexes here.
 
 ```php
 // provide a section number to overwrite only that section
-$page->setText("==Section 4==\n\nThis will appear in section 4", 4 );
+$page->setText("==Section 4==\n\nThis will appear in section 4", 4);
 // ... or overwrite a section by name
-$page->setText("==History==\n\nThis will appear in the history section", 'History' );
+$page->setText("==History==\n\nThis will appear in the history section", 'History');
 // ...or make a new section
-$page->setText("==New section==\n\nStuff", 'new' )
+$page->setText("==New section==\n\nStuff", 'new')
 // ...zero is the very first section
-$page->setText("Sausages are cylindrical packages of meat.", 0 )
+$page->setText("Sausages are cylindrical packages of meat.", 0)
 ```
 
 The minor edit switch and the edit summary description are the third and fourth arguments:
 
 ```php
-$page->setText( $text, $section, true, "removing spam!");
+$page->setText($text, $section, true, "removing spam!");
 ```
 
 Here are some easier methods for editing sections:
 
 ```php
-$page->setSection( $text, $section, $summary, $minor );
-$page->newSection( $sectionTitle, $text );
+$page->setSection($text, $section, $summary, $minor);
+$page->newSection($sectionTitle, $text);
 ```
 
 For the latter method, the $sectionTitle is also used as part of the edit summary description.
@@ -171,8 +171,12 @@ If you pass in a message argument, it will be recorded as a reason for the delet
 Did something go wrong?  Check the error array:
 
 ```php
-print_r( $this->getError() );
+print_r($page->getError());
 ```
+
+For MediaWiki API errors, the array contains the 'code' and 'info' key/value pairs [defined by the API](https://www.mediawiki.org/wiki/API:Errors_and_warnings#Errors).  For other errors, the following key/value pairs are returned:
+* 'login' for Wikimate authentication problems
+* 'page' for WikiPage errors
 
 Wanna run your own queries?
 You can use the edit and query commands in Wikimate:
@@ -185,7 +189,7 @@ $data = array(
 );
 
 // Send data as a query
-$array_result = $wiki->query( $data );
+$array_result = $wiki->query($data);
 
 $data = array(
 	'title' => 'this',
@@ -194,7 +198,7 @@ $data = array(
 );
 
 // Send as an edit query with content-type of application/x-www-form-urlencoded
-$array_result = $wiki->edit( $data );
+$array_result = $wiki->edit($data);
 ```
 
 Both methods return an array of the MediaWiki API result.

@@ -80,7 +80,8 @@ class Wikimate
 		$response = $this->session->post($this->api, array(), $details);
 		// Check if we got an API result or the API doc page (invalid request)
 		if (strpos($response->body, "This is an auto-generated MediaWiki API documentation page") !== false) {
-			$this->error['login'] = "The API could not understand the first login request";
+			$this->error = array();
+			$this->error['login'] = 'The API could not understand the first login request';
 			return false;
 		}
 
@@ -93,7 +94,7 @@ class Wikimate
 			print_r($loginResult);
 		}
 
-		if ($loginResult->login->result == "NeedToken") {
+		if ($loginResult->login->result == 'NeedToken') {
 			//Logger::log("Sending token {$loginResult->login->token}");
 			$details['lgtoken'] = strtolower(trim($loginResult->login->token));
 
@@ -102,7 +103,8 @@ class Wikimate
 
 			// Check if we got an API result or the API doc page (invalid request)
 			if (strpos($loginResult, "This is an auto-generated MediaWiki API documentation page") !== false) {
-				$this->error['login'] = "The API could not understand the confirm token request";
+				$this->error = array();
+				$this->error['login'] = 'The API could not understand the confirm token request';
 				return false;
 			}
 
@@ -115,8 +117,9 @@ class Wikimate
 				print_r($loginResult);
 			}
 
-			if ($loginResult->login->result != "Success") {
+			if ($loginResult->login->result != 'Success') {
 				// Some more comprehensive error checking
+				$this->error = array();
 				switch ($loginResult->login->result) {
 					case 'NotExists':
 						$this->error['login'] = 'The username does not exist';
@@ -318,8 +321,7 @@ class WikiPage
 		$this->text     = $this->getText(true);
 
 		if ($this->invalid) {
-			$this->error['page'] = "Invalid page title - cannot create WikiPage";
-			return null;
+			$this->error['page'] = 'Invalid page title - cannot create WikiPage';
 		}
 	}
 
@@ -443,7 +445,7 @@ class WikiPage
 	 * then this method will query the wiki API again for the page details.
 	 *
 	 * @param   boolean  $refresh  True to query the wiki API again
-	 * @return  string             The text of the page
+	 * @return  mixed              The text of the page (string), or null if error
 	 */
 	public function getText($refresh = false)
 	{
@@ -459,7 +461,8 @@ class WikiPage
 
 			// Check for errors
 			if (isset($r['error'])) {
-				$this->error = $r; // Set the error if there was one
+				$this->error = $r['error']; // Set the error if there was one
+				return null;
 			} else {
 				$this->error = null; // Reset the error status
 			}
@@ -717,12 +720,11 @@ class WikiPage
 		$r = $this->wikimate->edit($data); // The edit query
 
 		// Check if it worked
-		if (isset($r['edit']['result']) && $r['edit']['result'] == "Success") {
+		if (isset($r['edit']['result']) && $r['edit']['result'] == 'Success') {
 			$this->exists = true;
 
 			if (is_null($section)) {
 				$this->text = $text;
-			} else {
 			}
 
 			// Get the new starttimestamp
@@ -742,7 +744,13 @@ class WikiPage
 			return true;
 		}
 
-		$this->error = $r; // Return error response
+		// Return error response
+		if (isset($r['error'])) {
+			$this->error = $r['error'];
+		} else {
+			$this->error = array();
+			$this->error['page'] = 'Unexpected edit response: '.$r['edit']['result'];
+		}
 		return false;
 	}
 
@@ -808,7 +816,7 @@ class WikiPage
 			return true;
 		}
 
-		$this->error = $r; // Return error response
+		$this->error = $r['error']; // Return error response
 		return false;
 	}
 
@@ -843,7 +851,7 @@ class WikiPage
 
 		// Return error message and value
 		$this->error = array();
-		$this->error['section'] = "The section is not found on this page";
+		$this->error['page'] = 'The section is not found on this page';
 		return -1;
 	}
 }
