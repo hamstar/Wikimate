@@ -45,14 +45,14 @@ class Wikimate
 	/**
 	 * Set up a Requests_Session with appropriate user agent.
 	 *
-	 * @todo  Pull version number from elsewhere.
-	 *
 	 * @return  void
 	 */
 	protected function initRequests()
 	{
+		$this->useragent = 'Wikimate '.self::VERSION.' (https://github.com/hamstar/Wikimate)';
+
 		$this->session = new Requests_Session($this->api);
-		$this->useragent = "Wikimate ".self::VERSION." (https://github.com/hamstar/Wikimate)";
+		$this->session->useragent = $this->useragent;
 	}
 
 	/**
