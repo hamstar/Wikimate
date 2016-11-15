@@ -58,9 +58,12 @@ class Wikimate
 	/**
 	 * Logs in to the wiki.
 	 *
-	 * @return  boolean  True if logged in
+	 * @param   string   $username  The user name
+	 * @param   string   $password  The user password
+	 * @param   string   $domain    The domain (optional)
+	 * @return  boolean             True if logged in
 	 */
-	public function login($username, $password, $domain = NULL)
+	public function login($username, $password, $domain = null)
 	{
 		//Logger::log("Logging in");
 
@@ -94,7 +97,7 @@ class Wikimate
 			print_r($loginResult);
 		}
 
-		if ($loginResult->login->result == 'NeedToken') {
+		if (isset($loginResult->login->result) && $loginResult->login->result == 'NeedToken') {
 			//Logger::log("Sending token {$loginResult->login->token}");
 			$details['lgtoken'] = strtolower(trim($loginResult->login->token));
 
