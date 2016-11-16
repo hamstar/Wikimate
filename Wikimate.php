@@ -858,3 +858,501 @@ class WikiPage
 		return -1;
 	}
 }
+
+
+/**
+ * Models a wiki file that can have its properties retrieved and
+ * its contents downloaded and uploaded.
+ * All properties pertain to the current revision of the file.
+ *
+ * @author  Robert McLeod & Frans P. de Vries
+ * @since   October 2016
+ */
+class WikiFile
+{
+	protected $filename  = null;
+	protected $wikimate  = null;
+	protected $exists    = false;
+	protected $invalid   = false;
+	protected $error     = null;
+	protected $edittoken = null;
+	protected $info      = null;
+
+	/*
+	 *
+	 * Magic methods
+	 *
+	 */
+
+	/**
+	 * Constructs a WikiFile object from the filename given
+	 * and adds a Wikimate object.
+	 *
+	 * @param  string    $filename  Name of the wiki file
+	 * @param  Wikimate  $wikimate  Wikimate object
+	 */
+	public function __construct($filename, $wikimate)
+	{
+		$this->wikimate = $wikimate;
+		$this->filename = $filename;
+		$this->info     = $this->getInfo(true);
+
+		if ($this->invalid) {
+			$this->error['file'] = 'Invalid filename - cannot create WikiFile';
+		}
+	}
+
+	/**
+	 * Forget all object properties.
+	 *
+	 * @return  <type>  Destructor
+	 */
+	public function __destruct()
+	{
+		$this->filename   = null;
+		$this->wikimate   = null;
+		$this->exists     = false;
+		$this->invalid    = false;
+		$this->error      = null;
+		$this->edittoken  = null;
+		$this->info       = null;
+		return null;
+	}
+
+	/**
+	 * Returns the file existance status.
+	 *
+	 * @return  boolean  True if file exists
+	 */
+	public function exists()
+	{
+		return $this->exists;
+	}
+
+	/**
+	 * Alias of self::__destruct().
+	 */
+	public function destroy()
+	{
+		$this->__destruct();
+	}
+
+	/*
+	 *
+	 * File meta methods
+	 *
+	 */
+
+	/**
+	 * Returns an error if there is one, null shows no error.
+	 *
+	 * @return  mixed  Null for no errors, or an error array
+	 */
+	public function getError()
+	{
+		return $this->error;
+	}
+
+	/**
+	 * Returns the name of this file.
+	 *
+	 * @return  string  The name of this file
+	 */
+	public function getFilename()
+	{
+		return $this->filename;
+	}
+
+	/*
+	 *
+	 * Getter methods
+	 *
+	 */
+
+	/**
+	 * Gets the information of the file. If refresh is true,
+	 * then this method will query the wiki API again for the file details.
+	 *
+	 * @param   boolean  $refresh  True to query the wiki API again
+	 * @return  mixed              The info of the file (array), or null if error
+	 */
+	public function getInfo($refresh = false)
+	{
+		if ($refresh) { // We want to query the API
+
+			$data = array(
+				'titles' => 'File:' . $this->filename,
+				'prop' => 'info|imageinfo',
+				'iiprop' => 'bitdepth|canonicaltitle|comment|parsedcomment|'
+				          . 'commonmetadata|metadata|extmetadata|mediatype|'
+				          . 'mime|thumbmime|sha1|size|timestamp|url|user|userid',
+				'intoken' => 'edit',
+			);
+
+			$r = $this->wikimate->query($data); // Run the query
+
+			// Check for errors
+			if (isset($r['error'])) {
+				$this->error = $r['error']; // Set the error if there was one
+				return null;
+			} else {
+				$this->error = null; // Reset the error status
+			}
+
+			// Get the page (there should only be one)
+			$page = array_pop($r['query']['pages']);
+			unset($r, $data);
+
+			// Abort if invalid file title
+			if (isset($page['invalid'])) {
+				$this->invalid = true;
+				return null;
+			}
+
+			$this->edittoken = $page['edittoken'];
+
+			if (!isset($page['missing'])) {
+				// Update the existance if the file is there
+				$this->exists = true;
+				// Put the content into info
+				$this->info   = $page['imageinfo'][0];
+			}
+			unset($page);
+		}
+
+		return $this->info; // Return the info in any case
+	}
+
+	/**
+	 * Returns the aspect ratio of this image,
+	 * or 0 if file has no image dimensions.
+	 *
+	 * @return  float  The aspect ratio of this image, or 0 if no dimensions
+	 */
+	public function getAspectRatio()
+	{
+		if ($this->info['height'] > 0) {
+			return $this->info['width'] / $this->info['height'];
+		} else {
+			return 0;
+		}
+	}
+
+	/**
+	 * Returns the bit depth of this file.
+	 *
+	 * @return  int  The bit depth of this file
+	 */
+	public function getBitDepth()
+	{
+		return (int)$this->info['bitdepth'];
+	}
+
+	/**
+	 * Returns the canonical title of this file.
+	 *
+	 * @return  string  The canonical title of this file
+	 */
+	public function getCanonicalTitle()
+	{
+		return $this->info['canonicaltitle'];
+	}
+
+	/**
+	 * Returns the comment of this file.
+	 *
+	 * @return  string  The comment of this file
+	 */
+	public function getComment()
+	{
+		return $this->info['comment'];
+	}
+
+	/**
+	 * Returns the common metadata of this file.
+	 *
+	 * @return  array  The common metadata of this file
+	 */
+	public function getCommonMetadata()
+	{
+		return $this->info['commonmetadata'];
+	}
+
+	/**
+	 * Returns the description URL of this file.
+	 *
+	 * @return  string  The description URL of this file
+	 */
+	public function getDescriptionUrl()
+	{
+		return $this->info['descriptionurl'];
+	}
+
+	/**
+	 * Returns the extended metadata of this file.
+	 *
+	 * @return  array  The extended metadata of this file
+	 */
+	public function getExtendedMetadata()
+	{
+		return $this->info['extmetadata'];
+	}
+
+	/**
+	 * Returns the height of this file.
+	 *
+	 * @return  int  The height of this file
+	 */
+	public function getHeight()
+	{
+		return (int)$this->info['height'];
+	}
+
+	/**
+	 * Returns the media type of this file.
+	 *
+	 * @return  string  The media type of this file
+	 */
+	public function getMediaType()
+	{
+		return $this->info['mediatype'];
+	}
+
+	/**
+	 * Returns the Exif metadata of this file.
+	 *
+	 * @return  array  The metadata of this file
+	 */
+	public function getMetadata()
+	{
+		return $this->info['metadata'];
+	}
+
+	/**
+	 * Returns the MIME type of this file.
+	 *
+	 * @return  string  The MIME type of this file
+	 */
+	public function getMime()
+	{
+		return $this->info['mime'];
+	}
+
+	/**
+	 * Returns the parsed comment of this file.
+	 *
+	 * @return  string  The parsed comment of this file
+	 */
+	public function getParsedComment()
+	{
+		return $this->info['parsedcomment'];
+	}
+
+	/**
+	 * Returns the SHA-1 hash of this file.
+	 *
+	 * @return  string  The SHA-1 hash of this file
+	 */
+	public function getSha1()
+	{
+		return $this->info['sha1'];
+	}
+
+	/**
+	 * Returns the size of this file.
+	 *
+	 * @return  int  The size of this file
+	 */
+	public function getSize()
+	{
+		return (int)$this->info['size'];
+	}
+
+	/**
+	 * Returns the MIME type of this file's thumbnail,
+	 * or null if property not available.
+	 *
+	 * @return  string  The MIME type of this file's thumbnail, or null if unavailable
+	 */
+	public function getThumbMime()
+	{
+		return (isset($this->info['thumbmime']) ? $this->info['thumbmime'] : null);
+	}
+
+	/**
+	 * Returns the timestamp of this file.
+	 *
+	 * @return  string  The timestamp of this file
+	 */
+	public function getTimestamp()
+	{
+		return $this->info['timestamp'];
+	}
+
+	/**
+	 * Returns the URL of this file.
+	 *
+	 * @return  string  The URL of this file
+	 */
+	public function getUrl()
+	{
+		return $this->info['url'];
+	}
+
+	/**
+	 * Returns the user of this file.
+	 *
+	 * @return  string  The user of this file
+	 */
+	public function getUser()
+	{
+		return $this->info['user'];
+	}
+
+	/**
+	 * Returns the user ID of this file.
+	 *
+	 * @return  int  The user ID of this file
+	 */
+	public function getUserId()
+	{
+		return (int)$this->info['userid'];
+	}
+
+	/**
+	 * Returns the width of this file.
+	 *
+	 * @return  int  The width of this file
+	 */
+	public function getWidth()
+	{
+		return (int)$this->info['width'];
+	}
+
+	/*
+	 *
+	 * File contents methods
+	 *
+	 */
+
+	/**
+	 * Downloads and returns the current file's contents,
+	 * or null if an error occurs.
+	 *
+	 * @return  mixed  Contents (string), or null if error
+	 */
+	public function download()
+	{
+		// Download file, or handle error
+		$data = $this->wikimate->download($this->getUrl());
+		if ($data === null) {
+			$this->error = $this->wikimate->getError(); // Copy error if there was one
+		} else {
+			$this->error = null; // Reset the error status
+		}
+
+		return $data;
+	}
+
+	/**
+	 * Downloads the current file's contents and writes it to the given path.
+	 *
+	 * @param   string   $path  The file path to write to
+	 * @return  boolean         True if path was written successfully
+	 */
+	public function downloadFile($path)
+	{
+		// Download contents of current file
+		if (($data = $this->download()) === null) {
+			return false;
+		}
+
+		// Write contents to specified path
+		if (@file_put_contents($path, $data) === false) {
+			$this->error = array();
+			$this->error['file'] = "Unable to write file '$path'";
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Uploads the given contents to the current file.
+	 * $text is only used for the article page of a new file, not an existing
+	 * (update that via WikiPage::setText()).
+	 * If no $text is specified, $comment will be used as new page text.
+	 *
+	 * @param   string   $data       The data to upload
+	 * @param   string   $comment    Upload comment for the file
+	 * @param   string   $text       The article text for the file page
+	 * @param   boolean  $overwrite  True to overwrite existing file
+	 * @return  boolean              True if uploading was successful
+	 */
+	public function upload($data, $comment, $text = null, $overwrite = false)
+	{
+		// Check whether to overwrite existing file
+		if ($this->exists && !$overwrite) {
+			$this->error = array();
+			$this->error['file'] = 'Cannot overwrite existing file';
+			return false;
+		}
+
+		// Collect upload parameters
+		$params = array(
+			'filename' => $this->filename,
+			'comment' => $comment,
+			'ignorewarnings' => $overwrite,
+			'file' => $data,
+			'token' => $this->edittoken,
+		);
+		if ($text !== null) {
+			$params['text'] = $text;
+		}
+
+		// Upload file, or handle error
+		$r = $this->wikimate->upload($params);
+
+		if (isset($r['upload']['result']) && $r['upload']['result'] == 'Success') {
+			// Update the file's properties
+			$this->info = $r['upload']['imageinfo'];
+
+			$this->error = null; // Reset the error status
+			return true;
+		}
+
+		// Return error response
+		if (isset($r['error'])) {
+			$this->error = $r['error'];
+		} else {
+			$this->error = array();
+			$this->error['file'] = 'Unexpected upload response: '.$r['upload']['result'];
+		}
+		return false;
+	}
+
+	/**
+	 * Reads contents from the given path and uploads it to the current file.
+	 * $text is only used for the article page of a new file, not an existing
+	 * (update that via WikiPage::setText()).
+	 * If no $text is specified, $comment will be used as new page text.
+	 *
+	 * @param   string   $path       The file path to upload
+	 * @param   string   $comment    Upload comment for the file
+	 * @param   string   $text       The article text for the file page
+	 * @param   boolean  $overwrite  True to overwrite existing file
+	 * @return  boolean              True if uploading was successful
+	 */
+	public function uploadFile($path, $comment, $text = null, $overwrite = false)
+	{
+		// Read contents from specified path
+		if (($data = @file_get_contents($path)) === false) {
+			$this->error = array();
+			$this->error['file'] = "Unable to read file '$path'";
+			return false;
+		}
+
+		// Upload contents to current file
+		return $this->upload($data, $comment, $text, $overwrite);
+	}
+}
