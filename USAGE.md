@@ -166,6 +166,74 @@ $page->delete("The page was created accidentally in the first place.");
 
 If you pass in a message argument, it will be recorded as a reason for the deletion.
 
+### Getting a file object
+
+Once connected you can also start playing around with files.
+
+```php
+// create a new file object
+$file = $wiki->getFile('Site-logo.png');
+// check if the file exists or not
+if (!$file->exists()) die('File not found');
+// get the file name
+echo $file->getFilename();
+```
+
+All available properties of the file are accessible via `get` methods.
+
+```php
+// get the file size, timestamp, and hash
+echo $file->getSize();
+echo $file->getTimestamp();
+echo $file->getSha1();
+// get dimensions and MIME type for an image
+echo $file->getHeight();
+echo $file->getWidth();
+echo $file->getMime();
+// get aspect ratio of an image
+// this is a convenience method rather than a direct property
+echo $file->getAspectRatio();
+```
+
+### Downloading...
+
+You can obtain the data of the file by using the `download()` method and use it in your script, or write it directly to a local file via the `downloadFile()` method.
+
+```php
+$data = $file->download();
+// process image $data of Site-logo.png
+$result = $file->downloadFile('/path/to/sitelogo.png');
+```
+
+### Uploading...
+
+You can upload data from your script to the file by using the `upload()` method, or read it directly from a local file via the `uploadFile()` method.
+
+A comment for the file's history must be supplied, and for a new file the text for its associated description page can optionally be supplied as well. If no such text is passed, the comment will be used instead.
+
+The `upload()` and `uploadFile()` methods guard against uploading data to an existing file, but allow this when the overwrite flag is set.
+
+```php
+// construct image $data for Site-logo.png
+$result = upload($data, 'Upload new site logo', 'New site logo to reflect the new brand', true);
+$result = uploadFile('/path/to/newlogo.png', 'Upload new site logo', 'New site logo to reflect the new brand', true);
+
+// add a new button to the site
+$file = $wiki->getFile('New-button.png');
+if ($file->exists()) die('New button already exists');
+$result = uploadFile('/path/to/newbutton.png', 'Upload new button', 'New button to match the new logo');
+```
+
+### Deleting...
+
+If the account you're using has delete permissions, you can delete files as well via `delete()` on its description page:
+
+```php
+$page = $wiki->getPage('File:Old-button.png');
+// returns true if the delete was successful
+$page->delete('The button was superseded by a new one');
+```
+
 ### Other stuff
 
 Did something go wrong?  Check the error array:
@@ -177,6 +245,7 @@ print_r($page->getError());
 For MediaWiki API errors, the array contains the 'code' and 'info' key/value pairs [defined by the API](https://www.mediawiki.org/wiki/API:Errors_and_warnings#Errors).  For other errors, the following key/value pairs are returned:
 * 'login' for Wikimate authentication problems
 * 'page' for WikiPage errors
+* 'file' for WikiFile errors
 
 Wanna run your own queries?
 You can use the edit and query commands in Wikimate:
