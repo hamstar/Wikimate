@@ -5,7 +5,7 @@ It currently consists of two classes:
 * **WikiPage** – The only object made so far. Provides an interface to getting/editing pages.
 
 The [latest released version](https://github.com/hamstar/Wikimate/releases) of Wikimate
-is v0.10.0, released on Jun 24, 2014.
+is v0.11.0, released on Nov 16, 2016.
 See [CHANGELOG.md](CHANGELOG.md) for the detailed version history.
 
 ## Installation
@@ -25,7 +25,7 @@ Then, download Wikimate, and initialise it by running `composer install` (or
 To use Wikimate within another project, you can add it as a composer dependency
 by adding the following to your `composer.json` file:
 
-    "hamstar/Wikimate": "0.10.1"
+    "hamstar/Wikimate": "0.11.0"
 
 ## Usage
 
