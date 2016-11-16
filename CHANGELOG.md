@@ -2,6 +2,12 @@
 
 Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/) and [Keep a Changelog](http://keepachangelog.com/).
 
+### Current development
+
+#### Added
+
+* New class WikiFile to retrieve properties of a file, and download and upload its contents.  All properties pertain to the current revision of the file. ([#69])
+
 ### Version 0.11.0
 
 #### Added
@@ -71,4 +77,5 @@ Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/) 
 [#63]: https://github.com/hamstar/Wikimate/pull/63
 [#64]: https://github.com/hamstar/Wikimate/pull/64
 [#67]: https://github.com/hamstar/Wikimate/pull/67
+[#69]: https://github.com/hamstar/Wikimate/pull/69
 
