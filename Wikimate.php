@@ -199,6 +199,17 @@ class Wikimate
 	}
 
 	/**
+	 * Returns a WikiFile object populated with the file data.
+	 *
+	 * @param   string    $filename  The name of the wiki file
+	 * @return  WikiFile             The file object
+	 */
+	public function getFile($filename)
+	{
+		return new WikiFile($filename, $this);
+	}
+
+	/**
 	 * Performs a query to the wiki API with the given details.
 	 *
 	 * @param   array  $array  Array of details to be passed in the query
@@ -266,6 +277,68 @@ class Wikimate
 		$array['format'] = 'php';
 
 		$apiResult = $this->session->post($this->api, $headers, $array);
+
+		return unserialize($apiResult->body);
+	}
+
+	/**
+	 * Downloads data from the given URL.
+	 *
+	 * @param   string  $url  The URL to download from
+	 * @return  mixed         The downloaded data (string), or null if error
+	 */
+	public function download($url)
+	{
+		$getResult = $this->session->get($url);
+
+		if (!$getResult->success) {
+			$this->error = array();
+			$this->error['file'] = 'Download error (HTTP status: ' . $getResult->status_code . ')';
+			$this->error['http'] = $getResult->status_code;
+			return null;
+		}
+		return $getResult->body;
+	}
+
+	/**
+	 * Uploads a file to the wiki API.
+	 *
+	 * @param   array    $array  Array of details to be used in the upload
+	 * @return  array            Unserialized php output from the wiki API
+	 */
+	public function upload($array)
+	{
+		$array['action'] = 'upload';
+		$array['format'] = 'php';
+
+		// Construct multipart body: https://www.mediawiki.org/wiki/API:Upload#Sample_Raw_Upload
+		$boundary = '---Wikimate-' . md5(microtime());
+		$body = '';
+		foreach ($array as $fieldName => $fieldData) {
+			$body .= "--{$boundary}\r\n";
+			$body .= 'Content-Disposition: form-data; name="' . $fieldName . '"';
+			// Process the (binary) file
+			if ($fieldName == 'file') {
+				$body .= '; filename="' . $array['filename'] . '"' . "\r\n";
+				$body .= "Content-Type: application/octet-stream; charset=UTF-8\r\n";
+				$body .= "Content-Transfer-Encoding: binary\r\n";
+			// Process text parameters
+			} else {
+				$body .= "\r\n";
+				$body .= "Content-Type: text/plain; charset=UTF-8\r\n";
+				$body .= "Content-Transfer-Encoding: 8bit\r\n";
+			}
+			$body .= "\r\n{$fieldData}\r\n";
+		}
+		$body .= "--{$boundary}--\r\n";
+
+		// Construct multipart headers
+		$headers = array(
+			'Content-Type' => "multipart/form-data; boundary={$boundary}",
+			'Content-Length' => strlen($body),
+		);
+
+		$apiResult = $this->session->post($this->api, $headers, $body);
 
 		return unserialize($apiResult->body);
 	}
@@ -393,7 +466,7 @@ class WikiPage
 
 	/*
 	 *
-	 * Page meta functions
+	 * Page meta methods
 	 *
 	 */
 
@@ -439,7 +512,7 @@ class WikiPage
 
 	/*
 	 *
-	 * Getter functions
+	 * Getter methods
 	 *
 	 */
 
@@ -666,7 +739,7 @@ class WikiPage
 
 	/*
 	 *
-	 * Setter functions
+	 * Setter methods
 	 *
 	 */
 
