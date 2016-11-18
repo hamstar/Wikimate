@@ -344,9 +344,9 @@ class Wikimate
 	}
 
 	/**
-	 * Returns an error if there is one, null shows no error.
+	 * Returns the latest error if there is one.
 	 *
-	 * @return  mixed  Null for no errors, or an error array
+	 * @return  mixed  The error array, or null if no error
 	 */
 	public function getError()
 	{
@@ -385,7 +385,7 @@ class WikiPage
 
 	/**
 	 * Constructs a WikiPage object from the title given
-	 * and adds a Wikimate object.
+	 * and associate with the passed Wikimate object.
 	 *
 	 * @param  string    $title     Name of the wiki article
 	 * @param  Wikimate  $wikimate  Wikimate object
@@ -447,7 +447,7 @@ class WikiPage
 	}
 
 	/**
-	 * Returns the page existance status.
+	 * Returns the page existence status.
 	 *
 	 * @return  boolean  True if page exists
 	 */
@@ -471,9 +471,9 @@ class WikiPage
 	 */
 
 	/**
-	 * Returns an error if there is one, null shows no error.
+	 * Returns the latest error if there is one.
 	 *
-	 * @return  mixed  Null for no errors, or an error array
+	 * @return  mixed  The error array, or null if no error
 	 */
 	public function getError()
 	{
@@ -557,7 +557,7 @@ class WikiPage
 			$this->starttimestamp = $page['starttimestamp'];
 
 			if (!isset($page['missing'])) {
-				// Update the existance if the page is there
+				// Update the existence if the page is there
 				$this->exists = true;
 				// Put the content into text
 				$this->text   = $page['revisions'][0]['*'];
@@ -879,8 +879,9 @@ class WikiPage
 		);
 
 		// Set options from arguments
-		if (!is_null($reason))
+		if (!is_null($reason)) {
 			$data['reason'] = $reason;
+		}
 
 		$r = $this->wikimate->delete($data); // The delete query
 
@@ -959,7 +960,7 @@ class WikiFile
 
 	/**
 	 * Constructs a WikiFile object from the filename given
-	 * and adds a Wikimate object.
+	 * and associate with the passed Wikimate object.
 	 *
 	 * @param  string    $filename  Name of the wiki file
 	 * @param  Wikimate  $wikimate  Wikimate object
@@ -993,7 +994,7 @@ class WikiFile
 	}
 
 	/**
-	 * Returns the file existance status.
+	 * Returns the file existence status.
 	 *
 	 * @return  boolean  True if file exists
 	 */
@@ -1017,9 +1018,9 @@ class WikiFile
 	 */
 
 	/**
-	 * Returns an error if there is one, null shows no error.
+	 * Returns the latest error if there is one.
 	 *
-	 * @return  mixed  Null for no errors, or an error array
+	 * @return  mixed  The error array, or null if no error
 	 */
 	public function getError()
 	{
@@ -1085,7 +1086,7 @@ class WikiFile
 			$this->edittoken = $page['edittoken'];
 
 			if (!isset($page['missing'])) {
-				// Update the existance if the file is there
+				// Update the existence if the file is there
 				$this->exists = true;
 				// Put the content into info
 				$this->info   = $page['imageinfo'][0];
@@ -1098,7 +1099,7 @@ class WikiFile
 
 	/**
 	 * Returns the aspect ratio of this image,
-	 * or 0 if file has no image dimensions.
+	 * or 0 if file is not an image (and thus has no dimensions).
 	 *
 	 * @return  float  The aspect ratio of this image, or 0 if no dimensions
 	 */
@@ -1132,9 +1133,9 @@ class WikiFile
 	}
 
 	/**
-	 * Returns the comment of this file.
+	 * Returns the edit comment of this file.
 	 *
-	 * @return  string  The comment of this file
+	 * @return  string  The edit comment of this file
 	 */
 	public function getComment()
 	{
@@ -1212,9 +1213,9 @@ class WikiFile
 	}
 
 	/**
-	 * Returns the parsed comment of this file.
+	 * Returns the parsed edit comment of this file.
 	 *
-	 * @return  string  The parsed comment of this file
+	 * @return  string  The parsed edit comment of this file
 	 */
 	public function getParsedComment()
 	{
@@ -1273,7 +1274,7 @@ class WikiFile
 	}
 
 	/**
-	 * Returns the user of this file.
+	 * Returns the user who uploaded this file.
 	 *
 	 * @return  string  The user of this file
 	 */
@@ -1283,7 +1284,7 @@ class WikiFile
 	}
 
 	/**
-	 * Returns the user ID of this file.
+	 * Returns the ID of the user who uploaded this file.
 	 *
 	 * @return  int  The user ID of this file
 	 */
