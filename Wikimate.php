@@ -526,6 +526,7 @@ class WikiPage
 	public function getText($refresh = false)
 	{
 		if ($refresh) { // We want to query the API
+			// Specify relevant page properties to retrieve
 			$data = array(
 				'titles' => $this->title,
 				'prop' => 'info|revisions',
@@ -1053,7 +1054,7 @@ class WikiFile
 	public function getInfo($refresh = false)
 	{
 		if ($refresh) { // We want to query the API
-
+			// Specify all image properties to retrieve
 			$data = array(
 				'titles' => 'File:' . $this->filename,
 				'prop' => 'info|imageinfo',
@@ -1115,7 +1116,7 @@ class WikiFile
 	/**
 	 * Returns the bit depth of this file.
 	 *
-	 * @return  int  The bit depth of this file
+	 * @return  integer  The bit depth of this file
 	 */
 	public function getBitDepth()
 	{
@@ -1175,7 +1176,7 @@ class WikiFile
 	/**
 	 * Returns the height of this file.
 	 *
-	 * @return  int  The height of this file
+	 * @return  integer  The height of this file
 	 */
 	public function getHeight()
 	{
@@ -1235,7 +1236,7 @@ class WikiFile
 	/**
 	 * Returns the size of this file.
 	 *
-	 * @return  int  The size of this file
+	 * @return  integer  The size of this file
 	 */
 	public function getSize()
 	{
@@ -1286,7 +1287,7 @@ class WikiFile
 	/**
 	 * Returns the ID of the user who uploaded this file.
 	 *
-	 * @return  int  The user ID of this file
+	 * @return  integer  The user ID of this file
 	 */
 	public function getUserId()
 	{
@@ -1296,7 +1297,7 @@ class WikiFile
 	/**
 	 * Returns the width of this file.
 	 *
-	 * @return  int  The width of this file
+	 * @return  integer  The width of this file
 	 */
 	public function getWidth()
 	{
@@ -1315,7 +1316,7 @@ class WikiFile
 	 *
 	 * @return  mixed  Contents (string), or null if error
 	 */
-	public function download()
+	public function downloadData()
 	{
 		// Download file, or handle error
 		$data = $this->wikimate->download($this->getUrl());
@@ -1337,7 +1338,7 @@ class WikiFile
 	public function downloadFile($path)
 	{
 		// Download contents of current file
-		if (($data = $this->download()) === null) {
+		if (($data = $this->downloadData()) === null) {
 			return false;
 		}
 
