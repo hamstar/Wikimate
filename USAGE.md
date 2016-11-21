@@ -196,31 +196,36 @@ echo $file->getAspectRatio();
 
 ### Downloading...
 
-You can obtain the data of the file by using the `download()` method and use it in your script, or write it directly to a local file via the `downloadFile()` method.
+You can obtain the data of the file by using the `downloadData()` method and use it in your script, or write it directly to a local file via the `downloadFile()` method.
 
 ```php
-$data = $file->download();
+$data = $file->downloadData();
 // process image $data of Site-logo.png
 $result = $file->downloadFile('/path/to/sitelogo.png');
 ```
 
 ### Uploading...
 
-You can upload data from your script to the file by using the `upload()` method, or read it directly from a local file via the `uploadFile()` method.
+You can upload data from your script to the file by using the `uploadData()` method, or read it directly from a local file via the `uploadFile()` method. Additionally, uploading from a URL is possible via the `uploadFromUrl()` method.
 
 A comment for the file's history must be supplied, and for a new file the text for its associated description page can be provided as well. If no such text is passed, the comment will be used instead.
 
-The `upload()` and `uploadFile()` methods guard against uploading data to an existing file, but allow this when the overwrite flag is set.
+All upload methods guard against uploading data to an existing file, but allow this when the overwrite flag is set.
 
 ```php
 // construct image $data for Site-logo.png
-$result = upload($data, 'Upload new site logo', 'New site logo to reflect the new brand', true);
+$result = uploadData($data, 'Upload new site logo', 'New site logo to reflect the new brand', true);
 $result = uploadFile('/path/to/newlogo.png', 'Upload new site logo', 'New site logo to reflect the new brand', true);
 
 // add a new button to the site
 $file = $wiki->getFile('New-button.png');
 if ($file->exists()) die('New button already exists');
 $result = uploadFile('/path/to/newbutton.png', 'Upload new button', 'New button to match the new logo');
+
+// add an example image from a remote URL
+$file = $wiki->getFile('Wiki-example.jpg');
+if ($file->exists()) die('Example image already exists');
+$result = uploadFromUrl('https://upload.wikimedia.org/wikipedia/en/a/a9/Example.jpg', 'Adopt Wiki example image');
 ```
 
 ### Deleting...
