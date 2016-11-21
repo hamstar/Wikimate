@@ -1352,18 +1352,18 @@ class WikiFile
 	}
 
 	/**
-	 * Uploads the given contents to the current file.
+	 * Uploads to the current file using the given parameters.
 	 * $text is only used for the article page of a new file, not an existing
 	 * (update that via WikiPage::setText()).
 	 * If no $text is specified, $comment will be used as new page text.
 	 *
-	 * @param   string   $data       The data to upload
+	 * @param   array    $params     The upload parameters
 	 * @param   string   $comment    Upload comment for the file
 	 * @param   string   $text       The article text for the file page
 	 * @param   boolean  $overwrite  True to overwrite existing file
 	 * @return  boolean              True if uploading was successful
 	 */
-	public function upload($data, $comment, $text = null, $overwrite = false)
+	private function uploadCommon(array $params, $comment, $text = null, $overwrite = false)
 	{
 		// Check whether to overwrite existing file
 		if ($this->exists && !$overwrite) {
@@ -1373,15 +1373,12 @@ class WikiFile
 		}
 
 		// Collect upload parameters
-		$params = array(
-			'filename' => $this->filename,
-			'comment' => $comment,
-			'ignorewarnings' => $overwrite,
-			'file' => $data,
-			'token' => $this->edittoken,
-		);
-		if ($text !== null) {
-			$params['text'] = $text;
+		$params['filename']       = $this->filename;
+		$params['comment']        = $comment;
+		$params['ignorewarnings'] = $overwrite;
+		$params['token']          = $this->edittoken;
+		if (!is_null($text)) {
+			$params['text']   = $text;
 		}
 
 		// Upload file, or handle error
@@ -1406,6 +1403,29 @@ class WikiFile
 	}
 
 	/**
+	 * Uploads the given contents to the current file.
+	 * $text is only used for the article page of a new file, not an existing
+	 * (update that via WikiPage::setText()).
+	 * If no $text is specified, $comment will be used as new page text.
+	 *
+	 * @param   string   $data       The data to upload
+	 * @param   string   $comment    Upload comment for the file
+	 * @param   string   $text       The article text for the file page
+	 * @param   boolean  $overwrite  True to overwrite existing file
+	 * @return  boolean              True if uploading was successful
+	 */
+	public function uploadData($data, $comment, $text = null, $overwrite = false)
+	{
+		// Collect upload parameter
+		$params = array(
+			'file' => $data,
+		);
+
+		// Upload contents to current file
+		return $this->uploadCommon($params, $comment, $text, $overwrite);
+	}
+
+	/**
 	 * Reads contents from the given path and uploads it to the current file.
 	 * $text is only used for the article page of a new file, not an existing
 	 * (update that via WikiPage::setText()).
@@ -1427,6 +1447,29 @@ class WikiFile
 		}
 
 		// Upload contents to current file
-		return $this->upload($data, $comment, $text, $overwrite);
+		return $this->uploadData($data, $comment, $text, $overwrite);
+	}
+
+	/**
+	 * Uploads file contents from the given URL to the current file.
+	 * $text is only used for the article page of a new file, not an existing
+	 * (update that via WikiPage::setText()).
+	 * If no $text is specified, $comment will be used as new page text.
+	 *
+	 * @param   string   $url        The URL from which to upload
+	 * @param   string   $comment    Upload comment for the file
+	 * @param   string   $text       The article text for the file page
+	 * @param   boolean  $overwrite  True to overwrite existing file
+	 * @return  boolean              True if uploading was successful
+	 */
+	public function uploadFromUrl($url, $comment, $text = null, $overwrite = false)
+	{
+		// Collect upload parameter
+		$params = array(
+			'url' => $url,
+		);
+
+		// Upload URL to current file
+		return $this->uploadCommon($params, $comment, $text, $overwrite);
 	}
 }
