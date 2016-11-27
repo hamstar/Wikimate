@@ -952,6 +952,7 @@ class WikiFile
 	protected $error     = null;
 	protected $edittoken = null;
 	protected $info      = null;
+	protected $history   = null;
 
 	/*
 	 *
@@ -991,6 +992,7 @@ class WikiFile
 		$this->error      = null;
 		$this->edittoken  = null;
 		$this->info       = null;
+		$this->history    = null;
 		return null;
 	}
 
@@ -1049,9 +1051,10 @@ class WikiFile
 	 * then this method will query the wiki API again for the file details.
 	 *
 	 * @param   boolean  $refresh  True to query the wiki API again
+	 * @param   array    $history  An optional array of revision history parameters
 	 * @return  mixed              The info of the file (array), or null if error
 	 */
-	public function getInfo($refresh = false)
+	public function getInfo($refresh = false, $history = null)
 	{
 		if ($refresh) { // We want to query the API
 			// Specify relevant file properties to retrieve
@@ -1063,6 +1066,14 @@ class WikiFile
 				          . 'mime|thumbmime|sha1|size|timestamp|url|user|userid',
 				'intoken' => 'edit',
 			);
+			// Add optional history parameters
+			if (is_array($history)) {
+				foreach ($history as $key => $val) {
+					$data[$key] = $val;
+				}
+				// Retrieve archive name property as well
+				$data['iiprop'] .= '|archivename';
+			}
 
 			$r = $this->wikimate->query($data); // Run the query
 
@@ -1089,8 +1100,9 @@ class WikiFile
 			if (!isset($page['missing'])) {
 				// Update the existence if the file is there
 				$this->exists = true;
-				// Put the content into info
-				$this->info   = $page['imageinfo'][0];
+				// Put the content into info & history
+				$this->info    = $page['imageinfo'][0];
+				$this->history = $page['imageinfo'];
 			}
 			unset($page);
 		}
@@ -1302,6 +1314,157 @@ class WikiFile
 	public function getWidth()
 	{
 		return (int)$this->info['width'];
+	}
+
+	/*
+	 *
+	 * File history & deletion methods
+	 *
+	 */
+
+	/**
+	 * Returns the revision history of this file with all properties.
+	 * The initial history at object creation contains only the
+	 * current revision of the file. To obtain more revisions,
+	 * set $refresh to true and also optionally set $limit and
+	 * the timestamps.
+	 *
+	 * The maximum limit is 500 for user accounts and 5000 for bot accounts.
+	 *
+	 * Timestamps can be in several formats as described here:
+	 * https://www.mediawiki.org/w/api.php?action=help&modules=main#main.2Fdatatypes
+	 *
+	 * @param   boolean  $refresh  True to query the wiki API again
+	 * @param   integer  $limit    The number of file revisions to return
+	 *                             (the maximum number by default)
+	 * @param   string   $startts  The start timestamp of the listing (optional)
+	 * @param   string   $endts    The end timestamp of the listing (optional)
+	 * @return  mixed              The array of selected file revisions, or null if error
+	 */
+	public function getHistory($refresh = false, $limit = null, $startts = null, $endts = null)
+	{
+		if ($refresh) { // We want to query the API
+			// Collect optional history parameters
+			$history = array();
+			if (!is_null($limit)) {
+				$history['iilimit'] = $limit;
+			} else {
+				$history['iilimit'] = 'max';
+			}
+			if (!is_null($startts)) {
+				$history['iistart'] = $startts;
+			}
+			if (!is_null($endts)) {
+				$history['iiend'] = $endts;
+			}
+
+			// Get file revision history
+			if ($this->getInfo($refresh, $history) === null) {
+				return null;
+			}
+		}
+
+		return $this->history;
+	}
+
+	/**
+	 * Returns the properties of the specified file revision.
+	 *
+	 * Revision can be the following:
+	 * - revision timestamp (string:"2001-01-15T14:56:00Z")
+	 * - revision index (int:3)
+	 * The current revision has index 0.
+	 *
+	 * @param   mixed  $revision  The index or timestamp of the revision
+	 * @return  mixed             The properties (array), or null if not found
+	 */
+	public function getRevision($revision)
+	{
+		// Select revision by index
+		if (is_int($revision)) {
+			if (isset($this->history[$revision])) {
+				return $this->history[$revision];
+			}
+		// Search revision by timestamp
+		} else {
+			foreach ($this->history as $history) {
+				if ($history['timestamp'] == $revision) {
+					return $history;
+				}
+			}
+		}
+
+		// Return error message
+		$this->error = array();
+		$this->error['file'] = 'The revision is not found for this file';
+		return null;
+	}
+
+	/**
+	 * Returns the archive name of the specified file revision.
+	 *
+	 * Revision can be the following:
+	 * - revision timestamp (string:"2001-01-15T14:56:00Z")
+	 * - revision index (int:3)
+	 * The current revision has index 0.
+	 *
+	 * @param   mixed  $revision  The index or timestamp of the revision
+	 * @return  mixed             The archive name (string), or null if not found
+	 */
+	public function getArchivename($revision)
+	{
+		// Obtain the properties of the revision
+		if (($info = $this->getRevision($revision)) === null) {
+			return null;
+		}
+
+		// Check for archive name
+		if (!isset($info['archivename'])) {
+			// Return error message
+			$this->error = array();
+			$this->error['file'] = 'This revision contains no archive name';
+			return null;
+		}
+
+		return $info['archivename'];
+	}
+
+	/**
+	 * Delete the file, or an older revision of it.
+	 *
+	 * @param   string   $reason       Reason for the deletion
+	 * @param   string   $archivename  The archive name of the older revision
+	 * @return  boolean                True if file (revision) was deleted successfully
+	 */
+	public function delete($reason = null, $archivename = null)
+	{
+		$data = array(
+			'title' => 'File:' . $this->filename,
+			'token' => $this->edittoken,
+		);
+
+		// Set options from arguments
+		if (!is_null($reason)) {
+			$data['reason'] = $reason;
+		}
+		if (!is_null($archivename)) {
+			$data['oldimage'] = $archivename;
+		}
+
+		$r = $this->wikimate->delete($data); // The delete query
+
+		// Check if it worked
+		if (isset($r['delete'])) {
+			if (is_null($archivename)) {
+				$this->exists = false; // The file was deleted altogether
+			}
+
+			$this->error = null; // Reset the error status
+			return true;
+		}
+
+		$this->error = $r['error']; // Return error response
+		return false;
 	}
 
 	/*
