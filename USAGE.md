@@ -228,14 +228,53 @@ if ($file->exists()) die('Example image already exists');
 $result = uploadFromUrl('https://upload.wikimedia.org/wikipedia/en/a/a9/Example.jpg', 'Adopt Wiki example image');
 ```
 
-### Deleting...
+### History...
 
-If the account you're using has delete permissions, you can delete files as well via `delete()` on its description page:
+The revision history of a file can be obtained as an array with a properties array per revision:
 
 ```php
-$page = $wiki->getPage('File:Old-button.png');
+$file = $wiki->getFile('Frequently-changed-file.zip');
+// get only the current revision
+$history = $file->getHistory();
+// get the maximum number of revisions (500 for user accounts, 5000 for bot accounts)
+$history = $file->getHistory(true);
+// get the latest 10 revisions during 2015 (can use all MediaWiki timestamp formats)
+$history = $file->getHistory(true, 10, '2015-01-01 00:00:00', '2015-12-31 23:59:59');
+// iterate over revisions and print properties
+foreach ($history as $revision => $properties) {
+  echo "Revision $revision properties:\n";
+  print_r($properties);
+}
+```
+
+One specific revision can be requested by revision sequence number or by exact timestamp in the current history, as can its archive name:
+
+```php
+// get the latest 50 revisions
+$history = $file->getHistory(true, 50);
+// get the properties of the penultimate revision
+$revision = $file->getRevision(1);
+// get the archive name of the specific revision (must be ISO 8601 format)
+$archivename = $file->getArchivename('2016-11-22T33:44:55Z');
+```
+
+### Deleting...
+
+If the account you're using has delete permissions, you can delete files as well:
+
+```php
+$file = $wiki->getFile('Old-button.png');
 // returns true if the delete was successful
-$page->delete('The button was superseded by a new one');
+$file->delete('The button was superseded by a new one');
+```
+
+To delete a specific older revision of the file, the archive name is needed:
+
+```php
+$file = $wiki->getFile('Often-changed-file.zip');
+$history = $file->getHistory(true);
+$archivename = $file->getArchivename(3);
+$file->delete('This was an inadvertent release', $archivename);
 ```
 
 ### Other stuff
