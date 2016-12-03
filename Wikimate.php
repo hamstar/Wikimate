@@ -644,8 +644,8 @@ class WikiPage
 	 * Returns the requested section, with its subsections, if any.
 	 *
 	 * Section can be the following:
-	 * - section name (string:"History")
-	 * - section index (int:3)
+	 * - section name (string, e.g. "History")
+	 * - section index (int, e.g. 3)
 	 *
 	 * @param   mixed    $section             The section to get
 	 * @param   boolean  $includeHeading      False to get section text only,
@@ -749,9 +749,9 @@ class WikiPage
 	 * after the page edit (if the edit is successful).
 	 *
 	 * Section can be the following:
-	 * - section name (string:"History")
-	 * - section index (int:3)
-	 * - a new section (string:"new")
+	 * - section name (string, e.g. "History")
+	 * - section index (int, e.g. 3)
+	 * - a new section (the string "new")
 	 * - the whole page (null)
 	 *
 	 * @param   string   $text     The article text
@@ -837,9 +837,9 @@ class WikiPage
 	 * with the summary and minor parameters switched.
 	 *
 	 * Section can be the following:
-	 * - section name (string:"History")
-	 * - section index (int:3)
-	 * - a new section (string:"new")
+	 * - section name (string, e.g. "History")
+	 * - section index (int, e.g. 3)
+	 * - a new section (the string "new")
 	 * - the whole page (null)
 	 *
 	 * @param   string   $text     The text of the section
@@ -1371,10 +1371,11 @@ class WikiFile
 	 * Returns the properties of the specified file revision.
 	 *
 	 * Revision can be the following:
-	 * - revision timestamp (string:"2001-01-15T14:56:00Z")
-	 * - revision index (int:3)
-	 * The most recent revision has index 0, it increments towards
-	 * older revisions.  A timestamp must be in ISO 8601 format.
+	 * - revision timestamp (string, e.g. "2001-01-15T14:56:00Z")
+	 * - revision index (int, e.g. 3)
+	 * The most recent revision has index 0, 
+	 * and it increments towards older revisions.
+	 * A timestamp must be in ISO 8601 format.
 	 *
 	 * @param   mixed  $revision  The index or timestamp of the revision
 	 * @return  mixed             The properties (array), or null if not found
@@ -1405,10 +1406,11 @@ class WikiFile
 	 * Returns the archive name of the specified file revision.
 	 *
 	 * Revision can be the following:
-	 * - revision timestamp (string:"2001-01-15T14:56:00Z")
-	 * - revision index (int:3)
-	 * The most recent revision has index 0, it increments towards
-	 * older revisions.  A timestamp must be in ISO 8601 format.
+	 * - revision timestamp (string, e.g. "2001-01-15T14:56:00Z")
+	 * - revision index (int, e.g. 3)
+	 * The most recent revision has index 0, 
+	 * and it increments towards older revisions.
+	 * A timestamp must be in ISO 8601 format.
 	 *
 	 * @param   mixed  $revision  The index or timestamp of the revision
 	 * @return  mixed             The archive name (string), or null if not found
