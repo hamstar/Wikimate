@@ -233,7 +233,7 @@ $result = uploadFromUrl('https://upload.wikimedia.org/wikipedia/en/a/a9/Example.
 The revision history of a file can be obtained as an array with a properties array per revision:
 
 ```php
-$file = $wiki->getFile('Often-changed-file.zip');
+$file = $wiki->getFile('Frequently-changed-file.zip');
 // get only the current revision
 $history = $file->getHistory();
 // get the maximum number of revisions (500 for user accounts, 5000 for bot accounts)

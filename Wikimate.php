@@ -929,7 +929,7 @@ class WikiPage
 
 		// Return error message and value
 		$this->error = array();
-		$this->error['page'] = 'The section is not found on this page';
+		$this->error['page'] = "Section '$section' was not found on this page";
 		return -1;
 	}
 }
@@ -1373,7 +1373,8 @@ class WikiFile
 	 * Revision can be the following:
 	 * - revision timestamp (string:"2001-01-15T14:56:00Z")
 	 * - revision index (int:3)
-	 * The current revision has index 0.
+	 * The most recent revision has index 0, it increments towards
+	 * older revisions.  A timestamp must be in ISO 8601 format.
 	 *
 	 * @param   mixed  $revision  The index or timestamp of the revision
 	 * @return  mixed             The properties (array), or null if not found
@@ -1396,7 +1397,7 @@ class WikiFile
 
 		// Return error message
 		$this->error = array();
-		$this->error['file'] = 'The revision is not found for this file';
+		$this->error['file'] = "Revision '$revision' was not found for this file";
 		return null;
 	}
 
@@ -1406,7 +1407,8 @@ class WikiFile
 	 * Revision can be the following:
 	 * - revision timestamp (string:"2001-01-15T14:56:00Z")
 	 * - revision index (int:3)
-	 * The current revision has index 0.
+	 * The most recent revision has index 0, it increments towards
+	 * older revisions.  A timestamp must be in ISO 8601 format.
 	 *
 	 * @param   mixed  $revision  The index or timestamp of the revision
 	 * @return  mixed             The archive name (string), or null if not found
@@ -1430,7 +1432,7 @@ class WikiFile
 	}
 
 	/**
-	 * Delete the file, or an older revision of it.
+	 * Delete the file, or only an older revision of it.
 	 *
 	 * @param   string   $reason       Reason for the deletion
 	 * @param   string   $archivename  The archive name of the older revision
