@@ -1112,208 +1112,472 @@ class WikiFile
 
 	/**
 	 * Returns the aspect ratio of this image,
-	 * or 0 if file is not an image (and thus has no dimensions).
+	 * or of its specified revision.
+	 * Returns 0 if file is not an image (and thus has no dimensions).
 	 *
-	 * @return  float  The aspect ratio of this image, or 0 if no dimensions
+	 * @param   mixed  $revision  The index or timestamp of the revision (optional)
+	 * @return  float             The aspect ratio of this image, or 0 if no dimensions,
+	 *                            or -1 if revision not found
 	 */
-	public function getAspectRatio()
+	public function getAspectRatio($revision = null)
 	{
-		if ($this->info['height'] > 0) {
-			return $this->info['width'] / $this->info['height'];
+		// Without revision, use current info
+		if (!isset($revision)) {
+			// Check for dimensions
+			if ($this->info['height'] > 0) {
+				return $this->info['width'] / $this->info['height'];
+			} else {
+				return 0;
+			}
+		}
+
+		// Obtain the properties of the revision
+		if (($info = $this->getRevision($revision)) === null) {
+			return -1;
+		}
+
+		// Check for dimensions
+		if (isset($info['height'])) {
+			return $info['width'] / $info['height'];
 		} else {
 			return 0;
 		}
 	}
 
 	/**
-	 * Returns the bit depth of this file.
+	 * Returns the bit depth of this file,
+	 * or of its specified revision.
 	 *
-	 * @return  integer  The bit depth of this file
+	 * @param   mixed    $revision  The index or timestamp of the revision (optional)
+	 * @return  integer             The bit depth of this file,
+	 *                              or -1 if revision not found
 	 */
-	public function getBitDepth()
+	public function getBitDepth($revision = null)
 	{
-		return (int)$this->info['bitdepth'];
+		// Without revision, use current info
+		if (!isset($revision)) {
+			return (int)$this->info['bitdepth'];
+		}
+
+		// Obtain the properties of the revision
+		if (($info = $this->getRevision($revision)) === null) {
+			return -1;
+		}
+
+		return (int)$info['bitdepth'];
 	}
 
 	/**
-	 * Returns the canonical title of this file.
+	 * Returns the canonical title of this file,
+	 * or of its specified revision.
 	 *
-	 * @return  string  The canonical title of this file
+	 * @param   mixed  $revision  The index or timestamp of the revision (optional)
+	 * @return  mixed             The canonical title of this file (string),
+	 *                            or null if revision not found
 	 */
-	public function getCanonicalTitle()
+	public function getCanonicalTitle($revision = null)
 	{
-		return $this->info['canonicaltitle'];
+		// Without revision, use current info
+		if (!isset($revision)) {
+			return $this->info['canonicaltitle'];
+		}
+
+		// Obtain the properties of the revision
+		if (($info = $this->getRevision($revision)) === null) {
+			return null;
+		}
+
+		return $info['canonicaltitle'];
 	}
 
 	/**
-	 * Returns the edit comment of this file.
+	 * Returns the edit comment of this file,
+	 * or of its specified revision.
 	 *
-	 * @return  string  The edit comment of this file
+	 * @param   mixed  $revision  The index or timestamp of the revision (optional)
+	 * @return  mixed             The edit comment of this file (string),
+	 *                            or null if revision not found
 	 */
-	public function getComment()
+	public function getComment($revision = null)
 	{
-		return $this->info['comment'];
+		// Without revision, use current info
+		if (!isset($revision)) {
+			return $this->info['comment'];
+		}
+
+		// Obtain the properties of the revision
+		if (($info = $this->getRevision($revision)) === null) {
+			return null;
+		}
+
+		return $info['comment'];
 	}
 
 	/**
-	 * Returns the common metadata of this file.
+	 * Returns the common metadata of this file,
+	 * or of its specified revision.
 	 *
-	 * @return  array  The common metadata of this file
+	 * @param   mixed  $revision  The index or timestamp of the revision (optional)
+	 * @return  mixed             The common metadata of this file (array),
+	 *                            or null if revision not found
 	 */
-	public function getCommonMetadata()
+	public function getCommonMetadata($revision = null)
 	{
-		return $this->info['commonmetadata'];
+		// Without revision, use current info
+		if (!isset($revision)) {
+			return $this->info['commonmetadata'];
+		}
+
+		// Obtain the properties of the revision
+		if (($info = $this->getRevision($revision)) === null) {
+			return null;
+		}
+
+		return $info['commonmetadata'];
 	}
 
 	/**
-	 * Returns the description URL of this file.
+	 * Returns the description URL of this file,
+	 * or of its specified revision.
 	 *
-	 * @return  string  The description URL of this file
+	 * @param   mixed  $revision  The index or timestamp of the revision (optional)
+	 * @return  mixed             The description URL of this file (string),
+	 *                            or null if revision not found
 	 */
-	public function getDescriptionUrl()
+	public function getDescriptionUrl($revision = null)
 	{
-		return $this->info['descriptionurl'];
+		// Without revision, use current info
+		if (!isset($revision)) {
+			return $this->info['descriptionurl'];
+		}
+
+		// Obtain the properties of the revision
+		if (($info = $this->getRevision($revision)) === null) {
+			return null;
+		}
+
+		return $info['descriptionurl'];
 	}
 
 	/**
-	 * Returns the extended metadata of this file.
+	 * Returns the extended metadata of this file,
+	 * or of its specified revision.
 	 *
-	 * @return  array  The extended metadata of this file
+	 * @param   mixed  $revision  The index or timestamp of the revision (optional)
+	 * @return  mixed             The extended metadata of this file (array),
+	 *                            or null if revision not found
 	 */
-	public function getExtendedMetadata()
+	public function getExtendedMetadata($revision = null)
 	{
-		return $this->info['extmetadata'];
+		// Without revision, use current info
+		if (!isset($revision)) {
+			return $this->info['extmetadata'];
+		}
+
+		// Obtain the properties of the revision
+		if (($info = $this->getRevision($revision)) === null) {
+			return null;
+		}
+
+		return $info['extmetadata'];
 	}
 
 	/**
-	 * Returns the height of this file.
+	 * Returns the height of this file,
+	 * or of its specified revision.
 	 *
-	 * @return  integer  The height of this file
+	 * @param   mixed    $revision  The index or timestamp of the revision (optional)
+	 * @return  integer             The height of this file, or -1 if revision not found
 	 */
-	public function getHeight()
+	public function getHeight($revision = null)
 	{
-		return (int)$this->info['height'];
+		// Without revision, use current info
+		if (!isset($revision)) {
+			return (int)$this->info['height'];
+		}
+
+		// Obtain the properties of the revision
+		if (($info = $this->getRevision($revision)) === null) {
+			return -1;
+		}
+
+		return (int)$info['height'];
 	}
 
 	/**
-	 * Returns the media type of this file.
+	 * Returns the media type of this file,
+	 * or of its specified revision.
 	 *
-	 * @return  string  The media type of this file
+	 * @param   mixed  $revision  The index or timestamp of the revision (optional)
+	 * @return  mixed             The media type of this file (string),
+	 *                            or null if revision not found
 	 */
-	public function getMediaType()
+	public function getMediaType($revision = null)
 	{
-		return $this->info['mediatype'];
+		// Without revision, use current info
+		if (!isset($revision)) {
+			return $this->info['mediatype'];
+		}
+
+		// Obtain the properties of the revision
+		if (($info = $this->getRevision($revision)) === null) {
+			return null;
+		}
+
+		return $info['mediatype'];
 	}
 
 	/**
-	 * Returns the Exif metadata of this file.
+	 * Returns the Exif metadata of this file,
+	 * or of its specified revision.
 	 *
-	 * @return  array  The metadata of this file
+	 * @param   mixed  $revision  The index or timestamp of the revision (optional)
+	 * @return  mixed             The metadata of this file (array),
+	 *                            or null if revision not found
 	 */
-	public function getMetadata()
+	public function getMetadata($revision = null)
 	{
-		return $this->info['metadata'];
+		// Without revision, use current info
+		if (!isset($revision)) {
+			return $this->info['metadata'];
+		}
+
+		// Obtain the properties of the revision
+		if (($info = $this->getRevision($revision)) === null) {
+			return null;
+		}
+
+		return $info['metadata'];
 	}
 
 	/**
-	 * Returns the MIME type of this file.
+	 * Returns the MIME type of this file,
+	 * or of its specified revision.
 	 *
-	 * @return  string  The MIME type of this file
+	 * @param   mixed  $revision  The index or timestamp of the revision (optional)
+	 * @return  mixed             The MIME type of this file (string),
+	 *                            or null if revision not found
 	 */
-	public function getMime()
+	public function getMime($revision = null)
 	{
-		return $this->info['mime'];
+		// Without revision, use current info
+		if (!isset($revision)) {
+			return $this->info['mime'];
+		}
+
+		// Obtain the properties of the revision
+		if (($info = $this->getRevision($revision)) === null) {
+			return null;
+		}
+
+		return $info['mime'];
 	}
 
 	/**
-	 * Returns the parsed edit comment of this file.
+	 * Returns the parsed edit comment of this file,
+	 * or of its specified revision.
 	 *
-	 * @return  string  The parsed edit comment of this file
+	 * @param   mixed  $revision  The index or timestamp of the revision (optional)
+	 * @return  mixed             The parsed edit comment of this file (string),
+	 *                            or null if revision not found
 	 */
-	public function getParsedComment()
+	public function getParsedComment($revision = null)
 	{
-		return $this->info['parsedcomment'];
+		// Without revision, use current info
+		if (!isset($revision)) {
+			return $this->info['parsedcomment'];
+		}
+
+		// Obtain the properties of the revision
+		if (($info = $this->getRevision($revision)) === null) {
+			return null;
+		}
+
+		return $info['parsedcomment'];
 	}
 
 	/**
-	 * Returns the SHA-1 hash of this file.
+	 * Returns the SHA-1 hash of this file,
+	 * or of its specified revision.
 	 *
-	 * @return  string  The SHA-1 hash of this file
+	 * @param   mixed  $revision  The index or timestamp of the revision (optional)
+	 * @return  mixed             The SHA-1 hash of this file (string),
+	 *                            or null if revision not found
 	 */
-	public function getSha1()
+	public function getSha1($revision = null)
 	{
-		return $this->info['sha1'];
+		// Without revision, use current info
+		if (!isset($revision)) {
+			return $this->info['sha1'];
+		}
+
+		// Obtain the properties of the revision
+		if (($info = $this->getRevision($revision)) === null) {
+			return null;
+		}
+
+		return $info['sha1'];
 	}
 
 	/**
-	 * Returns the size of this file.
+	 * Returns the size of this file,
+	 * or of its specified revision.
 	 *
-	 * @return  integer  The size of this file
+	 * @param   mixed    $revision  The index or timestamp of the revision (optional)
+	 * @return  integer             The size of this file, or -1 if revision not found
 	 */
-	public function getSize()
+	public function getSize($revision = null)
 	{
-		return (int)$this->info['size'];
+		// Without revision, use current info
+		if (!isset($revision)) {
+			return (int)$this->info['size'];
+		}
+
+		// Obtain the properties of the revision
+		if (($info = $this->getRevision($revision)) === null) {
+			return -1;
+		}
+
+		return (int)$info['size'];
 	}
 
 	/**
 	 * Returns the MIME type of this file's thumbnail,
-	 * or null if property not available.
+	 * or of its specified revision.
+	 * Returns empty string if property not available for this file type.
 	 *
-	 * @return  string  The MIME type of this file's thumbnail, or null if unavailable
+	 * @param   mixed  $revision  The index or timestamp of the revision (optional)
+	 * @return  mixed             The MIME type of this file's thumbnail (string),
+	 *                            or '' if unavailable, or null if revision not found
 	 */
-	public function getThumbMime()
+	public function getThumbMime($revision = null)
 	{
-		return (isset($this->info['thumbmime']) ? $this->info['thumbmime'] : null);
+		// Without revision, use current info
+		if (!isset($revision)) {
+			return (isset($this->info['thumbmime']) ? $this->info['thumbmime'] : '');
+		}
+
+		// Obtain the properties of the revision
+		if (($info = $this->getRevision($revision)) === null) {
+			return null;
+		}
+
+		// Check for thumbnail MIME type
+		return (isset($info['thumbmime']) ? $info['thumbmime'] : '');
 	}
 
 	/**
-	 * Returns the timestamp of this file.
+	 * Returns the timestamp of this file,
+	 * or of its specified revision.
 	 *
-	 * @return  string  The timestamp of this file
+	 * @param   mixed  $revision  The index or timestamp of the revision (optional)
+	 * @return  mixed             The timestamp of this file (string),
+	 *                            or null if revision not found
 	 */
-	public function getTimestamp()
+	public function getTimestamp($revision = null)
 	{
-		return $this->info['timestamp'];
+		// Without revision, use current info
+		if (!isset($revision)) {
+			return $this->info['timestamp'];
+		}
+
+		// Obtain the properties of the revision
+		if (($info = $this->getRevision($revision)) === null) {
+			return null;
+		}
+
+		return $info['timestamp'];
 	}
 
 	/**
-	 * Returns the URL of this file.
+	 * Returns the URL of this file,
+	 * or of its specified revision.
 	 *
-	 * @return  string  The URL of this file
+	 * @param   mixed  $revision  The index or timestamp of the revision (optional)
+	 * @return  mixed             The URL of this file (string),
+	 *                            or null if revision not found
 	 */
-	public function getUrl()
+	public function getUrl($revision = null)
 	{
-		return $this->info['url'];
+		// Without revision, use current info
+		if (!isset($revision)) {
+			return $this->info['url'];
+		}
+
+		// Obtain the properties of the revision
+		if (($info = $this->getRevision($revision)) === null) {
+			return null;
+		}
+
+		return $info['url'];
 	}
 
 	/**
-	 * Returns the user who uploaded this file.
+	 * Returns the user who uploaded this file,
+	 * or of its specified revision.
 	 *
-	 * @return  string  The user of this file
+	 * @param   mixed  $revision  The index or timestamp of the revision (optional)
+	 * @return  mixed             The user of this file (string),
+	 *                            or null if revision not found
 	 */
-	public function getUser()
+	public function getUser($revision = null)
 	{
-		return $this->info['user'];
+		// Without revision, use current info
+		if (!isset($revision)) {
+			return $this->info['user'];
+		}
+
+		// Obtain the properties of the revision
+		if (($info = $this->getRevision($revision)) === null) {
+			return null;
+		}
+
+		return $info['user'];
 	}
 
 	/**
-	 * Returns the ID of the user who uploaded this file.
+	 * Returns the ID of the user who uploaded this file,
+	 * or of its specified revision.
 	 *
-	 * @return  integer  The user ID of this file
+	 * @param   mixed    $revision  The index or timestamp of the revision (optional)
+	 * @return  integer             The user ID of this file,
+	 *                              or -1 if revision not found
 	 */
-	public function getUserId()
+	public function getUserId($revision = null)
 	{
-		return (int)$this->info['userid'];
+		// Without revision, use current info
+		if (!isset($revision)) {
+			return (int)$this->info['userid'];
+		}
+
+		// Obtain the properties of the revision
+		if (($info = $this->getRevision($revision)) === null) {
+			return -1;
+		}
+
+		return (int)$info['userid'];
 	}
 
 	/**
-	 * Returns the width of this file.
+	 * Returns the width of this file,
+	 * or of its specified revision.
 	 *
-	 * @return  integer  The width of this file
+	 * @param   mixed    $revision  The index or timestamp of the revision (optional)
+	 * @return  integer             The width of this file, or -1 if revision not found
 	 */
-	public function getWidth()
+	public function getWidth($revision = null)
 	{
-		return (int)$this->info['width'];
+		// Without revision, use current info
+		if (!isset($revision)) {
+			return (int)$this->info['width'];
+		}
+
+		// Obtain the properties of the revision
+		if (($info = $this->getRevision($revision)) === null) {
+			return -1;
+		}
+
+		return (int)$info['width'];
 	}
 
 	/*
@@ -1373,7 +1637,7 @@ class WikiFile
 	 * Revision can be the following:
 	 * - revision timestamp (string, e.g. "2001-01-15T14:56:00Z")
 	 * - revision index (int, e.g. 3)
-	 * The most recent revision has index 0, 
+	 * The most recent revision has index 0,
 	 * and it increments towards older revisions.
 	 * A timestamp must be in ISO 8601 format.
 	 *
@@ -1408,7 +1672,7 @@ class WikiFile
 	 * Revision can be the following:
 	 * - revision timestamp (string, e.g. "2001-01-15T14:56:00Z")
 	 * - revision index (int, e.g. 3)
-	 * The most recent revision has index 0, 
+	 * The most recent revision has index 0,
 	 * and it increments towards older revisions.
 	 * A timestamp must be in ISO 8601 format.
 	 *

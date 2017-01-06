@@ -2,7 +2,8 @@ Wikimate is a wrapper for the MediaWiki API that aims to be very easy to use.
 It currently consists of two classes:
 
 * **Wikimate** – Serves as a loader and manager for different wiki objects (e.g. pages).
-* **WikiPage** – The only object made so far. Provides an interface to getting/editing pages.
+* **WikiPage** – Provides an interface to getting/editing pages or sections of them.
+* **WikiFile** – Provides an interface to downloading/uploading files and getting their properties.
 
 The [latest released version](https://github.com/hamstar/Wikimate/releases) of Wikimate
 is v0.11.0, released on Nov 16, 2016.

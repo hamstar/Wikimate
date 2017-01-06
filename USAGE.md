@@ -247,15 +247,28 @@ foreach ($history as $revision => $properties) {
 }
 ```
 
-One specific revision can be requested by revision sequence number or by exact timestamp in the current history, as can its archive name:
+One specific revision can be requested by revision sequence number or by exact timestamp in the current history, as can its archive name.  Invoking `getHistory(true[, ...])` is required before any older revisions can be requested.
 
 ```php
 // get the latest 50 revisions
 $history = $file->getHistory(true, 50);
-// get the properties of the penultimate revision
+// get all properties of the penultimate revision
 $revision = $file->getRevision(1);
 // get the archive name of the specific revision (must be ISO 8601 format)
 $archivename = $file->getArchivename('2016-11-22T33:44:55Z');
+```
+
+All standard file properties can also be obtained for one specific revision:
+
+```php
+// get the file size of the current revision
+echo $file->getSize(0);
+// get the hash of the penultimate revision
+echo $file->getSha1(1);
+// get the aspect ratio of the antepenultimate revision
+echo $file->getAspectRatio(2);
+// get the URL of the specific revision (must be ISO 8601 format)
+echo $file->getUrl('2016-11-22T33:44:55Z');
 ```
 
 ### Deleting...
