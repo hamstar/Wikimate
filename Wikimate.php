@@ -1111,6 +1111,32 @@ class WikiFile
 	}
 
 	/**
+	 * Returns the anonymous flag of this file,
+	 * or of its specified revision.
+	 * If true, then getUser()'s value represents an anonymous IP address.
+	 *
+	 * @param   mixed  $revision  The index or timestamp of the revision (optional)
+	 * @return  mixed             The anonymous flag of this file (boolean),
+	 *                            or null if revision not found
+	 */
+	public function getAnon($revision = null)
+	{
+		// Without revision, use current info
+		if (!isset($revision)) {
+			// Check for anon flag
+			return isset($this->info['anon']) ? true : false;
+		}
+
+		// Obtain the properties of the revision
+		if (($info = $this->getRevision($revision)) === null) {
+			return null;
+		}
+
+		// Check for anon flag
+		return isset($info['anon']) ? true : false;
+	}
+
+	/**
 	 * Returns the aspect ratio of this image,
 	 * or of its specified revision.
 	 * Returns 0 if file is not an image (and thus has no dimensions).

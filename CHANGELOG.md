@@ -6,7 +6,7 @@ Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/) 
 
 #### Added
 
-* New class WikiFile to retrieve properties of a file, and download and upload its contents.  All properties pertain to the current revision of the file, or a specific older revision. ([#69], [#71], [#78])
+* New class WikiFile to retrieve properties of a file, and download and upload its contents.  All properties pertain to the current revision of the file, or a specific older revision. ([#69], [#71], [#78], [#80])
 * WikiFile also provides the file history and the ability to delete a file or an older revision of it. ([#76])
 
 ### Version 0.11.0
@@ -82,4 +82,5 @@ Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/) 
 [#71]: https://github.com/hamstar/Wikimate/pull/71
 [#76]: https://github.com/hamstar/Wikimate/pull/76
 [#78]: https://github.com/hamstar/Wikimate/pull/78
+[#80]: https://github.com/hamstar/Wikimate/pull/80
 
