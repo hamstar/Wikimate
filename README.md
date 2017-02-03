@@ -6,7 +6,7 @@ It currently consists of two classes:
 * **WikiFile** – Provides an interface to downloading/uploading files and getting their properties.
 
 The [latest released version](https://github.com/hamstar/Wikimate/releases) of Wikimate
-is v0.11.0, released on Nov 16, 2016.
+is v0.12.0, released on Feb 3, 2017.
 See [CHANGELOG.md](CHANGELOG.md) for the detailed version history.
 
 ## Installation
@@ -26,7 +26,7 @@ Then, download Wikimate, and initialise it by running `composer install` (or
 To use Wikimate within another project, you can add it as a composer dependency
 by adding the following to your `composer.json` file:
 
-    "hamstar/Wikimate": "0.11.0"
+    "hamstar/Wikimate": "0.12.0"
 
 ## Usage
 

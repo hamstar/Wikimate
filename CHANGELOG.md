@@ -2,7 +2,7 @@
 
 Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/) and [Keep a Changelog](http://keepachangelog.com/).
 
-### Current development
+### Version 0.11.0
 
 #### Added
 
