@@ -2,7 +2,7 @@
 /// =============================================================================
 /// Wikimate is a wrapper for the MediaWiki API that aims to be very easy to use.
 ///
-/// @version    0.11.0
+/// @version    0.12.0
 /// @copyright  SPDX-License-Identifier: MIT
 /// =============================================================================
 
@@ -17,7 +17,7 @@ class Wikimate
 	/**
 	 * @var  string  The current version number (conforms to http://semver.org/).
 	 */
-	const VERSION = '0.11.0';
+	const VERSION = '0.12.0';
 
 	protected $api;
 	protected $username;
