@@ -2,7 +2,11 @@
 
 Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/) and [Keep a Changelog](http://keepachangelog.com/).
 
-### Version 0.11.0
+### Current development
+
+* Fix PHP notice in `WikiFile::getInfo()` for moved or deleted file. ([#85])
+
+### Version 0.12.0
 
 #### Added
 
@@ -83,4 +87,5 @@ Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/) 
 [#76]: https://github.com/hamstar/Wikimate/pull/76
 [#78]: https://github.com/hamstar/Wikimate/pull/78
 [#80]: https://github.com/hamstar/Wikimate/pull/80
+[#85]: https://github.com/hamstar/Wikimate/pull/85
 
