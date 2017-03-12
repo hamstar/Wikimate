@@ -10,15 +10,17 @@ if they would like to help maintaining the repository.
 
 ## Guidelines for commits and pull requests
 
-1. **Every change** (except for very minor ones such as spelling fixes) **should be made via pull requests**,
-   rather than as direct commits to the `master` branch.
+1. **Every change should be made via pull requests**,
+   rather than as direct commits to the `master` branch
+   (except for very minor ones such as spelling fixes).
 2. **Maintainers should not merge their own pull requests**.
-   This allows every change to be validated by at least another maintainer
+   This allows every change to be validated by at least another maintainer.
 3. Pull requests should comprise a single feature or bugfix.
    **Unrelated changes should be sent as separate PRs.**
    The exception are minor code cleanup changes,
    which can be included (as a separate commit) in the PR that prompted them.
-4. **Commits should be atomic** (as small as possible while still representing a self-consistent set of changes)
+4. **Commits should be atomic**
+   (as small as possible while still representing a self-consistent set of changes)
    and have descriptive commit messages.
 5. **Every PR should include a CHANGELOG.md entry**.
    This makes it much easier to prepare releases,
