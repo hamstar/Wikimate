@@ -1097,7 +1097,8 @@ class WikiFile
 
 			$this->edittoken = $page['edittoken'];
 
-			if (!isset($page['missing'])) {
+			// Check that file is present and has info
+			if (!isset($page['missing']) && isset($page['imageinfo'])) {
 				// Update the existence if the file is there
 				$this->exists = true;
 				// Put the content into info & history
