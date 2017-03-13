@@ -32,9 +32,9 @@ A PR should be created with all relevant changes to update the repository for th
 (See [#81](https://github.com/hamstar/Wikimate/pull/81) for an example.)
 It should apply the following actions:
 
-1. Change the "Unreleased" heading in the CHANGELOG.md file
+1. Change the "Unreleased version" heading in the CHANGELOG.md file
    to the appropriate version name (e.g. "Version 1.2.3")
-   and add a new "Unreleased" section heading above it;
+   and add a new "Unreleased version" section heading above it;
 2. Edit the README and replace all references
    to the previous version number and release date
    with the corresponding data for the new version;
