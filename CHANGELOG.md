@@ -4,6 +4,10 @@ Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/) 
 
 ### Unreleased version
 
+#### Added
+
+* New GOVERNANCE.md file to explicitly codify the project management principles and provide guidelines for maintenance tasks ([#83])
+
 #### Fixed
 
 * Prevented PHP notice in `WikiFile::getInfo()` for moved or deleted file. ([#85])
@@ -89,5 +93,6 @@ Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/) 
 [#76]: https://github.com/hamstar/Wikimate/pull/76
 [#78]: https://github.com/hamstar/Wikimate/pull/78
 [#80]: https://github.com/hamstar/Wikimate/pull/80
+[#83]: https://github.com/hamstar/Wikimate/pull/83
 [#85]: https://github.com/hamstar/Wikimate/pull/85
 
