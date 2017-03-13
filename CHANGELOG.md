@@ -2,9 +2,11 @@
 
 Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/) and [Keep a Changelog](http://keepachangelog.com/).
 
-### Current development
+### Unreleased version
 
-* Fix PHP notice in `WikiFile::getInfo()` for moved or deleted file. ([#85])
+#### Fixed
+
+* Prevented PHP notice in `WikiFile::getInfo()` for moved or deleted file. ([#85])
 
 ### Version 0.12.0
 
