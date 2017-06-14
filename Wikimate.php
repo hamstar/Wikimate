@@ -188,14 +188,14 @@ class Wikimate
 	}
 
 	/**
-	 * Returns a WikiPage object populated with the page data.
+	 * Returns a WikimatePage object populated with the page data.
 	 *
 	 * @param   string    $title  The name of the wiki article
-	 * @return  WikiPage          The page object
+	 * @return  WikimatePage          The page object
 	 */
 	public function getPage($title)
 	{
-		return new WikiPage($title, $this);
+		return new WikimatePage($title, $this);
 	}
 
 	/**
@@ -361,7 +361,7 @@ class Wikimate
  * @author  Robert McLeod
  * @since   December 2010
  */
-class WikiPage
+class WikimatePage
 {
 	const SECTIONLIST_BY_INDEX = 1;
 	const SECTIONLIST_BY_NAME = 2;
@@ -384,7 +384,7 @@ class WikiPage
 	 */
 
 	/**
-	 * Constructs a WikiPage object from the title given
+	 * Constructs a WikimatePage object from the title given
 	 * and associate with the passed Wikimate object.
 	 *
 	 * @param  string    $title     Name of the wiki article
@@ -397,7 +397,7 @@ class WikiPage
 		$this->text     = $this->getText(true);
 
 		if ($this->invalid) {
-			$this->error['page'] = 'Invalid page title - cannot create WikiPage';
+			$this->error['page'] = 'Invalid page title - cannot create WikimatePage';
 		}
 	}
 
@@ -727,7 +727,7 @@ class WikiPage
 				$array = array_keys($this->sections->byName);
 				break;
 			default:
-				throw new Exception('Unexpected parameter $keyNames given to WikiPage::getAllSections()');
+				throw new Exception('Unexpected parameter $keyNames given to WikimatePage::getAllSections()');
 				break;
 		}
 
@@ -833,7 +833,7 @@ class WikiPage
 
 	/**
 	 * Sets the text of the given section.
-	 * Essentially an alias of WikiPage:setText()
+	 * Essentially an alias of WikimatePage:setText()
 	 * with the summary and minor parameters switched.
 	 *
 	 * Section can be the following:
@@ -855,7 +855,7 @@ class WikiPage
 	}
 
 	/**
-	 * Alias of WikiPage::setSection() specifically for creating new sections.
+	 * Alias of WikimatePage::setSection() specifically for creating new sections.
 	 *
 	 * @param   string   $name  The heading name for the new section
 	 * @param   string   $text  The text of the new section
@@ -1813,7 +1813,7 @@ class WikiFile
 	/**
 	 * Uploads to the current file using the given parameters.
 	 * $text is only used for the page contents of a new file,
-	 * not an existing one (update that via WikiPage::setText()).
+	 * not an existing one (update that via WikimatePage::setText()).
 	 * If no $text is specified, $comment will be used as new page text.
 	 *
 	 * @param   array    $params     The upload parameters
@@ -1864,7 +1864,7 @@ class WikiFile
 	/**
 	 * Uploads the given contents to the current file.
 	 * $text is only used for the page contents of a new file,
-	 * not an existing one (update that via WikiPage::setText()).
+	 * not an existing one (update that via WikimatePage::setText()).
 	 * If no $text is specified, $comment will be used as new page text.
 	 *
 	 * @param   string   $data       The data to upload
@@ -1887,7 +1887,7 @@ class WikiFile
 	/**
 	 * Reads contents from the given path and uploads it to the current file.
 	 * $text is only used for the page contents of a new file,
-	 * not an existing one (update that via WikiPage::setText()).
+	 * not an existing one (update that via WikimatePage::setText()).
 	 * If no $text is specified, $comment will be used as new page text.
 	 *
 	 * @param   string   $path       The file path to upload
@@ -1912,7 +1912,7 @@ class WikiFile
 	/**
 	 * Uploads file contents from the given URL to the current file.
 	 * $text is only used for the page contents of a new file,
-	 * not an existing one (update that via WikiPage::setText()).
+	 * not an existing one (update that via WikimatePage::setText()).
 	 * If no $text is specified, $comment will be used as new page text.
 	 *
 	 * @param   string   $url        The URL from which to upload
