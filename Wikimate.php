@@ -766,7 +766,7 @@ class WikimatePage
 		$data = array(
 			'title' => $this->title,
 			'text' => $text,
-			'md5' => md5($text),
+			//'md5' => md5($text),
 			'bot' => "true",
 			'token' => $this->edittoken,
 			'starttimestamp' => $this->starttimestamp,
