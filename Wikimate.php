@@ -35,9 +35,12 @@ class Wikimate
 	 *
 	 * @return  Wikimate
 	 */
-	public function __construct($api)
+	public function __construct($api, $headers = array(), $data = array(), $options = array())
 	{
 		$this->api = $api;
+		$this->headers = $headers;
+		$this->data    = $data;
+		$this->options = $options;
 
 		$this->initRequests();
 	}
@@ -51,7 +54,7 @@ class Wikimate
 	{
 		$this->useragent = 'Wikimate '.self::VERSION.' (https://github.com/hamstar/Wikimate)';
 
-		$this->session = new Requests_Session($this->api);
+		$this->session = new Requests_Session($this->api, $this->headers, $this->data, $this->options);
 		$this->session->useragent = $this->useragent;
 	}
 
