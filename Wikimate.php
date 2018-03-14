@@ -37,7 +37,7 @@ class Wikimate
 	 */
 	public function __construct($api, $headers = array(), $data = array(), $options = array())
 	{
-		$this->api = $api;
+		$this->api     = $api;
 		$this->headers = $headers;
 		$this->data    = $data;
 		$this->options = $options;
