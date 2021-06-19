@@ -293,12 +293,18 @@ class Wikimate
 	 */
 	public function edit($array)
 	{
+		// Obtain default token first
+		if (($edittoken = $this->token()) === false) {
+			return false;
+		}
+
 		$headers = array(
 			'Content-Type' => "application/x-www-form-urlencoded"
 		);
 
 		$array['action'] = 'edit';
 		$array['format'] = 'php';
+		$array['token'] = $edittoken;
 
 		$apiResult = $this->session->post($this->api, $headers, $array);
 
@@ -313,12 +319,18 @@ class Wikimate
 	 */
 	public function delete($array)
 	{
+		// Obtain default token first
+		if (($deletetoken = $this->token()) === false) {
+			return false;
+		}
+
 		$headers = array(
 			'Content-Type' => "application/x-www-form-urlencoded"
 		);
 
 		$array['action'] = 'delete';
 		$array['format'] = 'php';
+		$array['token'] = $deletetoken;
 
 		$apiResult = $this->session->post($this->api, $headers, $array);
 
@@ -352,8 +364,14 @@ class Wikimate
 	 */
 	public function upload($array)
 	{
+		// Obtain default token first
+		if (($uploadtoken = $this->token()) === false) {
+			return false;
+		}
+
 		$array['action'] = 'upload';
 		$array['format'] = 'php';
+		$array['token'] = $uploadtoken;
 
 		// Construct multipart body: https://www.mediawiki.org/wiki/API:Upload#Sample_Raw_Upload
 		$boundary = '---Wikimate-' . md5(microtime());
@@ -416,7 +434,6 @@ class WikiPage
 	protected $exists         = false;
 	protected $invalid        = false;
 	protected $error          = null;
-	protected $edittoken      = null;
 	protected $starttimestamp = null;
 	protected $text           = null;
 	protected $sections       = null;
@@ -457,7 +474,6 @@ class WikiPage
 		$this->exists         = false;
 		$this->invalid        = false;
 		$this->error          = null;
-		$this->edittoken      = null;
 		$this->starttimestamp = null;
 		$this->text           = null;
 		$this->sections       = null;
@@ -575,7 +591,7 @@ class WikiPage
 				'titles' => $this->title,
 				'prop' => 'info|revisions',
 				'rvprop' => 'content', // Need to get page text
-				'intoken' => 'edit',
+				'curtimestamp' => 1,
 			);
 
 			$r = $this->wikimate->query($data); // Run the query
@@ -590,7 +606,6 @@ class WikiPage
 
 			// Get the page (there should only be one)
 			$page = array_pop($r['query']['pages']);
-			unset($r, $data);
 
 			// Abort if invalid page title
 			if (isset($page['invalid'])) {
@@ -598,8 +613,8 @@ class WikiPage
 				return null;
 			}
 
-			$this->edittoken      = $page['edittoken'];
-			$this->starttimestamp = $page['starttimestamp'];
+			$this->starttimestamp = $r['curtimestamp'];
+			unset($r, $data);
 
 			if (!isset($page['missing'])) {
 				// Update the existence if the page is there
@@ -812,7 +827,6 @@ class WikiPage
 			'text' => $text,
 			'md5' => md5($text),
 			'bot' => "true",
-			'token' => $this->edittoken,
 			'starttimestamp' => $this->starttimestamp,
 		);
 
@@ -852,16 +866,20 @@ class WikiPage
 			$data = array(
 				'titles' => $this->title,
 				'prop' => 'info',
-				'intoken' => 'edit',
+				'curtimestamp' => 1,
 			);
 
 			$r = $this->wikimate->query($data);
 
-			$page = array_pop($r['query']['pages']); // Get the page
+			// Check for errors
+			if (isset($r['error'])) {
+				$this->error = $r['error']; // Set the error if there was one
+				return null;
+			} else {
+				$this->error = null; // Reset the error status
+			}
 
-			$this->starttimestamp = $page['starttimestamp']; // Update the starttimestamp
-
-			$this->error = null; // Reset the error status
+			$this->starttimestamp = $r['curtimestamp']; // Update the starttimestamp
 			return true;
 		}
 
@@ -920,7 +938,6 @@ class WikiPage
 	{
 		$data = array(
 			'title' => $this->title,
-			'token' => $this->edittoken,
 		);
 
 		// Set options from arguments
@@ -989,14 +1006,13 @@ class WikiPage
  */
 class WikiFile
 {
-	protected $filename  = null;
-	protected $wikimate  = null;
-	protected $exists    = false;
-	protected $invalid   = false;
-	protected $error     = null;
-	protected $edittoken = null;
-	protected $info      = null;
-	protected $history   = null;
+	protected $filename = null;
+	protected $wikimate = null;
+	protected $exists   = false;
+	protected $invalid  = false;
+	protected $error    = null;
+	protected $info     = null;
+	protected $history  = null;
 
 	/*
 	 *
@@ -1029,14 +1045,13 @@ class WikiFile
 	 */
 	public function __destruct()
 	{
-		$this->filename   = null;
-		$this->wikimate   = null;
-		$this->exists     = false;
-		$this->invalid    = false;
-		$this->error      = null;
-		$this->edittoken  = null;
-		$this->info       = null;
-		$this->history    = null;
+		$this->filename = null;
+		$this->wikimate = null;
+		$this->exists   = false;
+		$this->invalid  = false;
+		$this->error    = null;
+		$this->info     = null;
+		$this->history  = null;
 		return null;
 	}
 
@@ -1108,7 +1123,6 @@ class WikiFile
 				'iiprop' => 'bitdepth|canonicaltitle|comment|parsedcomment|'
 				          . 'commonmetadata|metadata|extmetadata|mediatype|'
 				          . 'mime|thumbmime|sha1|size|timestamp|url|user|userid',
-				'intoken' => 'edit',
 			);
 			// Add optional history parameters
 			if (is_array($history)) {
@@ -1138,8 +1152,6 @@ class WikiFile
 				$this->invalid = true;
 				return null;
 			}
-
-			$this->edittoken = $page['edittoken'];
 
 			// Check that file is present and has info
 			if (!isset($page['missing']) && isset($page['imageinfo'])) {
@@ -1779,7 +1791,6 @@ class WikiFile
 	{
 		$data = array(
 			'title' => 'File:' . $this->filename,
-			'token' => $this->edittoken,
 		);
 
 		// Set options from arguments
@@ -1879,7 +1890,6 @@ class WikiFile
 		$params['filename']       = $this->filename;
 		$params['comment']        = $comment;
 		$params['ignorewarnings'] = $overwrite;
-		$params['token']          = $this->edittoken;
 		if (!is_null($text)) {
 			$params['text']   = $text;
 		}
