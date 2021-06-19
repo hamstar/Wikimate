@@ -19,6 +19,9 @@ class Wikimate
 	 */
 	const VERSION = '0.12.0';
 
+	const TOKEN_DEFAULT = 'csrf';
+	const TOKEN_LOGIN   = 'login';
+
 	protected $api;
 	protected $username;
 	protected $password;
@@ -56,6 +59,59 @@ class Wikimate
 
 		$this->session = new Requests_Session($this->api, $this->headers, $this->data, $this->options);
 		$this->session->useragent = $this->useragent;
+	}
+
+	/**
+	 * Obtains a wiki token for logging in or data-modifying actions.
+	 *
+	 * @param   string  $type  The token type
+	 * @return  string         The requested token
+	 */
+	protected function token($type = self::TOKEN_DEFAULT)
+	{
+		// Check for supported token types
+		if ($type != self::TOKEN_DEFAULT && $type != self::TOKEN_LOGIN) {
+			$this->error = array();
+			$this->error['login'] = 'The API does not support the token type';
+			return false;
+		}
+
+		$details = array(
+			'action' => 'query',
+			'meta' => 'tokens',
+			'type' => $type,
+			'format' => 'json'
+		);
+
+		// Send the token request
+		$response = $this->session->post($this->api, array(), $details);
+		// Check if we got an API result or the API doc page (invalid request)
+		if (strpos($response->body, "This is an auto-generated MediaWiki API documentation page") !== false) {
+			$this->error = array();
+			$this->error['login'] = 'The API could not understand the token request';
+			return false;
+		}
+
+		$tokenResult = json_decode($response->body);
+		// Check if we got a JSON result
+		if ($tokenResult === null) {
+			$this->error = array();
+			$this->error['login'] = 'The API did not return the token response';
+			return false;
+		}
+
+		if ($this->debugMode) {
+			echo "Token request:\n";
+			print_r($details);
+			echo "Token request response:\n";
+			print_r($tokenResult);
+		}
+
+		if ($type == self::TOKEN_LOGIN) {
+			return $tokenResult->query->tokens->logintoken;
+		} else {
+			return $tokenResult->query->tokens->csrftoken;
+		}
 	}
 
 	/**
