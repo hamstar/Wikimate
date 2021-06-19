@@ -124,8 +124,6 @@ class Wikimate
 	 */
 	public function login($username, $password, $domain = null)
 	{
-		//Logger::log("Logging in");
-
 		// Obtain login token first
 		if (($logintoken = $this->token(self::TOKEN_LOGIN)) === false) {
 			return false;
@@ -169,8 +167,6 @@ class Wikimate
 		}
 
 		if (isset($loginResult->login->result) && $loginResult->login->result != 'Success') {
-			//Logger::log("Sending token {$loginResult->login->token}");
-
 			// Some more comprehensive error checking
 			$this->error = array();
 			switch ($loginResult->login->result) {
@@ -184,7 +180,6 @@ class Wikimate
 			return false;
 		}
 
-		//Logger::log("Logged in");
 		return true;
 	}
 
