@@ -103,7 +103,7 @@ class Wikimate
 		if ($this->debugMode) {
 			echo "Token request:\n";
 			print_r($details);
-			echo "Token request response:\n";
+			echo "Token response:\n";
 			print_r($tokenResult);
 		}
 
@@ -126,10 +126,16 @@ class Wikimate
 	{
 		//Logger::log("Logging in");
 
+		// Obtain login token first
+		if (($logintoken = $this->token(self::TOKEN_LOGIN)) === false) {
+			return false;
+		}
+
 		$details = array(
 			'action' => 'login',
 			'lgname' => $username,
 			'lgpassword' => $password,
+			'lgtoken' => $logintoken,
 			'format' => 'json'
 		);
 
@@ -143,55 +149,39 @@ class Wikimate
 		// Check if we got an API result or the API doc page (invalid request)
 		if (strpos($response->body, "This is an auto-generated MediaWiki API documentation page") !== false) {
 			$this->error = array();
-			$this->error['login'] = 'The API could not understand the first login request';
+			$this->error['login'] = 'The API could not understand the login request';
 			return false;
 		}
 
 		$loginResult = json_decode($response->body);
+		// Check if we got a JSON result
+		if ($loginResult === null) {
+			$this->error = array();
+			$this->error['login'] = 'The API did not return the login response';
+			return false;
+		}
 
 		if ($this->debugMode) {
 			echo "Login request:\n";
 			print_r($details);
-			echo "Login request response:\n";
+			echo "Login response:\n";
 			print_r($loginResult);
 		}
 
-		if (isset($loginResult->login->result) && $loginResult->login->result == 'NeedToken') {
+		if (isset($loginResult->login->result) && $loginResult->login->result != 'Success') {
 			//Logger::log("Sending token {$loginResult->login->token}");
-			$details['lgtoken'] = strtolower(trim($loginResult->login->token));
 
-			// Send the confirm token request
-			$loginResult = $this->session->post($this->api, array(), $details)->body;
-
-			// Check if we got an API result or the API doc page (invalid request)
-			if (strpos($loginResult, "This is an auto-generated MediaWiki API documentation page") !== false) {
-				$this->error = array();
-				$this->error['login'] = 'The API could not understand the confirm token request';
-				return false;
+			// Some more comprehensive error checking
+			$this->error = array();
+			switch ($loginResult->login->result) {
+				case 'Failed':
+					$this->error['login'] = 'Incorrect username or password';
+					break;
+				default:
+					$this->error['login'] = 'The API result was: ' . $loginResult->login->result;
+					break;
 			}
-
-			$loginResult = json_decode($loginResult);
-
-			if ($this->debugMode) {
-				echo "Confirm token request:\n";
-				print_r($details);
-				echo "Confirm token response:\n";
-				print_r($loginResult);
-			}
-
-			if ($loginResult->login->result != 'Success') {
-				// Some more comprehensive error checking
-				$this->error = array();
-				switch ($loginResult->login->result) {
-					case 'NotExists':
-						$this->error['login'] = 'The username does not exist';
-						break;
-					default:
-						$this->error['login'] = 'The API result was: ' . $loginResult->login->result;
-						break;
-				}
-				return false;
-			}
+			return false;
 		}
 
 		//Logger::log("Logged in");
