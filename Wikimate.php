@@ -63,6 +63,9 @@ class Wikimate
 
 	/**
 	 * Obtains a wiki token for logging in or data-modifying actions.
+	 * For now this method, in Wikimate tradition, is kept simple and supports
+	 * only the two token types needed elsewhere in the library.  It also
+	 * doesn't support the option to request multiple tokens at once.
 	 *
 	 * @param   string  $type  The token type
 	 * @return  string         The requested token
