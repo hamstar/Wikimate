@@ -19,6 +19,9 @@ class Wikimate
 	 */
 	const VERSION = '0.12.0';
 
+	const TOKEN_DEFAULT = 'csrf';
+	const TOKEN_LOGIN   = 'login';
+
 	protected $api;
 	protected $username;
 	protected $password;
@@ -59,6 +62,62 @@ class Wikimate
 	}
 
 	/**
+	 * Obtains a wiki token for logging in or data-modifying actions.
+	 * For now this method, in Wikimate tradition, is kept simple and supports
+	 * only the two token types needed elsewhere in the library.  It also
+	 * doesn't support the option to request multiple tokens at once.
+	 *
+	 * @param   string  $type  The token type
+	 * @return  string         The requested token
+	 */
+	protected function token($type = self::TOKEN_DEFAULT)
+	{
+		// Check for supported token types
+		if ($type != self::TOKEN_DEFAULT && $type != self::TOKEN_LOGIN) {
+			$this->error = array();
+			$this->error['login'] = 'The API does not support the token type';
+			return false;
+		}
+
+		$details = array(
+			'action' => 'query',
+			'meta' => 'tokens',
+			'type' => $type,
+			'format' => 'json'
+		);
+
+		// Send the token request
+		$response = $this->session->post($this->api, array(), $details);
+		// Check if we got an API result or the API doc page (invalid request)
+		if (strpos($response->body, "This is an auto-generated MediaWiki API documentation page") !== false) {
+			$this->error = array();
+			$this->error['login'] = 'The API could not understand the token request';
+			return false;
+		}
+
+		$tokenResult = json_decode($response->body);
+		// Check if we got a JSON result
+		if ($tokenResult === null) {
+			$this->error = array();
+			$this->error['login'] = 'The API did not return the token response';
+			return false;
+		}
+
+		if ($this->debugMode) {
+			echo "Token request:\n";
+			print_r($details);
+			echo "Token response:\n";
+			print_r($tokenResult);
+		}
+
+		if ($type == self::TOKEN_LOGIN) {
+			return $tokenResult->query->tokens->logintoken;
+		} else {
+			return $tokenResult->query->tokens->csrftoken;
+		}
+	}
+
+	/**
 	 * Logs in to the wiki.
 	 *
 	 * @param   string   $username  The user name
@@ -68,12 +127,16 @@ class Wikimate
 	 */
 	public function login($username, $password, $domain = null)
 	{
-		//Logger::log("Logging in");
+		// Obtain login token first
+		if (($logintoken = $this->token(self::TOKEN_LOGIN)) === false) {
+			return false;
+		}
 
 		$details = array(
 			'action' => 'login',
 			'lgname' => $username,
 			'lgpassword' => $password,
+			'lgtoken' => $logintoken,
 			'format' => 'json'
 		);
 
@@ -87,58 +150,39 @@ class Wikimate
 		// Check if we got an API result or the API doc page (invalid request)
 		if (strpos($response->body, "This is an auto-generated MediaWiki API documentation page") !== false) {
 			$this->error = array();
-			$this->error['login'] = 'The API could not understand the first login request';
+			$this->error['login'] = 'The API could not understand the login request';
 			return false;
 		}
 
 		$loginResult = json_decode($response->body);
+		// Check if we got a JSON result
+		if ($loginResult === null) {
+			$this->error = array();
+			$this->error['login'] = 'The API did not return the login response';
+			return false;
+		}
 
 		if ($this->debugMode) {
 			echo "Login request:\n";
 			print_r($details);
-			echo "Login request response:\n";
+			echo "Login response:\n";
 			print_r($loginResult);
 		}
 
-		if (isset($loginResult->login->result) && $loginResult->login->result == 'NeedToken') {
-			//Logger::log("Sending token {$loginResult->login->token}");
-			$details['lgtoken'] = strtolower(trim($loginResult->login->token));
-
-			// Send the confirm token request
-			$loginResult = $this->session->post($this->api, array(), $details)->body;
-
-			// Check if we got an API result or the API doc page (invalid request)
-			if (strpos($loginResult, "This is an auto-generated MediaWiki API documentation page") !== false) {
-				$this->error = array();
-				$this->error['login'] = 'The API could not understand the confirm token request';
-				return false;
+		if (isset($loginResult->login->result) && $loginResult->login->result != 'Success') {
+			// Some more comprehensive error checking
+			$this->error = array();
+			switch ($loginResult->login->result) {
+				case 'Failed':
+					$this->error['login'] = 'Incorrect username or password';
+					break;
+				default:
+					$this->error['login'] = 'The API result was: ' . $loginResult->login->result;
+					break;
 			}
-
-			$loginResult = json_decode($loginResult);
-
-			if ($this->debugMode) {
-				echo "Confirm token request:\n";
-				print_r($details);
-				echo "Confirm token response:\n";
-				print_r($loginResult);
-			}
-
-			if ($loginResult->login->result != 'Success') {
-				// Some more comprehensive error checking
-				$this->error = array();
-				switch ($loginResult->login->result) {
-					case 'NotExists':
-						$this->error['login'] = 'The username does not exist';
-						break;
-					default:
-						$this->error['login'] = 'The API result was: ' . $loginResult->login->result;
-						break;
-				}
-				return false;
-			}
+			return false;
 		}
 
-		//Logger::log("Logged in");
 		return true;
 	}
 
@@ -252,12 +296,18 @@ class Wikimate
 	 */
 	public function edit($array)
 	{
+		// Obtain default token first
+		if (($edittoken = $this->token()) === false) {
+			return false;
+		}
+
 		$headers = array(
 			'Content-Type' => "application/x-www-form-urlencoded"
 		);
 
 		$array['action'] = 'edit';
 		$array['format'] = 'php';
+		$array['token'] = $edittoken;
 
 		$apiResult = $this->session->post($this->api, $headers, $array);
 
@@ -272,12 +322,18 @@ class Wikimate
 	 */
 	public function delete($array)
 	{
+		// Obtain default token first
+		if (($deletetoken = $this->token()) === false) {
+			return false;
+		}
+
 		$headers = array(
 			'Content-Type' => "application/x-www-form-urlencoded"
 		);
 
 		$array['action'] = 'delete';
 		$array['format'] = 'php';
+		$array['token'] = $deletetoken;
 
 		$apiResult = $this->session->post($this->api, $headers, $array);
 
@@ -311,8 +367,14 @@ class Wikimate
 	 */
 	public function upload($array)
 	{
+		// Obtain default token first
+		if (($uploadtoken = $this->token()) === false) {
+			return false;
+		}
+
 		$array['action'] = 'upload';
 		$array['format'] = 'php';
+		$array['token'] = $uploadtoken;
 
 		// Construct multipart body: https://www.mediawiki.org/wiki/API:Upload#Sample_Raw_Upload
 		$boundary = '---Wikimate-' . md5(microtime());
@@ -375,7 +437,6 @@ class WikiPage
 	protected $exists         = false;
 	protected $invalid        = false;
 	protected $error          = null;
-	protected $edittoken      = null;
 	protected $starttimestamp = null;
 	protected $text           = null;
 	protected $sections       = null;
@@ -416,7 +477,6 @@ class WikiPage
 		$this->exists         = false;
 		$this->invalid        = false;
 		$this->error          = null;
-		$this->edittoken      = null;
 		$this->starttimestamp = null;
 		$this->text           = null;
 		$this->sections       = null;
@@ -534,7 +594,7 @@ class WikiPage
 				'titles' => $this->title,
 				'prop' => 'info|revisions',
 				'rvprop' => 'content', // Need to get page text
-				'intoken' => 'edit',
+				'curtimestamp' => 1,
 			);
 
 			$r = $this->wikimate->query($data); // Run the query
@@ -549,7 +609,6 @@ class WikiPage
 
 			// Get the page (there should only be one)
 			$page = array_pop($r['query']['pages']);
-			unset($r, $data);
 
 			// Abort if invalid page title
 			if (isset($page['invalid'])) {
@@ -557,8 +616,8 @@ class WikiPage
 				return null;
 			}
 
-			$this->edittoken      = $page['edittoken'];
-			$this->starttimestamp = $page['starttimestamp'];
+			$this->starttimestamp = $r['curtimestamp'];
+			unset($r, $data);
 
 			if (!isset($page['missing'])) {
 				// Update the existence if the page is there
@@ -771,7 +830,6 @@ class WikiPage
 			'text' => $text,
 			'md5' => md5($text),
 			'bot' => "true",
-			'token' => $this->edittoken,
 			'starttimestamp' => $this->starttimestamp,
 		);
 
@@ -811,16 +869,20 @@ class WikiPage
 			$data = array(
 				'titles' => $this->title,
 				'prop' => 'info',
-				'intoken' => 'edit',
+				'curtimestamp' => 1,
 			);
 
 			$r = $this->wikimate->query($data);
 
-			$page = array_pop($r['query']['pages']); // Get the page
+			// Check for errors
+			if (isset($r['error'])) {
+				$this->error = $r['error']; // Set the error if there was one
+				return null;
+			} else {
+				$this->error = null; // Reset the error status
+			}
 
-			$this->starttimestamp = $page['starttimestamp']; // Update the starttimestamp
-
-			$this->error = null; // Reset the error status
+			$this->starttimestamp = $r['curtimestamp']; // Update the starttimestamp
 			return true;
 		}
 
@@ -879,7 +941,6 @@ class WikiPage
 	{
 		$data = array(
 			'title' => $this->title,
-			'token' => $this->edittoken,
 		);
 
 		// Set options from arguments
@@ -948,14 +1009,13 @@ class WikiPage
  */
 class WikiFile
 {
-	protected $filename  = null;
-	protected $wikimate  = null;
-	protected $exists    = false;
-	protected $invalid   = false;
-	protected $error     = null;
-	protected $edittoken = null;
-	protected $info      = null;
-	protected $history   = null;
+	protected $filename = null;
+	protected $wikimate = null;
+	protected $exists   = false;
+	protected $invalid  = false;
+	protected $error    = null;
+	protected $info     = null;
+	protected $history  = null;
 
 	/*
 	 *
@@ -988,14 +1048,13 @@ class WikiFile
 	 */
 	public function __destruct()
 	{
-		$this->filename   = null;
-		$this->wikimate   = null;
-		$this->exists     = false;
-		$this->invalid    = false;
-		$this->error      = null;
-		$this->edittoken  = null;
-		$this->info       = null;
-		$this->history    = null;
+		$this->filename = null;
+		$this->wikimate = null;
+		$this->exists   = false;
+		$this->invalid  = false;
+		$this->error    = null;
+		$this->info     = null;
+		$this->history  = null;
 		return null;
 	}
 
@@ -1067,7 +1126,6 @@ class WikiFile
 				'iiprop' => 'bitdepth|canonicaltitle|comment|parsedcomment|'
 				          . 'commonmetadata|metadata|extmetadata|mediatype|'
 				          . 'mime|thumbmime|sha1|size|timestamp|url|user|userid',
-				'intoken' => 'edit',
 			);
 			// Add optional history parameters
 			if (is_array($history)) {
@@ -1097,8 +1155,6 @@ class WikiFile
 				$this->invalid = true;
 				return null;
 			}
-
-			$this->edittoken = $page['edittoken'];
 
 			// Check that file is present and has info
 			if (!isset($page['missing']) && isset($page['imageinfo'])) {
@@ -1738,7 +1794,6 @@ class WikiFile
 	{
 		$data = array(
 			'title' => 'File:' . $this->filename,
-			'token' => $this->edittoken,
 		);
 
 		// Set options from arguments
@@ -1838,7 +1893,6 @@ class WikiFile
 		$params['filename']       = $this->filename;
 		$params['comment']        = $comment;
 		$params['ignorewarnings'] = $overwrite;
-		$params['token']          = $this->edittoken;
 		if (!is_null($text)) {
 			$params['text']   = $text;
 		}

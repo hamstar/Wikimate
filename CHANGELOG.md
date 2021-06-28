@@ -8,16 +8,20 @@ Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/) 
 
 * New GOVERNANCE.md file to explicitly codify the project management principles and provide guidelines for maintenance tasks ([#83])
 
+#### Changed
+
+* Modernize token handling for login and data-modifying actions ([#100])
+
 #### Fixed
 
-* Prevented PHP notice in `WikiFile::getInfo()` for moved or deleted file. ([#85])
+* Prevented PHP notice in `WikiFile::getInfo()` for moved or deleted file ([#85])
 
 ### Version 0.12.0
 
 #### Added
 
 * New class WikiFile to retrieve properties of a file, and download and upload its contents.  All properties pertain to the current revision of the file, or a specific older revision. ([#69], [#71], [#78], [#80])
-* WikiFile also provides the file history and the ability to delete a file or an older revision of it. ([#76])
+* WikiFile also provides the file history and the ability to delete a file or an older revision of it ([#76])
 
 ### Version 0.11.0
 
