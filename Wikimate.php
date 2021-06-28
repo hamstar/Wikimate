@@ -34,7 +34,7 @@ class Wikimate
 	protected $debugMode = false;
 
 	/**
-	 * Create a new Wikimate object.
+	 * Creates a new Wikimate object.
 	 *
 	 * @return  Wikimate
 	 */
@@ -49,7 +49,7 @@ class Wikimate
 	}
 
 	/**
-	 * Set up a Requests_Session with appropriate user agent.
+	 * Sets up a Requests_Session with appropriate user agent.
 	 *
 	 * @return  void
 	 */
@@ -215,7 +215,7 @@ class Wikimate
 	}
 
 	/**
-	 * Get or print the Requests configuration.
+	 * Gets or prints the Requests configuration.
 	 *
 	 * @param   boolean  $echo  Whether to echo the options
 	 * @return  array           Options if $echo is false
@@ -508,7 +508,7 @@ class WikiPage
 	}
 
 	/**
-	 * Forget all object properties.
+	 * Forgets all object properties.
 	 *
 	 * @return  <type>  Destructor
 	 */
@@ -809,7 +809,7 @@ class WikiPage
 	}
 
 	/**
-	 * Return all the sections of the page in an array - the key names can be
+	 * Returns all the sections of the page in an array - the key names can be
 	 * set to name or index by using the following for the second param:
 	 * - self::SECTIONLIST_BY_NAME
 	 * - self::SECTIONLIST_BY_INDEX
@@ -974,7 +974,7 @@ class WikiPage
 	}
 
 	/**
-	 * Delete the page.
+	 * Deletes the page.
 	 *
 	 * @param   string   $reason  Reason for the deletion
 	 * @return  boolean           True if page was deleted successfully
@@ -1011,7 +1011,7 @@ class WikiPage
 	 */
 
 	/**
-	 * Find a section's index by name.
+	 * Finds a section's index by name.
 	 * If a section index or 'new' is passed, it is returned directly.
 	 *
 	 * @param   mixed  $section  The section name or index to find
@@ -1084,7 +1084,7 @@ class WikiFile
 	}
 
 	/**
-	 * Forget all object properties.
+	 * Forgets all object properties.
 	 *
 	 * @return  <type>  Destructor
 	 */
@@ -1826,7 +1826,7 @@ class WikiFile
 	}
 
 	/**
-	 * Delete the file, or only an older revision of it.
+	 * Deletes the file, or only an older revision of it.
 	 *
 	 * @param   string   $reason       Reason for the deletion
 	 * @param   string   $archivename  The archive name of the older revision
