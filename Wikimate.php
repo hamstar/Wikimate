@@ -267,8 +267,16 @@ class Wikimate
 		$array['action'] = 'query';
 		$array['format'] = 'php';
 
+		if ($this->debugMode) {
+			echo "query GET parameters:\n";
+			echo http_build_query($array) . "\n";
+		}
 		$apiResult = $this->session->get($this->api.'?'.http_build_query($array));
 
+		if ($this->debugMode) {
+			echo "query GET response:\n";
+			print_r(unserialize($apiResult->body));
+		}
 		return unserialize($apiResult->body);
 	}
 
@@ -283,8 +291,16 @@ class Wikimate
 		$array['action'] = 'parse';
 		$array['format'] = 'php';
 
+		if ($this->debugMode) {
+			echo "parse GET parameters:\n";
+			echo http_build_query($array) . "\n";
+		}
 		$apiResult = $this->session->get($this->api.'?'.http_build_query($array));
 
+		if ($this->debugMode) {
+			echo "parse GET response:\n";
+			print_r(json_decode($apiResult->body));
+		}
 		return unserialize($apiResult->body);
 	}
 
@@ -309,8 +325,16 @@ class Wikimate
 		$array['format'] = 'php';
 		$array['token'] = $edittoken;
 
+		if ($this->debugMode) {
+			echo "edit POST parameters:\n";
+			print_r($array);
+		}
 		$apiResult = $this->session->post($this->api, $headers, $array);
 
+		if ($this->debugMode) {
+			echo "edit POST response:\n";
+			print_r(unserialize($apiResult->body));
+		}
 		return unserialize($apiResult->body);
 	}
 
@@ -335,8 +359,16 @@ class Wikimate
 		$array['format'] = 'php';
 		$array['token'] = $deletetoken;
 
+		if ($this->debugMode) {
+			echo "delete POST parameters:\n";
+			print_r($array);
+		}
 		$apiResult = $this->session->post($this->api, $headers, $array);
 
+		if ($this->debugMode) {
+			echo "delete POST response:\n";
+			print_r(unserialize($apiResult->body));
+		}
 		return unserialize($apiResult->body);
 	}
 
@@ -351,6 +383,10 @@ class Wikimate
 		$getResult = $this->session->get($url);
 
 		if (!$getResult->success) {
+			if ($this->debugMode) {
+				echo "download GET response:\n";
+				print_r($getResult);
+			}
 			$this->error = array();
 			$this->error['file'] = 'Download error (HTTP status: ' . $getResult->status_code . ')';
 			$this->error['http'] = $getResult->status_code;
@@ -405,6 +441,10 @@ class Wikimate
 
 		$apiResult = $this->session->post($this->api, $headers, $body);
 
+		if ($this->debugMode) {
+			echo "upload POST response:\n";
+			print_r(unserialize($apiResult->body));
+		}
 		return unserialize($apiResult->body);
 	}
 
