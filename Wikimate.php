@@ -412,7 +412,9 @@ class Wikimate
 		$array['format'] = 'php';
 		$array['token'] = $uploadtoken;
 
-		// Construct multipart body: https://www.mediawiki.org/wiki/API:Upload#Sample_Raw_Upload
+		// Construct multipart body:
+		// https://www.mediawiki.org/w/index.php?title=API:Upload&oldid=2293685#Sample_Raw_Upload
+		// https://www.mediawiki.org/w/index.php?title=API:Upload&oldid=2339771#Sample_Raw_POST_of_a_single_chunk
 		$boundary = '---Wikimate-' . md5(microtime());
 		$body = '';
 		foreach ($array as $fieldName => $fieldData) {
