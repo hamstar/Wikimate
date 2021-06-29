@@ -7,7 +7,7 @@
 /// =============================================================================
 
 /**
- * Provides an interface over wiki API objects such as pages.
+ * Provides an interface over wiki API objects such as pages and files.
  *
  * @author  Robert McLeod
  * @since   December 2010
