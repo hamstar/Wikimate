@@ -6,6 +6,7 @@ Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/) 
 
 #### Added
 
+* Added more debug logging of MediaWiki requests and responses ([#101])
 * New GOVERNANCE.md file to explicitly codify the project management principles and provide guidelines for maintenance tasks ([#83])
 
 #### Changed

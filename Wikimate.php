@@ -7,7 +7,7 @@
 /// =============================================================================
 
 /**
- * Provides an interface over wiki API objects such as pages.
+ * Provides an interface over wiki API objects such as pages and files.
  *
  * @author  Robert McLeod
  * @since   December 2010
@@ -34,7 +34,7 @@ class Wikimate
 	protected $debugMode = false;
 
 	/**
-	 * Create a new Wikimate object.
+	 * Creates a new Wikimate object.
 	 *
 	 * @return  Wikimate
 	 */
@@ -49,7 +49,7 @@ class Wikimate
 	}
 
 	/**
-	 * Set up a Requests_Session with appropriate user agent.
+	 * Sets up a Requests_Session with appropriate user agent.
 	 *
 	 * @return  void
 	 */
@@ -215,7 +215,7 @@ class Wikimate
 	}
 
 	/**
-	 * Get or print the Requests configuration.
+	 * Gets or prints the Requests configuration.
 	 *
 	 * @param   boolean  $echo  Whether to echo the options
 	 * @return  array           Options if $echo is false
@@ -267,8 +267,16 @@ class Wikimate
 		$array['action'] = 'query';
 		$array['format'] = 'php';
 
+		if ($this->debugMode) {
+			echo "query GET parameters:\n";
+			echo http_build_query($array) . "\n";
+		}
 		$apiResult = $this->session->get($this->api.'?'.http_build_query($array));
 
+		if ($this->debugMode) {
+			echo "query GET response:\n";
+			print_r(unserialize($apiResult->body));
+		}
 		return unserialize($apiResult->body);
 	}
 
@@ -283,8 +291,16 @@ class Wikimate
 		$array['action'] = 'parse';
 		$array['format'] = 'php';
 
+		if ($this->debugMode) {
+			echo "parse GET parameters:\n";
+			echo http_build_query($array) . "\n";
+		}
 		$apiResult = $this->session->get($this->api.'?'.http_build_query($array));
 
+		if ($this->debugMode) {
+			echo "parse GET response:\n";
+			print_r(json_decode($apiResult->body));
+		}
 		return unserialize($apiResult->body);
 	}
 
@@ -309,8 +325,16 @@ class Wikimate
 		$array['format'] = 'php';
 		$array['token'] = $edittoken;
 
+		if ($this->debugMode) {
+			echo "edit POST parameters:\n";
+			print_r($array);
+		}
 		$apiResult = $this->session->post($this->api, $headers, $array);
 
+		if ($this->debugMode) {
+			echo "edit POST response:\n";
+			print_r(unserialize($apiResult->body));
+		}
 		return unserialize($apiResult->body);
 	}
 
@@ -335,8 +359,16 @@ class Wikimate
 		$array['format'] = 'php';
 		$array['token'] = $deletetoken;
 
+		if ($this->debugMode) {
+			echo "delete POST parameters:\n";
+			print_r($array);
+		}
 		$apiResult = $this->session->post($this->api, $headers, $array);
 
+		if ($this->debugMode) {
+			echo "delete POST response:\n";
+			print_r(unserialize($apiResult->body));
+		}
 		return unserialize($apiResult->body);
 	}
 
@@ -351,6 +383,10 @@ class Wikimate
 		$getResult = $this->session->get($url);
 
 		if (!$getResult->success) {
+			if ($this->debugMode) {
+				echo "download GET response:\n";
+				print_r($getResult);
+			}
 			$this->error = array();
 			$this->error['file'] = 'Download error (HTTP status: ' . $getResult->status_code . ')';
 			$this->error['http'] = $getResult->status_code;
@@ -376,7 +412,9 @@ class Wikimate
 		$array['format'] = 'php';
 		$array['token'] = $uploadtoken;
 
-		// Construct multipart body: https://www.mediawiki.org/wiki/API:Upload#Sample_Raw_Upload
+		// Construct multipart body:
+		// https://www.mediawiki.org/w/index.php?title=API:Upload&oldid=2293685#Sample_Raw_Upload
+		// https://www.mediawiki.org/w/index.php?title=API:Upload&oldid=2339771#Sample_Raw_POST_of_a_single_chunk
 		$boundary = '---Wikimate-' . md5(microtime());
 		$body = '';
 		foreach ($array as $fieldName => $fieldData) {
@@ -405,6 +443,10 @@ class Wikimate
 
 		$apiResult = $this->session->post($this->api, $headers, $body);
 
+		if ($this->debugMode) {
+			echo "upload POST response:\n";
+			print_r(unserialize($apiResult->body));
+		}
 		return unserialize($apiResult->body);
 	}
 
@@ -466,7 +508,7 @@ class WikiPage
 	}
 
 	/**
-	 * Forget all object properties.
+	 * Forgets all object properties.
 	 *
 	 * @return  <type>  Destructor
 	 */
@@ -767,7 +809,7 @@ class WikiPage
 	}
 
 	/**
-	 * Return all the sections of the page in an array - the key names can be
+	 * Returns all the sections of the page in an array - the key names can be
 	 * set to name or index by using the following for the second param:
 	 * - self::SECTIONLIST_BY_NAME
 	 * - self::SECTIONLIST_BY_INDEX
@@ -932,7 +974,7 @@ class WikiPage
 	}
 
 	/**
-	 * Delete the page.
+	 * Deletes the page.
 	 *
 	 * @param   string   $reason  Reason for the deletion
 	 * @return  boolean           True if page was deleted successfully
@@ -969,7 +1011,7 @@ class WikiPage
 	 */
 
 	/**
-	 * Find a section's index by name.
+	 * Finds a section's index by name.
 	 * If a section index or 'new' is passed, it is returned directly.
 	 *
 	 * @param   mixed  $section  The section name or index to find
@@ -1042,7 +1084,7 @@ class WikiFile
 	}
 
 	/**
-	 * Forget all object properties.
+	 * Forgets all object properties.
 	 *
 	 * @return  <type>  Destructor
 	 */
@@ -1784,7 +1826,7 @@ class WikiFile
 	}
 
 	/**
-	 * Delete the file, or only an older revision of it.
+	 * Deletes the file, or only an older revision of it.
 	 *
 	 * @param   string   $reason       Reason for the deletion
 	 * @param   string   $archivename  The archive name of the older revision
