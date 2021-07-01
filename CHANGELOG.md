@@ -4,6 +4,10 @@ Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/) 
 
 ### Upcoming version
 
+No changes yet.
+
+### Version 0.13.0 - 2021-07-05
+
 #### Added
 
 * Added more debug logging of MediaWiki requests and responses ([#101], [#106])
