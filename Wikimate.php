@@ -301,7 +301,7 @@ class Wikimate
 
 		if ($this->debugMode) {
 			echo "parse GET response:\n";
-			print_r(json_decode($apiResult->body));
+			print_r(unserialize($apiResult->body));
 		}
 		return unserialize($apiResult->body);
 	}
