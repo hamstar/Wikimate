@@ -54,6 +54,10 @@ Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/) 
 
 * Switched to using the *Requests* library instead of Curl ([#25])
 
+### Version 0.9 - 2014-06-13
+
+* Bumped version for stable release
+
 ### Version 0.5
 
 * Removed the use of constants in favour of constructor arguments
@@ -100,4 +104,6 @@ Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/) 
 [#80]: https://github.com/hamstar/Wikimate/pull/80
 [#83]: https://github.com/hamstar/Wikimate/pull/83
 [#85]: https://github.com/hamstar/Wikimate/pull/85
+[#100]: https://github.com/hamstar/Wikimate/pull/100
+[#101]: https://github.com/hamstar/Wikimate/pull/101
 
