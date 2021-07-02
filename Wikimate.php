@@ -66,6 +66,8 @@ class Wikimate
 	 * For now this method, in Wikimate tradition, is kept simple and supports
 	 * only the two token types needed elsewhere in the library.  It also
 	 * doesn't support the option to request multiple tokens at once.
+	 * See https://www.mediawiki.org/wiki/Special:MyLanguage/API:Tokens
+	 * for more information.
 	 *
 	 * @param   string  $type  The token type
 	 * @return  string         The requested token
