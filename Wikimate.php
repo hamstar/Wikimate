@@ -610,7 +610,7 @@ class WikiPage
 	/**
 	 * Returns the sections offsets and lengths.
 	 *
-	 * @return  StdClass  Section class
+	 * @return  stdClass  Section class
 	 */
 	public function getSectionOffsets()
 	{
