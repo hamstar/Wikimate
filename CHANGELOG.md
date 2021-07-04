@@ -6,16 +6,17 @@ Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/) 
 
 #### Added
 
-* Added more debug logging of MediaWiki requests and responses ([#101])
+* Added more debug logging of MediaWiki requests and responses ([#101], [#106])
 * New GOVERNANCE.md file to explicitly codify the project management principles and provide guidelines for maintenance tasks ([#83], [#105])
 
 #### Changed
 
-* Modernize token handling for login and data-modifying actions ([#100])
+* Modernize token handling for login and data-modifying actions ([#100], [#106])
 
 #### Fixed
 
 * Prevented PHP notice in `WikiFile::getInfo()` for moved or deleted file ([#85])
+* Fixed capitalization of a built-in PHP class in a comment ([#106])
 
 ### Version 0.12.0 - 2017-02-03
 
@@ -107,3 +108,4 @@ Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/) 
 [#100]: https://github.com/hamstar/Wikimate/pull/100
 [#101]: https://github.com/hamstar/Wikimate/pull/101
 [#105]: https://github.com/hamstar/Wikimate/pull/105
+[#106]: https://github.com/hamstar/Wikimate/pull/106
