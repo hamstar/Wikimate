@@ -15,6 +15,8 @@ if they would like to help maintaining the repository.
    (except for very minor ones such as spelling fixes).
 2. **Maintainers should not merge their own pull requests**.
    This allows every change to be validated by at least another maintainer.
+   That said, if there's no input by other maintainers in over a week,
+   the maintainer who authored the pull request can merge their own PR.
 3. Pull requests should comprise a single feature or bugfix.
    **Unrelated changes should be sent as separate PRs.**
    The exception are minor code cleanup changes,
