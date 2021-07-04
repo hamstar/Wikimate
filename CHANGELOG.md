@@ -7,7 +7,7 @@ Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/) 
 #### Added
 
 * Added more debug logging of MediaWiki requests and responses ([#101])
-* New GOVERNANCE.md file to explicitly codify the project management principles and provide guidelines for maintenance tasks ([#83])
+* New GOVERNANCE.md file to explicitly codify the project management principles and provide guidelines for maintenance tasks ([#83], [#105])
 
 #### Changed
 
@@ -106,4 +106,4 @@ Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/) 
 [#85]: https://github.com/hamstar/Wikimate/pull/85
 [#100]: https://github.com/hamstar/Wikimate/pull/100
 [#101]: https://github.com/hamstar/Wikimate/pull/101
-
+[#105]: https://github.com/hamstar/Wikimate/pull/105
