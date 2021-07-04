@@ -24,7 +24,7 @@ if they would like to help maintaining the repository.
 4. **Commits should be atomic**
    (as small as possible while still representing a self-consistent set of changes)
    and have descriptive commit messages.
-5. **Every PR should include a CHANGELOG.md entry**.
+5. **Every PR should include a `CHANGELOG.md` entry**.
    This makes it much easier to prepare releases,
    and allows the change author to properly summarize it.
 
@@ -34,14 +34,14 @@ A PR should be created with all relevant changes to update the repository for th
 (See [#81](https://github.com/hamstar/Wikimate/pull/81) for an example.)
 It should apply the following actions:
 
-1. Change the "Upcoming version" heading in the CHANGELOG.md file
+1. Change the "Upcoming version" heading in the `CHANGELOG.md` file
    to the appropriate version name and date (e.g. "Version 1.2.3 - 2020-12-31")
    and add a new "Upcoming version" section heading above it,
    with the contents "No changes yet.";
 2. Edit the README and replace all references
    to the previous version number and release date
    with the corresponding data for the new version;
-3. Update all version references in Wikimate.php
+3. Update all version references in `Wikimate.php`
    to the new version.
 
 Once this PR is merged, a new release should be created
@@ -52,4 +52,4 @@ The version tag and the title of the release notes should be in the format v1.2.
 (following [SemVer](http://semver.org/) conventions
 to determine which part of the version number to increase).
 The body of the release notes should be a summary of the contents
-of the relevant section in CHANGELOG.md.
+of the relevant section in `CHANGELOG.md`.
