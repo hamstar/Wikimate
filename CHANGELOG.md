@@ -17,14 +17,14 @@ Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/) 
 
 * Prevented PHP notice in `WikiFile::getInfo()` for moved or deleted file ([#85])
 
-### Version 0.12.0
+### Version 0.12.0 - 2017-02-03
 
 #### Added
 
 * New class WikiFile to retrieve properties of a file, and download and upload its contents.  All properties pertain to the current revision of the file, or a specific older revision. ([#69], [#71], [#78], [#80])
 * WikiFile also provides the file history and the ability to delete a file or an older revision of it ([#76])
 
-### Version 0.11.0
+### Version 0.11.0 - 2016-11-16
 
 #### Added
 
@@ -48,7 +48,7 @@ Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/) 
 * Fixed passing the return value in `WikiPage::setSection()` ([#30])
 * Corrected call to `Wikimate::debugRequestsConfig()` ([#30])
 
-### Version 0.10.0
+### Version 0.10.0 - 2014-06-24
 
 #### Changed
 
@@ -58,14 +58,14 @@ Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/) 
 
 * Bumped version for stable release
 
-### Version 0.5
+### Version 0.5 - 2011-09-09
 
 * Removed the use of constants in favour of constructor arguments
 * Added checks that throw an exception if can't write to wikimate_cookie.txt
 * Throws exception if curl library not loaded
 * Throws exception if can't login
 
-### Version 0.4
+### Version 0.4 - 2011-01-15
 
 * Added `WikiPage::newSection()` and `WikiPage::setSection()` (shortcuts to `WikiPage::setText()`)
 * Added the ability to get individual sections of the article with `WikiPage::getSection()`
@@ -73,7 +73,7 @@ Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/) 
 * Added the ability to get array showing section offsets and lengths in the page wikicode with `WikiPage::getSectionOffsets()`
 * Added the ability to see how many sections are on a page with `WikiPage::getNumSections()`
 
-### Version 0.3
+### Version 0.3 - 2010-12-26
 
 * Initial commit
 

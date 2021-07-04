@@ -35,7 +35,7 @@ A PR should be created with all relevant changes to update the repository for th
 It should apply the following actions:
 
 1. Change the "Upcoming version" heading in the CHANGELOG.md file
-   to the appropriate version name (e.g. "Version 1.2.3")
+   to the appropriate version name and date (e.g. "Version 1.2.3 - 2020-12-31")
    and add a new "Upcoming version" section heading above it,
    with the contents "No changes yet.";
 2. Edit the README and replace all references
