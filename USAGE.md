@@ -300,6 +300,7 @@ print_r($page->getError());
 
 For MediaWiki API errors, the array contains the 'code' and 'info' key/value pairs [defined by the API](https://www.mediawiki.org/wiki/API:Errors_and_warnings#Errors).  For other errors, the following key/value pairs are returned:
 * 'login' for Wikimate authentication problems
+* 'token' for Wikimate token problems
 * 'page' for WikiPage errors
 * 'file' for WikiFile errors
 
@@ -309,7 +310,6 @@ You can use the edit and query commands in Wikimate:
 ```php
 $data = array(
 	'prop' => 'info|revisions',
-	'intoken' => 'edit',
 	'titles' => 'this|that|other'
 );
 
@@ -318,7 +318,6 @@ $array_result = $wiki->query($data);
 
 $data = array(
 	'title' => 'this',
-	'token' => '+\\', // this is urlencoded automatically
 	'etc' => 'stuff'
 );
 
