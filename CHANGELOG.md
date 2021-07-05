@@ -4,6 +4,10 @@ Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/) 
 
 ### Upcoming version
 
+No changes yet.
+
+### Version 0.13.0 - 2021-07-05
+
 #### Added
 
 * Added more debug logging of MediaWiki requests and responses ([#101], [#106])
@@ -11,7 +15,7 @@ Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/) 
 
 #### Changed
 
-* Modernize token handling for login and data-modifying actions ([#100], [#106])
+* Modernized token handling for login and data-modifying actions. Requires MediaWiki v1.27 or newer. ([#100], [#106])
 
 #### Fixed
 
