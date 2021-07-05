@@ -66,6 +66,8 @@ class Wikimate
 	 * For now this method, in Wikimate tradition, is kept simple and supports
 	 * only the two token types needed elsewhere in the library.  It also
 	 * doesn't support the option to request multiple tokens at once.
+	 * See https://www.mediawiki.org/wiki/Special:MyLanguage/API:Tokens
+	 * for more information.
 	 *
 	 * @param   string  $type  The token type
 	 * @return  string         The requested token
@@ -75,7 +77,7 @@ class Wikimate
 		// Check for supported token types
 		if ($type != self::TOKEN_DEFAULT && $type != self::TOKEN_LOGIN) {
 			$this->error = array();
-			$this->error['login'] = 'The API does not support the token type';
+			$this->error['token'] = 'The API does not support the token type';
 			return false;
 		}
 
@@ -91,7 +93,7 @@ class Wikimate
 		// Check if we got an API result or the API doc page (invalid request)
 		if (strpos($response->body, "This is an auto-generated MediaWiki API documentation page") !== false) {
 			$this->error = array();
-			$this->error['login'] = 'The API could not understand the token request';
+			$this->error['token'] = 'The API could not understand the token request';
 			return false;
 		}
 
@@ -99,7 +101,7 @@ class Wikimate
 		// Check if we got a JSON result
 		if ($tokenResult === null) {
 			$this->error = array();
-			$this->error['login'] = 'The API did not return the token response';
+			$this->error['token'] = 'The API did not return the token response';
 			return false;
 		}
 
@@ -299,7 +301,7 @@ class Wikimate
 
 		if ($this->debugMode) {
 			echo "parse GET response:\n";
-			print_r(json_decode($apiResult->body));
+			print_r(unserialize($apiResult->body));
 		}
 		return unserialize($apiResult->body);
 	}
@@ -608,7 +610,7 @@ class WikiPage
 	/**
 	 * Returns the sections offsets and lengths.
 	 *
-	 * @return  StdClass  Section class
+	 * @return  stdClass  Section class
 	 */
 	public function getSectionOffsets()
 	{
