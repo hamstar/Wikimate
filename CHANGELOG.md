@@ -11,7 +11,7 @@ Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/) 
 
 #### Changed
 
-* Modernize token handling for login and data-modifying actions ([#100], [#106])
+* Modernized token handling for login and data-modifying actions. Requires MediaWiki v1.27 or newer. ([#100], [#106])
 
 #### Fixed
 
