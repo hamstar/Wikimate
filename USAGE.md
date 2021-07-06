@@ -349,6 +349,9 @@ $wiki->setUserAgent('Custom User Agent');
 $wiki->setUserAgent('Custom Prefix - ' . $useragent);
 ```
 
+In order to use a custom user agent for all requests in the session,
+call this method before invoking `Wikimate::login()`.
+
 #### Handling errors
 
 Did something go wrong?  Check the error array:
