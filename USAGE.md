@@ -326,3 +326,16 @@ $array_result = $wiki->edit($data);
 ```
 
 Both methods return an array of the MediaWiki API result.
+
+API requests are made over HTTP with a user agent string to identify
+the client to the server. By default the user agent is formatted as:
+
+`Wikimate <VERSION> (https://github.com/hamstar/Wikimate)`
+
+The string can be retrieved and customized via:
+
+```php
+$useragent = $wiki->getUserAgent();
+$wiki->setUserAgent('Custom User Agent');
+$wiki->setUserAgent('Custom Prefix - ' . $useragent);
+```

@@ -4,7 +4,9 @@ Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/) 
 
 ### Upcoming version
 
-No changes yet.
+#### Added
+
+* Support for getting/setting user agent for API requests ([#107])
 
 ### Version 0.13.0 - 2021-07-05
 
@@ -113,3 +115,4 @@ No changes yet.
 [#101]: https://github.com/hamstar/Wikimate/pull/101
 [#105]: https://github.com/hamstar/Wikimate/pull/105
 [#106]: https://github.com/hamstar/Wikimate/pull/106
+[#107]: https://github.com/hamstar/Wikimate/pull/107
