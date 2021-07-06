@@ -1,5 +1,22 @@
 ## Usage
 
+- [Introduction](#introduction)
+- [Getting a page object](#getting-a-page-object)
+  * [Reading...](#reading)
+  * [Writing...](#writing)
+  * [Deleting...](#deleting)
+- [Getting a file object](#getting-a-file-object)
+  * [Downloading...](#downloading)
+  * [Uploading...](#uploading)
+  * [Accessing revisions...](#accessing-revisions)
+  * [Deleting...](#deleting-1)
+- [Other stuff](#other-stuff)
+  * [Running custom queries](#running-custom-queries)
+  * [Customizing the user agent](#customizing-the-user-agent)
+  * [Handling errors](#handling-errors)
+
+### Introduction
+
 In your script file (e.g. `index.php`), include the `globals.php` file,
 and create a new `Wikimate` object with the target wiki's API address.
 Then provide a username and password to Wikimate's `login` method,
@@ -52,7 +69,7 @@ echo $page->getNumSections();
 echo $page->getSectionOffsets();
 ```
 
-### Reading...
+#### Reading...
 
 You can get the text of the page by using the `getText()` method
 which returns the text that was obtained when the page object was created.
@@ -112,7 +129,7 @@ Array
 
 An Exception is thrown if an unsupported value is supplied for the $keyNames parameter.
 
-### Writing...
+#### Writing...
 
 You can modify the whole article using the `setText()` method:
 
@@ -153,7 +170,7 @@ $page->newSection($sectionTitle, $text);
 
 For the latter method, the $sectionTitle is also used as part of the edit summary description.
 
-### Deleting...
+#### Deleting...
 
 If the account you're using has delete permissions,
 you can delete entire pages with `delete()`:
@@ -194,7 +211,7 @@ echo $file->getMime();
 echo $file->getAspectRatio();
 ```
 
-### Downloading...
+#### Downloading...
 
 You can obtain the data of the file by using the `downloadData()` method and use it in your script, or write it directly to a local file via the `downloadFile()` method.
 
@@ -204,7 +221,7 @@ $data = $file->downloadData();
 $result = $file->downloadFile('/path/to/sitelogo.png');
 ```
 
-### Uploading...
+#### Uploading...
 
 You can upload data from your script to the file by using the `uploadData()` method, or read it directly from a local file via the `uploadFile()` method. Additionally, uploading from a URL is possible via the `uploadFromUrl()` method.
 
@@ -228,7 +245,7 @@ if ($file->exists()) die('Example image already exists');
 $result = uploadFromUrl('https://upload.wikimedia.org/wikipedia/en/a/a9/Example.jpg', 'Adopt Wiki example image');
 ```
 
-### History...
+#### Accessing revisions...
 
 The revision history of a file can be obtained as an array with a properties array per revision:
 
@@ -271,7 +288,7 @@ echo $file->getAspectRatio(2);
 echo $file->getUrl('2016-11-22T33:44:55Z');
 ```
 
-### Deleting...
+#### Deleting...
 
 If the account you're using has delete permissions, you can delete files as well:
 
@@ -291,6 +308,8 @@ $file->delete('This was an inadvertent release', $archivename);
 ```
 
 ### Other stuff
+
+#### Running custom queries
 
 Wanna run your own queries?
 You can use the edit and query commands in Wikimate:
@@ -315,6 +334,8 @@ $array_result = $wiki->edit($data);
 
 Both methods return an array of the MediaWiki API result.
 
+#### Customizing the user agent
+
 API requests are made over HTTP with a user agent string to identify
 the client to the server. By default the user agent is formatted as:
 
@@ -327,6 +348,8 @@ $useragent = $wiki->getUserAgent();
 $wiki->setUserAgent('Custom User Agent');
 $wiki->setUserAgent('Custom Prefix - ' . $useragent);
 ```
+
+#### Handling errors
 
 Did something go wrong?  Check the error array:
 
