@@ -292,18 +292,6 @@ $file->delete('This was an inadvertent release', $archivename);
 
 ### Other stuff
 
-Did something go wrong?  Check the error array:
-
-```php
-print_r($page->getError());
-```
-
-For MediaWiki API errors, the array contains the 'code' and 'info' key/value pairs [defined by the API](https://www.mediawiki.org/wiki/API:Errors_and_warnings#Errors).  For other errors, the following key/value pairs are returned:
-* 'login' for Wikimate authentication problems
-* 'token' for Wikimate token problems
-* 'page' for WikiPage errors
-* 'file' for WikiFile errors
-
 Wanna run your own queries?
 You can use the edit and query commands in Wikimate:
 
@@ -339,3 +327,15 @@ $useragent = $wiki->getUserAgent();
 $wiki->setUserAgent('Custom User Agent');
 $wiki->setUserAgent('Custom Prefix - ' . $useragent);
 ```
+
+Did something go wrong?  Check the error array:
+
+```php
+print_r($page->getError());
+```
+
+For MediaWiki API errors, the array contains the 'code' and 'info' key/value pairs [defined by the API](https://www.mediawiki.org/wiki/API:Errors_and_warnings#Errors).  For other errors, the following key/value pairs are returned:
+* 'login' for Wikimate authentication problems
+* 'token' for Wikimate token problems
+* 'page' for WikiPage errors
+* 'file' for WikiFile errors

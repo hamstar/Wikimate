@@ -8,6 +8,10 @@ Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/) 
 
 * Support for getting/setting user agent for API requests ([#107])
 
+#### Changed
+
+* Grouped sections and added table of contents in USAGE.md ([#108])
+
 ### Version 0.13.0 - 2021-07-05
 
 #### Added
@@ -116,3 +120,4 @@ Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/) 
 [#105]: https://github.com/hamstar/Wikimate/pull/105
 [#106]: https://github.com/hamstar/Wikimate/pull/106
 [#107]: https://github.com/hamstar/Wikimate/pull/107
+[#108]: https://github.com/hamstar/Wikimate/pull/108
