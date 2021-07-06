@@ -189,6 +189,34 @@ class Wikimate
 	}
 
 	/**
+	 * Gets the user agent for API requests.
+	 *
+	 * @return  string  The default user agent, or the current one defined
+	 *                  by {@link Wikimate::setUserAgent()}
+	 */
+	public function getUserAgent()
+	{
+		return $this->useragent;
+	}
+
+	/**
+	 * Sets the user agent for API requests.
+	 *
+	 * In order to use a custom user agent for all requests in the session,
+	 * call this method before invoking {@link Wikimate::login()}.
+	 *
+	 * @param   string   $ua  The new user agent
+	 * @return  Wikimate      This object
+	 */
+	public function setUserAgent($ua)
+	{
+		$this->useragent = (string)$ua;
+		// Update the session
+		$this->session->useragent = $this->useragent;
+		return $this;
+	}
+
+	/**
 	 * Sets the debug mode.
 	 *
 	 * @param   boolean   $b  True to turn debugging on
