@@ -7,6 +7,7 @@ Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/) 
 #### Added
 
 * Support for getting/setting user agent for API requests ([#107])
+* Added missing PHPDoc comments for properties, constants, and more ([#109])
 
 #### Changed
 
@@ -121,3 +122,4 @@ Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/) 
 [#106]: https://github.com/hamstar/Wikimate/pull/106
 [#107]: https://github.com/hamstar/Wikimate/pull/107
 [#108]: https://github.com/hamstar/Wikimate/pull/108
+[#109]: https://github.com/hamstar/Wikimate/pull/109
