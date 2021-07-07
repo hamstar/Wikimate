@@ -587,13 +587,6 @@ class WikiPage
 	const SECTIONLIST_BY_NAME = 2;
 
 	/**
-	 * Use section numbers as keys in return array of {@link WikiPage::getAllSections()}
-	 *
-	 * @var integer
-	 */
-	const SECTIONLIST_BY_NUMBER = 3;
-
-	/**
 	 * The title of the page
 	 *
 	 * @var string|null
