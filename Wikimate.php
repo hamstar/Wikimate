@@ -163,7 +163,7 @@ class Wikimate
 			return false;
 		}
 
-		$tokenResult = json_decode($response->body);
+		$tokenResult = json_decode($response->body, true);
 		// Check if we got a JSON result
 		if ($tokenResult === null) {
 			$this->error = array();
@@ -179,9 +179,9 @@ class Wikimate
 		}
 
 		if ($type == self::TOKEN_LOGIN) {
-			return $tokenResult->query->tokens->logintoken;
+			return $tokenResult['query']['tokens']['logintoken'];
 		} else {
-			return $tokenResult->query->tokens->csrftoken;
+			return $tokenResult['query']['tokens']['csrftoken'];
 		}
 	}
 
@@ -223,7 +223,7 @@ class Wikimate
 			return false;
 		}
 
-		$loginResult = json_decode($response->body);
+		$loginResult = json_decode($response->body, true);
 		// Check if we got a JSON result
 		if ($loginResult === null) {
 			$this->error = array();
@@ -238,15 +238,15 @@ class Wikimate
 			print_r($loginResult);
 		}
 
-		if (isset($loginResult->login->result) && $loginResult->login->result != 'Success') {
+		if (isset($loginResult['login']['result']) && $loginResult['login']['result'] != 'Success') {
 			// Some more comprehensive error checking
 			$this->error = array();
-			switch ($loginResult->login->result) {
+			switch ($loginResult['login']['result']) {
 				case 'Failed':
 					$this->error['login'] = 'Incorrect username or password';
 					break;
 				default:
-					$this->error['login'] = 'The API result was: ' . $loginResult->login->result;
+					$this->error['login'] = 'The API result was: ' . $loginResult['login']['result'];
 					break;
 			}
 			return false;
