@@ -15,22 +15,81 @@
 class Wikimate
 {
 	/**
-	 * @var  string  The current version number (conforms to http://semver.org/).
+	 * The current version number (conforms to Semantic Versioning)
+	 *
+	 * @var string
+	 * @link https://semver.org/
 	 */
 	const VERSION = '0.13.0';
 
+	/**
+	 * Identifier for CSRF token
+	 *
+	 * @var string
+	 * @link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Tokens
+	 */
 	const TOKEN_DEFAULT = 'csrf';
-	const TOKEN_LOGIN   = 'login';
 
+	/**
+	 * Identifier for Login token
+	 *
+	 * @var string
+	 * @link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Tokens
+	 */
+	const TOKEN_LOGIN = 'login';
+
+	/**
+	 * Base URL for API requests
+	 *
+	 * @var string
+	 * @link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Main_page#Endpoint
+	 */
 	protected $api;
+
+	/**
+	 * Username for API requests
+	 *
+	 * @var string
+	 * @link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Login#Method_1._login
+	 */
 	protected $username;
+
+	/**
+	 * Password for API requests
+	 *
+	 * @var string
+	 * @link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Login#Method_1._login
+	 */
 	protected $password;
 
-	/** @var  Requests_Session */
+	/**
+	 * Session object for HTTP requests
+	 *
+	 * @var Requests_Session
+	 * @link https://requests.ryanmccue.info/
+	 */
 	protected $session;
+
+	/**
+	 * User agent string for Requests_Session
+	 *
+	 * @var string
+	 * @link https://requests.ryanmccue.info/docs/usage-advanced.html#session-handling
+	 */
 	protected $useragent;
 
-	protected $error     = null;
+	/**
+	 * Error array with API and Wikimate errors
+	 *
+	 * @var array|null
+	 */
+	protected $error = null;
+
+	/**
+	 * Whether to output debug logging
+	 *
+	 * @var boolean
+	 */
 	protected $debugMode = false;
 
 	/**
@@ -500,18 +559,82 @@ class Wikimate
  */
 class WikiPage
 {
+	/**
+	 * Use section indexes as keys in return array of {@link WikiPage::getAllSections()}
+	 *
+	 * @var integer
+	 */
 	const SECTIONLIST_BY_INDEX = 1;
+
+	/**
+	 * Use section names as keys in return array of {@link WikiPage::getAllSections()}
+	 *
+	 * @var integer
+	 */
 	const SECTIONLIST_BY_NAME = 2;
+
+	/**
+	 * Use section numbers as keys in return array of {@link WikiPage::getAllSections()}
+	 *
+	 * @var integer
+	 */
 	const SECTIONLIST_BY_NUMBER = 3;
 
-	protected $title          = null;
-	protected $wikimate       = null;
-	protected $exists         = false;
-	protected $invalid        = false;
-	protected $error          = null;
+	/**
+	 * The title of the page
+	 *
+	 * @var string|null
+	 */
+	protected $title = null;
+
+	/**
+	 * Wikimate object for API requests
+	 *
+	 * @var Wikimate|null
+	 */
+	protected $wikimate = null;
+
+	/**
+	 * Whether the page exists
+	 *
+	 * @var boolean
+	 */
+	protected $exists = false;
+
+	/**
+	 * Whether the page is invalid
+	 *
+	 * @var boolean
+	 */
+	protected $invalid = false;
+
+	/**
+	 * Error array with API and WikiPage errors
+	 *
+	 * @var array|null
+	 */
+	protected $error = null;
+
+	/**
+	 * Stores the timestamp for detection of edit conflicts
+	 *
+	 * @var integer|null
+	 */
 	protected $starttimestamp = null;
-	protected $text           = null;
-	protected $sections       = null;
+
+	/**
+	 * The complete text of the page
+	 *
+	 * @var string|null
+	 */
+	protected $text = null;
+
+	/**
+	 * The sections object for the page
+	 *
+	 * @var stdClass|null
+	 */
+	protected $sections = null;
 
 	/*
 	 *
@@ -1081,13 +1204,56 @@ class WikiPage
  */
 class WikiFile
 {
+	/**
+	 * The name of the file
+	 *
+	 * @var string|null
+	 */
 	protected $filename = null;
+
+	/**
+	 * Wikimate object for API requests
+	 *
+	 * @var Wikimate|null
+	 */
 	protected $wikimate = null;
-	protected $exists   = false;
-	protected $invalid  = false;
-	protected $error    = null;
-	protected $info     = null;
-	protected $history  = null;
+
+	/**
+	 * Whether the file exists
+	 *
+	 * @var boolean
+	 */
+	protected $exists = false;
+
+	/**
+	 * Whether the file is invalid
+	 *
+	 * @var boolean
+	 */
+	protected $invalid = false;
+
+	/**
+	 * Error array with API and WikiFile errors
+	 *
+	 * @var array|null
+	 */
+	protected $error = null;
+
+	/**
+	 * Image info for the current file revision
+	 *
+	 * @var array|null
+	 * @link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Imageinfo
+	 */
+	protected $info = null;
+
+	/**
+	 * Image info for all file revisions
+	 *
+	 * @var array|null
+	 * @link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Imageinfo
+	 */
+	protected $history = null;
 
 	/*
 	 *
