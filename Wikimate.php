@@ -95,6 +95,10 @@ class Wikimate
 	/**
 	 * Creates a new Wikimate object.
 	 *
+	 * @param   string    $api      Base URL for the API
+	 * @param   array     $headers  Default headers for API requests
+	 * @param   array     $data     Default data for API requests
+	 * @param   array     $options  Default options for API requests
 	 * @return  Wikimate
 	 */
 	public function __construct($api, $headers = array(), $data = array(), $options = array())
@@ -185,6 +189,7 @@ class Wikimate
 	 * @param   string   $password  The user password
 	 * @param   string   $domain    The domain (optional)
 	 * @return  boolean             True if logged in
+	 * @link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Login#Method_1._login
 	 */
 	public function login($username, $password, $domain = null)
 	{
@@ -350,6 +355,7 @@ class Wikimate
 	 *
 	 * @param   array  $array  Array of details to be passed in the query
 	 * @return  array          Unserialized php output from the wiki API
+	 * @link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Query
 	 */
 	public function query($array)
 	{
@@ -374,6 +380,7 @@ class Wikimate
 	 *
 	 * @param   array  $array  Array of details to be passed in the query
 	 * @return  array          Unserialized php output from the wiki API
+	 * @link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Parsing_wikitext
 	 */
 	public function parse($array)
 	{
@@ -398,6 +405,7 @@ class Wikimate
 	 *
 	 * @param   array  $array  Array of details to be passed in the query
 	 * @return  array          Unserialized php output from the wiki API
+	 * @link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Edit
 	 */
 	public function edit($array)
 	{
@@ -432,6 +440,7 @@ class Wikimate
 	 *
 	 * @param   array  $array  Array of details to be passed in the query
 	 * @return  array          Unserialized php output from the wiki API
+	 * @link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Delete
 	 */
 	public function delete($array)
 	{
@@ -489,6 +498,7 @@ class Wikimate
 	 *
 	 * @param   array    $array  Array of details to be used in the upload
 	 * @return  array            Unserialized php output from the wiki API
+	 * @link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Upload
 	 */
 	public function upload($array)
 	{
