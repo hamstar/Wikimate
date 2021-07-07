@@ -357,13 +357,13 @@ class Wikimate
 	 * Performs a query to the wiki API with the given details.
 	 *
 	 * @param   array  $array  Array of details to be passed in the query
-	 * @return  array          Unserialized php output from the wiki API
+	 * @return  array          Decoded JSON output from the wiki API
 	 * @link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Query
 	 */
 	public function query($array)
 	{
 		$array['action'] = 'query';
-		$array['format'] = 'php';
+		$array['format'] = 'json';
 
 		if ($this->debugMode) {
 			echo "query GET parameters:\n";
@@ -373,22 +373,22 @@ class Wikimate
 
 		if ($this->debugMode) {
 			echo "query GET response:\n";
-			print_r(unserialize($apiResult->body));
+			print_r(json_decode($apiResult->body, true));
 		}
-		return unserialize($apiResult->body);
+		return json_decode($apiResult->body, true);
 	}
 
 	/**
 	 * Performs a parse query to the wiki API.
 	 *
 	 * @param   array  $array  Array of details to be passed in the query
-	 * @return  array          Unserialized php output from the wiki API
+	 * @return  array          Decoded JSON output from the wiki API
 	 * @link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Parsing_wikitext
 	 */
 	public function parse($array)
 	{
 		$array['action'] = 'parse';
-		$array['format'] = 'php';
+		$array['format'] = 'json';
 
 		if ($this->debugMode) {
 			echo "parse GET parameters:\n";
@@ -398,16 +398,16 @@ class Wikimate
 
 		if ($this->debugMode) {
 			echo "parse GET response:\n";
-			print_r(unserialize($apiResult->body));
+			print_r(json_decode($apiResult->body, true));
 		}
-		return unserialize($apiResult->body);
+		return json_decode($apiResult->body, true);
 	}
 
 	/**
 	 * Perfoms an edit query to the wiki API.
 	 *
 	 * @param   array  $array  Array of details to be passed in the query
-	 * @return  array          Unserialized php output from the wiki API
+	 * @return  array          Decoded JSON output from the wiki API
 	 * @link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Edit
 	 */
 	public function edit($array)
@@ -422,7 +422,7 @@ class Wikimate
 		);
 
 		$array['action'] = 'edit';
-		$array['format'] = 'php';
+		$array['format'] = 'json';
 		$array['token'] = $edittoken;
 
 		if ($this->debugMode) {
@@ -433,16 +433,16 @@ class Wikimate
 
 		if ($this->debugMode) {
 			echo "edit POST response:\n";
-			print_r(unserialize($apiResult->body));
+			print_r(json_decode($apiResult->body, true));
 		}
-		return unserialize($apiResult->body);
+		return json_decode($apiResult->body, true);
 	}
 
 	/**
 	 * Perfoms a delete query to the wiki API.
 	 *
 	 * @param   array  $array  Array of details to be passed in the query
-	 * @return  array          Unserialized php output from the wiki API
+	 * @return  array          Decoded JSON output from the wiki API
 	 * @link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Delete
 	 */
 	public function delete($array)
@@ -457,7 +457,7 @@ class Wikimate
 		);
 
 		$array['action'] = 'delete';
-		$array['format'] = 'php';
+		$array['format'] = 'json';
 		$array['token'] = $deletetoken;
 
 		if ($this->debugMode) {
@@ -468,9 +468,9 @@ class Wikimate
 
 		if ($this->debugMode) {
 			echo "delete POST response:\n";
-			print_r(unserialize($apiResult->body));
+			print_r(json_decode($apiResult->body, true));
 		}
-		return unserialize($apiResult->body);
+		return json_decode($apiResult->body, true);
 	}
 
 	/**
@@ -500,7 +500,7 @@ class Wikimate
 	 * Uploads a file to the wiki API.
 	 *
 	 * @param   array    $array  Array of details to be used in the upload
-	 * @return  array            Unserialized php output from the wiki API
+	 * @return  array            Decoded JSON output from the wiki API
 	 * @link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Upload
 	 */
 	public function upload($array)
@@ -511,7 +511,7 @@ class Wikimate
 		}
 
 		$array['action'] = 'upload';
-		$array['format'] = 'php';
+		$array['format'] = 'json';
 		$array['token'] = $uploadtoken;
 
 		// Construct multipart body:
@@ -547,9 +547,9 @@ class Wikimate
 
 		if ($this->debugMode) {
 			echo "upload POST response:\n";
-			print_r(unserialize($apiResult->body));
+			print_r(json_decode($apiResult->body, true));
 		}
-		return unserialize($apiResult->body);
+		return json_decode($apiResult->body, true);
 	}
 
 	/**
