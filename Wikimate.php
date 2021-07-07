@@ -40,6 +40,14 @@ class Wikimate
 	const TOKEN_LOGIN = 'login';
 
 	/**
+	 * Default lag value in seconds
+	 *
+	 * @var integer
+	 * @link https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Maxlag_parameter
+	 */
+	const MAXLAG_DEFAULT = 5;
+
+	/**
 	 * Base URL for API requests
 	 *
 	 * @var string
@@ -92,6 +100,21 @@ class Wikimate
 	 * @var boolean
 	 */
 	protected $debugMode = false;
+
+	/**
+	 * Maximum lag in seconds to accept in requests
+	 *
+	 * @var integer
+	 * @link https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Maxlag_parameter
+	 */
+	protected $maxlag = self::MAXLAG_DEFAULT;
+
+	/**
+	 * Maximum number of retries for lagged requests (-1 = indefinitely)
+	 *
+	 * @var integer
+	 */
+	protected $maxretries = -1;
 
 	/**
 	 * Creates a new Wikimate object.
@@ -251,6 +274,50 @@ class Wikimate
 		}
 
 		return true;
+	}
+
+	/**
+	 * Gets the current value for the maxlag parameter.
+	 *
+	 * @return  integer  The maxlag value in seconds
+	 */
+	public function getMaxlag()
+	{
+		return $this->maxlag;
+	}
+
+	/**
+	 * Sets the new value for the maxlag parameter.
+	 *
+	 * @param   integer   $ml  The new maxlag value in seconds
+	 * @return  Wikimate       This object
+	 */
+	public function setMaxlag($ml)
+	{
+		$this->maxlag = (int)$ml;
+		return $this;
+	}
+
+	/**
+	 * Gets the current value for the max retries limit.
+	 *
+	 * @return  integer  The max retries limit
+	 */
+	public function getMaxretries()
+	{
+		return $this->maxretries;
+	}
+
+	/**
+	 * Sets the new value for the max retries limit.
+	 *
+	 * @param   integer   $mr  The new max retries limit
+	 * @return  Wikimate       This object
+	 */
+	public function setMaxretries($mr)
+	{
+		$this->maxretries = (int)$mr;
+		return $this;
 	}
 
 	/**
