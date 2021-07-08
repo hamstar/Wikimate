@@ -243,11 +243,11 @@ class Wikimate
 			'action' => 'query',
 			'meta' => 'tokens',
 			'type' => $type,
-			'format' => 'json'
 		);
 
 		// Send the token request
-		$response = $this->session->post($this->api, array(), $details);
+		$response = $this->request($details, array(), true);
+
 		// Check if we got an API result or the API doc page (invalid request)
 		if (strpos($response->body, "This is an auto-generated MediaWiki API documentation page") !== false) {
 			$this->error = array();
@@ -298,7 +298,6 @@ class Wikimate
 			'lgname' => $username,
 			'lgpassword' => $password,
 			'lgtoken' => $logintoken,
-			'format' => 'json'
 		);
 
 		// If $domain is provided, set the corresponding detail in the request information array
@@ -307,7 +306,8 @@ class Wikimate
 		}
 
 		// Send the login request
-		$response = $this->session->post($this->api, array(), $details);
+		$response = $this->request($details, array(), true);
+
 		// Check if we got an API result or the API doc page (invalid request)
 		if (strpos($response->body, "This is an auto-generated MediaWiki API documentation page") !== false) {
 			$this->error = array();
@@ -499,13 +499,12 @@ class Wikimate
 	public function query($array)
 	{
 		$array['action'] = 'query';
-		$array['format'] = 'json';
 
 		if ($this->debugMode) {
 			echo "query GET parameters:\n";
 			echo http_build_query($array) . "\n";
 		}
-		$apiResult = $this->session->get($this->api.'?'.http_build_query($array));
+		$apiResult = $this->request($array);
 
 		if ($this->debugMode) {
 			echo "query GET response:\n";
@@ -524,13 +523,12 @@ class Wikimate
 	public function parse($array)
 	{
 		$array['action'] = 'parse';
-		$array['format'] = 'json';
 
 		if ($this->debugMode) {
 			echo "parse GET parameters:\n";
 			echo http_build_query($array) . "\n";
 		}
-		$apiResult = $this->session->get($this->api.'?'.http_build_query($array));
+		$apiResult = $this->request($array);
 
 		if ($this->debugMode) {
 			echo "parse GET response:\n";
@@ -558,14 +556,13 @@ class Wikimate
 		);
 
 		$array['action'] = 'edit';
-		$array['format'] = 'json';
 		$array['token'] = $edittoken;
 
 		if ($this->debugMode) {
 			echo "edit POST parameters:\n";
 			print_r($array);
 		}
-		$apiResult = $this->session->post($this->api, $headers, $array);
+		$apiResult = $this->request($array, $headers, true);
 
 		if ($this->debugMode) {
 			echo "edit POST response:\n";
@@ -593,14 +590,13 @@ class Wikimate
 		);
 
 		$array['action'] = 'delete';
-		$array['format'] = 'json';
 		$array['token'] = $deletetoken;
 
 		if ($this->debugMode) {
 			echo "delete POST parameters:\n";
 			print_r($array);
 		}
-		$apiResult = $this->session->post($this->api, $headers, $array);
+		$apiResult = $this->request($array, $headers, true);
 
 		if ($this->debugMode) {
 			echo "delete POST response:\n";
@@ -648,6 +644,7 @@ class Wikimate
 
 		$array['action'] = 'upload';
 		$array['format'] = 'json';
+		$array['maxlag'] = $this->getMaxlag();
 		$array['token'] = $uploadtoken;
 
 		// Construct multipart body:
@@ -679,7 +676,7 @@ class Wikimate
 			'Content-Length' => strlen($body),
 		);
 
-		$apiResult = $this->session->post($this->api, $headers, $body);
+		$apiResult = $this->request($body, $headers, true);
 
 		if ($this->debugMode) {
 			echo "upload POST response:\n";
