@@ -10,6 +10,10 @@
 /**
  * Provides an interface over wiki API objects such as pages and files.
  *
+ * All requests to the API can throw an exception if the server is lagged
+ * and a finite number of retries is exhausted.  By default requests are
+ * tried indefinitely.  See {@see Wikimate::request()} for more information.
+ *
  * @author  Robert McLeod & Frans P. de Vries
  * @since   0.2  December 2010
  */
