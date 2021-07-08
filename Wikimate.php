@@ -149,6 +149,77 @@ class Wikimate
 	}
 
 	/**
+	 * Sends a GET or POST request in JSON format to the API.
+	 *
+	 * This method handles maxlag errors as advised at:
+	 * {@see https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Maxlag_parameter)
+	 * The request is sent with the current maxlag value (default 5 seconds).
+	 * If a lag error is received, the method waits (sleeps) for the
+	 * recommended time (per the Retry-After header), then tries again.
+	 * It will do this indefinitely unless the number of retries is limited,
+	 * in which case an exception is thrown.
+	 *
+	 * The string type for $data is used only for upload POST requests,
+	 * and must contain the complete multipart body, including maxlag.
+	 *
+	 * @param  array|string  $data     Data for the request
+	 * @param  array         $headers  Optional extra headers to send with the request
+	 * @param  boolean       $post     True to send a POST request, otherwise GET
+	 * @return Requests_Response       The API response
+	 * @throw  Exception               If lagged and ran out of retries
+	 */
+	private function request($data, $headers = array(), $post = false)
+	{
+		$retries = 0;
+
+		// Add format & maxlag parameter to request
+		if (is_array($data)) {
+			$data['format'] = 'json';
+			$data['maxlag'] = $this->getMaxlag();
+		}
+
+		// Send appropriate type of request, once or multiple times
+		do {
+			if ($post) {
+				$response = $this->session->post($this->api, $headers, $data);
+			} else {
+				$response = $this->session->get($this->api.'?'.http_build_query($data), $headers);
+			}
+
+			// Check for replication lag error
+			$server_lagged = ($response->headers->offsetGet('X-Database-Lag') !== null);
+			if ($server_lagged) {
+				// Determine recommended or default delay
+				if ($response->headers->offsetGet('Retry-After') !== null) {
+					$sleep = (int)$response->headers->offsetGet('Retry-After');
+				} else {
+					$sleep = $this->getMaxlag();
+				}
+
+				if ($this->debugMode) {
+					preg_match('/Waiting for [^ ]*: ([0-9.-]+) seconds? lagged/', $response->body, $match);
+					echo "Server lagged for {$match[1]} seconds; retry in {$sleep} seconds\n";
+				}
+				sleep($sleep);
+
+				// Check retries limit
+				if ($this->getMaxretries() >= 0) {
+					$retries++;
+				} else {
+					$retries == -1; // continue indefinitely
+				}
+			}
+		} while ($server_lagged && $retries <= $this->getMaxretries());
+
+		// Throw exception if we ran out of retries
+		if ($server_lagged) {
+			throw new Exception("Server lagged ($retries consecutive maxlag responses)");
+		} else {
+			return $response;
+		}
+	}
+
+	/**
 	 * Obtains a wiki token for logging in or data-modifying actions.
 	 * For now this method, in Wikimate tradition, is kept simple and supports
 	 * only the two token types needed elsewhere in the library.  It also
