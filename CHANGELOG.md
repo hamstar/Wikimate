@@ -14,6 +14,10 @@ Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/) 
 * Changed API requests from deprecated PHP format to JSON format ([#111])
 * Grouped sections and added table of contents in USAGE.md ([#108])
 
+#### Fixed
+
+* Removed null returns from destructors & fixed PHPDoc comments ([#114])
+
 ### Version 0.13.0 - 2021-07-05
 
 #### Added
@@ -125,3 +129,4 @@ Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/) 
 [#108]: https://github.com/hamstar/Wikimate/pull/108
 [#109]: https://github.com/hamstar/Wikimate/pull/109
 [#111]: https://github.com/hamstar/Wikimate/pull/111
+[#114]: https://github.com/hamstar/Wikimate/pull/114
