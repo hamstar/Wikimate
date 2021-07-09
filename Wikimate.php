@@ -668,8 +668,6 @@ class WikiPage
 
 	/**
 	 * Forgets all object properties.
-	 *
-	 * @return  <type>  Destructor
 	 */
 	public function __destruct()
 	{
@@ -681,7 +679,6 @@ class WikiPage
 		$this->starttimestamp = null;
 		$this->text           = null;
 		$this->sections       = null;
-		return null;
 	}
 
 	/**
@@ -1287,8 +1284,6 @@ class WikiFile
 
 	/**
 	 * Forgets all object properties.
-	 *
-	 * @return  <type>  Destructor
 	 */
 	public function __destruct()
 	{
@@ -1299,7 +1294,6 @@ class WikiFile
 		$this->error    = null;
 		$this->info     = null;
 		$this->history  = null;
-		return null;
 	}
 
 	/**
