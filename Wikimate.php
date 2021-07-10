@@ -12,6 +12,10 @@
 /**
  * Provides an interface over wiki API objects such as pages and files.
  *
+ * All requests to the API can throw an exception if the server is lagged
+ * and a finite number of retries is exhausted.  By default requests are
+ * tried indefinitely.  See {@see Wikimate::request()} for more information.
+ *
  * @author  Robert McLeod & Frans P. de Vries
  * @since   December 2010
  */
@@ -40,6 +44,14 @@ class Wikimate
 	 * @link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Tokens
 	 */
 	const TOKEN_LOGIN = 'login';
+
+	/**
+	 * Default lag value in seconds
+	 *
+	 * @var integer
+	 * @link https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Maxlag_parameter
+	 */
+	const MAXLAG_DEFAULT = 5;
 
 	/**
 	 * Base URL for API requests
@@ -96,6 +108,21 @@ class Wikimate
 	protected $debugMode = false;
 
 	/**
+	 * Maximum lag in seconds to accept in requests
+	 *
+	 * @var integer
+	 * @link https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Maxlag_parameter
+	 */
+	protected $maxlag = self::MAXLAG_DEFAULT;
+
+	/**
+	 * Maximum number of retries for lagged requests (-1 = indefinitely)
+	 *
+	 * @var integer
+	 */
+	protected $maxretries = -1;
+
+	/**
 	 * Creates a new Wikimate object.
 	 *
 	 * @param   string    $api      Base URL for the API
@@ -128,6 +155,77 @@ class Wikimate
 	}
 
 	/**
+	 * Sends a GET or POST request in JSON format to the API.
+	 *
+	 * This method handles maxlag errors as advised at:
+	 * {@see https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Maxlag_parameter)
+	 * The request is sent with the current maxlag value (default 5 seconds).
+	 * If a lag error is received, the method waits (sleeps) for the
+	 * recommended time (per the Retry-After header), then tries again.
+	 * It will do this indefinitely unless the number of retries is limited,
+	 * in which case an exception is thrown.
+	 *
+	 * The string type for $data is used only for upload POST requests,
+	 * and must contain the complete multipart body, including maxlag.
+	 *
+	 * @param  array|string  $data     Data for the request
+	 * @param  array         $headers  Optional extra headers to send with the request
+	 * @param  boolean       $post     True to send a POST request, otherwise GET
+	 * @return Requests_Response       The API response
+	 * @throw  Exception               If lagged and ran out of retries
+	 */
+	private function request($data, $headers = array(), $post = false)
+	{
+		$retries = 0;
+
+		// Add format & maxlag parameter to request
+		if (is_array($data)) {
+			$data['format'] = 'json';
+			$data['maxlag'] = $this->getMaxlag();
+		}
+
+		// Send appropriate type of request, once or multiple times
+		do {
+			if ($post) {
+				$response = $this->session->post($this->api, $headers, $data);
+			} else {
+				$response = $this->session->get($this->api.'?'.http_build_query($data), $headers);
+			}
+
+			// Check for replication lag error
+			$server_lagged = ($response->headers->offsetGet('X-Database-Lag') !== null);
+			if ($server_lagged) {
+				// Determine recommended or default delay
+				if ($response->headers->offsetGet('Retry-After') !== null) {
+					$sleep = (int)$response->headers->offsetGet('Retry-After');
+				} else {
+					$sleep = $this->getMaxlag();
+				}
+
+				if ($this->debugMode) {
+					preg_match('/Waiting for [^ ]*: ([0-9.-]+) seconds? lagged/', $response->body, $match);
+					echo "Server lagged for {$match[1]} seconds; retry in {$sleep} seconds\n";
+				}
+				sleep($sleep);
+
+				// Check retries limit
+				if ($this->getMaxretries() >= 0) {
+					$retries++;
+				} else {
+					$retries == -1; // continue indefinitely
+				}
+			}
+		} while ($server_lagged && $retries <= $this->getMaxretries());
+
+		// Throw exception if we ran out of retries
+		if ($server_lagged) {
+			throw new Exception("Server lagged ($retries consecutive maxlag responses)");
+		} else {
+			return $response;
+		}
+	}
+
+	/**
 	 * Obtains a wiki token for logging in or data-modifying actions.
 	 * For now this method, in Wikimate tradition, is kept simple and supports
 	 * only the two token types needed elsewhere in the library.  It also
@@ -151,11 +249,11 @@ class Wikimate
 			'action' => 'query',
 			'meta' => 'tokens',
 			'type' => $type,
-			'format' => 'json'
 		);
 
 		// Send the token request
-		$response = $this->session->post($this->api, array(), $details);
+		$response = $this->request($details, array(), true);
+
 		// Check if we got an API result or the API doc page (invalid request)
 		if (strpos($response->body, "This is an auto-generated MediaWiki API documentation page") !== false) {
 			$this->error = array();
@@ -206,7 +304,6 @@ class Wikimate
 			'lgname' => $username,
 			'lgpassword' => $password,
 			'lgtoken' => $logintoken,
-			'format' => 'json'
 		);
 
 		// If $domain is provided, set the corresponding detail in the request information array
@@ -215,7 +312,8 @@ class Wikimate
 		}
 
 		// Send the login request
-		$response = $this->session->post($this->api, array(), $details);
+		$response = $this->request($details, array(), true);
+
 		// Check if we got an API result or the API doc page (invalid request)
 		if (strpos($response->body, "This is an auto-generated MediaWiki API documentation page") !== false) {
 			$this->error = array();
@@ -253,6 +351,50 @@ class Wikimate
 		}
 
 		return true;
+	}
+
+	/**
+	 * Gets the current value for the maxlag parameter.
+	 *
+	 * @return  integer  The maxlag value in seconds
+	 */
+	public function getMaxlag()
+	{
+		return $this->maxlag;
+	}
+
+	/**
+	 * Sets the new value for the maxlag parameter.
+	 *
+	 * @param   integer   $ml  The new maxlag value in seconds
+	 * @return  Wikimate       This object
+	 */
+	public function setMaxlag($ml)
+	{
+		$this->maxlag = (int)$ml;
+		return $this;
+	}
+
+	/**
+	 * Gets the current value for the max retries limit.
+	 *
+	 * @return  integer  The max retries limit
+	 */
+	public function getMaxretries()
+	{
+		return $this->maxretries;
+	}
+
+	/**
+	 * Sets the new value for the max retries limit.
+	 *
+	 * @param   integer   $mr  The new max retries limit
+	 * @return  Wikimate       This object
+	 */
+	public function setMaxretries($mr)
+	{
+		$this->maxretries = (int)$mr;
+		return $this;
 	}
 
 	/**
@@ -363,13 +505,12 @@ class Wikimate
 	public function query($array)
 	{
 		$array['action'] = 'query';
-		$array['format'] = 'json';
 
 		if ($this->debugMode) {
 			echo "query GET parameters:\n";
 			echo http_build_query($array) . "\n";
 		}
-		$apiResult = $this->session->get($this->api.'?'.http_build_query($array));
+		$apiResult = $this->request($array);
 
 		if ($this->debugMode) {
 			echo "query GET response:\n";
@@ -388,13 +529,12 @@ class Wikimate
 	public function parse($array)
 	{
 		$array['action'] = 'parse';
-		$array['format'] = 'json';
 
 		if ($this->debugMode) {
 			echo "parse GET parameters:\n";
 			echo http_build_query($array) . "\n";
 		}
-		$apiResult = $this->session->get($this->api.'?'.http_build_query($array));
+		$apiResult = $this->request($array);
 
 		if ($this->debugMode) {
 			echo "parse GET response:\n";
@@ -422,14 +562,13 @@ class Wikimate
 		);
 
 		$array['action'] = 'edit';
-		$array['format'] = 'json';
 		$array['token'] = $edittoken;
 
 		if ($this->debugMode) {
 			echo "edit POST parameters:\n";
 			print_r($array);
 		}
-		$apiResult = $this->session->post($this->api, $headers, $array);
+		$apiResult = $this->request($array, $headers, true);
 
 		if ($this->debugMode) {
 			echo "edit POST response:\n";
@@ -457,14 +596,13 @@ class Wikimate
 		);
 
 		$array['action'] = 'delete';
-		$array['format'] = 'json';
 		$array['token'] = $deletetoken;
 
 		if ($this->debugMode) {
 			echo "delete POST parameters:\n";
 			print_r($array);
 		}
-		$apiResult = $this->session->post($this->api, $headers, $array);
+		$apiResult = $this->request($array, $headers, true);
 
 		if ($this->debugMode) {
 			echo "delete POST response:\n";
@@ -512,6 +650,7 @@ class Wikimate
 
 		$array['action'] = 'upload';
 		$array['format'] = 'json';
+		$array['maxlag'] = $this->getMaxlag();
 		$array['token'] = $uploadtoken;
 
 		// Construct multipart body:
@@ -543,7 +682,7 @@ class Wikimate
 			'Content-Length' => strlen($body),
 		);
 
-		$apiResult = $this->session->post($this->api, $headers, $body);
+		$apiResult = $this->request($body, $headers, true);
 
 		if ($this->debugMode) {
 			echo "upload POST response:\n";
