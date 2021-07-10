@@ -1,19 +1,17 @@
 <?php
 /**
- * =============================================================================
  * Wikimate is a wrapper for the MediaWiki API that aims to be very easy to use.
  *
  * @package    Wikimate
  * @version    0.13.0
  * @copyright  SPDX-License-Identifier: MIT
- * =============================================================================
  */
 
 /**
  * Provides an interface over wiki API objects such as pages and files.
  *
  * @author  Robert McLeod & Frans P. de Vries
- * @since   December 2010
+ * @since   0.2  December 2010
  */
 class Wikimate
 {
@@ -132,7 +130,7 @@ class Wikimate
 	 * For now this method, in Wikimate tradition, is kept simple and supports
 	 * only the two token types needed elsewhere in the library.  It also
 	 * doesn't support the option to request multiple tokens at once.
-	 * See https://www.mediawiki.org/wiki/Special:MyLanguage/API:Tokens
+	 * See {@see https://www.mediawiki.org/wiki/Special:MyLanguage/API:Tokens}
 	 * for more information.
 	 *
 	 * @param   string  $type  The token type
@@ -259,7 +257,7 @@ class Wikimate
 	 * Gets the user agent for API requests.
 	 *
 	 * @return  string  The default user agent, or the current one defined
-	 *                  by {@link Wikimate::setUserAgent()}
+	 *                  by {@see Wikimate::setUserAgent()}
 	 */
 	public function getUserAgent()
 	{
@@ -270,7 +268,7 @@ class Wikimate
 	 * Sets the user agent for API requests.
 	 *
 	 * In order to use a custom user agent for all requests in the session,
-	 * call this method before invoking {@link Wikimate::login()}.
+	 * call this method before invoking {@see Wikimate::login()}.
 	 *
 	 * @param   string   $ua  The new user agent
 	 * @return  Wikimate      This object
@@ -568,19 +566,19 @@ class Wikimate
  * Models a wiki article page that can have its text altered and retrieved.
  *
  * @author  Robert McLeod & Frans P. de Vries
- * @since   December 2010
+ * @since   0.2  December 2010
  */
 class WikiPage
 {
 	/**
-	 * Use section indexes as keys in return array of {@link WikiPage::getAllSections()}
+	 * Use section indexes as keys in return array of {@see WikiPage::getAllSections()}
 	 *
 	 * @var integer
 	 */
 	const SECTIONLIST_BY_INDEX = 1;
 
 	/**
-	 * Use section names as keys in return array of {@link WikiPage::getAllSections()}
+	 * Use section names as keys in return array of {@see WikiPage::getAllSections()}
 	 *
 	 * @var integer
 	 */
@@ -668,8 +666,6 @@ class WikiPage
 
 	/**
 	 * Forgets all object properties.
-	 *
-	 * @return  <type>  Destructor
 	 */
 	public function __destruct()
 	{
@@ -681,7 +677,6 @@ class WikiPage
 		$this->starttimestamp = null;
 		$this->text           = null;
 		$this->sections       = null;
-		return null;
 	}
 
 	/**
@@ -1206,7 +1201,7 @@ class WikiPage
  * All properties pertain to the current revision of the file.
  *
  * @author  Robert McLeod & Frans P. de Vries
- * @since   October 2016
+ * @since   0.12.0  October 2016
  */
 class WikiFile
 {
@@ -1287,8 +1282,6 @@ class WikiFile
 
 	/**
 	 * Forgets all object properties.
-	 *
-	 * @return  <type>  Destructor
 	 */
 	public function __destruct()
 	{
@@ -1299,7 +1292,6 @@ class WikiFile
 		$this->error    = null;
 		$this->info     = null;
 		$this->history  = null;
-		return null;
 	}
 
 	/**
@@ -1926,7 +1918,7 @@ class WikiFile
 	 * The maximum limit is 500 for user accounts and 5000 for bot accounts.
 	 *
 	 * Timestamps can be in several formats as described here:
-	 * https://www.mediawiki.org/w/api.php?action=help&modules=main#main.2Fdatatypes
+	 * {@see https://www.mediawiki.org/w/api.php?action=help&modules=main#main.2Fdatatypes}
 	 *
 	 * @param   boolean  $refresh  True to query the wiki API again
 	 * @param   integer  $limit    The number of file revisions to return
