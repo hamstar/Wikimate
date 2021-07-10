@@ -1,19 +1,17 @@
 <?php
 /**
- * =============================================================================
  * Wikimate is a wrapper for the MediaWiki API that aims to be very easy to use.
  *
  * @package    Wikimate
  * @version    0.13.0
  * @copyright  SPDX-License-Identifier: MIT
- * =============================================================================
  */
 
 /**
  * Provides an interface over wiki API objects such as pages and files.
  *
  * @author  Robert McLeod & Frans P. de Vries
- * @since   December 2010
+ * @since   0.2  December 2010
  */
 class Wikimate
 {
@@ -568,7 +566,7 @@ class Wikimate
  * Models a wiki article page that can have its text altered and retrieved.
  *
  * @author  Robert McLeod & Frans P. de Vries
- * @since   December 2010
+ * @since   0.2  December 2010
  */
 class WikiPage
 {
@@ -1203,7 +1201,7 @@ class WikiPage
  * All properties pertain to the current revision of the file.
  *
  * @author  Robert McLeod & Frans P. de Vries
- * @since   October 2016
+ * @since   0.12.0  October 2016
  */
 class WikiFile
 {
