@@ -12,7 +12,7 @@
  *
  * All requests to the API can throw an exception if the server is lagged
  * and a finite number of retries is exhausted.  By default requests are
- * tried indefinitely.  See {@see Wikimate::request()} for more information.
+ * retried indefinitely.  See {@see Wikimate::request()} for more information.
  *
  * @author  Robert McLeod & Frans P. de Vries
  * @since   0.2  December 2010
@@ -114,7 +114,7 @@ class Wikimate
 	protected $maxlag = self::MAXLAG_DEFAULT;
 
 	/**
-	 * Maximum number of retries for lagged requests (-1 = indefinitely)
+	 * Maximum number of retries for lagged requests (-1 = retry indefinitely)
 	 *
 	 * @var integer
 	 */
@@ -157,11 +157,12 @@ class Wikimate
 	 *
 	 * This method handles maxlag errors as advised at:
 	 * {@see https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Maxlag_parameter)
-	 * The request is sent with the current maxlag value (default 5 seconds).
+	 * The request is sent with the current maxlag value
+	 * (default: 5 seconds, per MAXLAG_DEFAULT).
 	 * If a lag error is received, the method waits (sleeps) for the
 	 * recommended time (per the Retry-After header), then tries again.
 	 * It will do this indefinitely unless the number of retries is limited,
-	 * in which case an exception is thrown.
+	 * in which case an exception is thrown once the limit is reached.
 	 *
 	 * The string type for $data is used only for upload POST requests,
 	 * and must contain the complete multipart body, including maxlag.
@@ -202,7 +203,7 @@ class Wikimate
 
 				if ($this->debugMode) {
 					preg_match('/Waiting for [^ ]*: ([0-9.-]+) seconds? lagged/', $response->body, $match);
-					echo "Server lagged for {$match[1]} seconds; retry in {$sleep} seconds\n";
+					echo "Server lagged for {$match[1]} seconds; will retry in {$sleep} seconds\n";
 				}
 				sleep($sleep);
 
@@ -210,7 +211,7 @@ class Wikimate
 				if ($this->getMaxretries() >= 0) {
 					$retries++;
 				} else {
-					$retries == -1; // continue indefinitely
+					$retries = -1; // continue indefinitely
 				}
 			}
 		} while ($server_lagged && $retries <= $this->getMaxretries());
@@ -352,7 +353,7 @@ class Wikimate
 	}
 
 	/**
-	 * Gets the current value for the maxlag parameter.
+	 * Gets the current value of the maxlag parameter.
 	 *
 	 * @return  integer  The maxlag value in seconds
 	 */
@@ -362,7 +363,7 @@ class Wikimate
 	}
 
 	/**
-	 * Sets the new value for the maxlag parameter.
+	 * Sets the new value of the maxlag parameter.
 	 *
 	 * @param   integer   $ml  The new maxlag value in seconds
 	 * @return  Wikimate       This object
@@ -374,7 +375,7 @@ class Wikimate
 	}
 
 	/**
-	 * Gets the current value for the max retries limit.
+	 * Gets the current value of the max retries limit.
 	 *
 	 * @return  integer  The max retries limit
 	 */
@@ -384,7 +385,7 @@ class Wikimate
 	}
 
 	/**
-	 * Sets the new value for the max retries limit.
+	 * Sets the new value of the max retries limit.
 	 *
 	 * @param   integer   $mr  The new max retries limit
 	 * @return  Wikimate       This object
