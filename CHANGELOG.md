@@ -17,6 +17,7 @@ Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/) 
 #### Fixed
 
 * Removed null returns from destructors & fixed PHPDoc comments ([#114])
+* Fixed sections object initialization warning in PHP 7.4+ ([#118])
 
 ### Version 0.13.0 - 2021-07-05
 
@@ -130,3 +131,4 @@ Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/) 
 [#109]: https://github.com/hamstar/Wikimate/pull/109
 [#111]: https://github.com/hamstar/Wikimate/pull/111
 [#114]: https://github.com/hamstar/Wikimate/pull/114
+[#118]: https://github.com/hamstar/Wikimate/pull/118

@@ -657,6 +657,7 @@ class WikiPage
 	{
 		$this->wikimate = $wikimate;
 		$this->title    = $title;
+		$this->sections = new stdClass();
 		$this->text     = $this->getText(true);
 
 		if ($this->invalid) {
