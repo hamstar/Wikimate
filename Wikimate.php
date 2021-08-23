@@ -3,7 +3,7 @@
  * Wikimate is a wrapper for the MediaWiki API that aims to be very easy to use.
  *
  * @package    Wikimate
- * @version    0.13.0
+ * @version    0.14.0
  * @copyright  SPDX-License-Identifier: MIT
  */
 
@@ -25,7 +25,7 @@ class Wikimate
 	 * @var string
 	 * @link https://semver.org/
 	 */
-	const VERSION = '0.13.0';
+	const VERSION = '0.14.0';
 
 	/**
 	 * Identifier for CSRF token
