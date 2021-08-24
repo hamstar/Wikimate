@@ -4,6 +4,10 @@ Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/) 
 
 ### Upcoming version
 
+No changes yet.
+
+### Version 0.14.0 - 2021-08-24
+
 #### Added
 
 * Support for the maxlag parameter (with retries) in API requests ([#112])
