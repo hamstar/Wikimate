@@ -122,6 +122,15 @@ class Wikimate
 	protected $maxretries = -1;
 
 	/**
+	 * Stored CSRF token for API requests
+	 *
+	 * @var string|null
+	 * @link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Tokens
+	 * @link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Edit#Additional_notes
+	 */
+	private $csrf_token = null;
+
+	/**
 	 * Creates a new Wikimate object.
 	 *
 	 * @param   string    $api      Base URL for the API
@@ -229,6 +238,9 @@ class Wikimate
 
 	/**
 	 * Obtains a wiki token for logging in or data-modifying actions.
+	 *
+	 * If a CSRF (default) token is requested, it is stored and returned
+	 * upon further such requests, instead of making another API call.
 	 * For now this method, in Wikimate tradition, is kept simple and supports
 	 * only the two token types needed elsewhere in the library.  It also
 	 * doesn't support the option to request multiple tokens at once.
@@ -245,6 +257,11 @@ class Wikimate
 			$this->error = array();
 			$this->error['token'] = 'The API does not support the token type';
 			return false;
+		}
+
+		// Check for existing CSRF token for this login session
+		if ($type == self::TOKEN_DEFAULT && $this->csrf_token !== null) {
+			return $this->csrf_token;
 		}
 
 		$details = array(
@@ -281,7 +298,9 @@ class Wikimate
 		if ($type == self::TOKEN_LOGIN) {
 			return $tokenResult['query']['tokens']['logintoken'];
 		} else {
-			return $tokenResult['query']['tokens']['csrftoken'];
+			// Store CSRF token for this login session
+			$this->csrf_token = $tokenResult['query']['tokens']['csrftoken'];
+			return $this->csrf_token;
 		}
 	}
 
