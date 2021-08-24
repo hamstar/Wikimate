@@ -248,7 +248,7 @@ class Wikimate
 	 * for more information.
 	 *
 	 * @param   string  $type  The token type
-	 * @return  string         The requested token
+	 * @return  mixed          The requested token (string), or null if error
 	 */
 	protected function token($type = self::TOKEN_DEFAULT)
 	{
@@ -256,7 +256,7 @@ class Wikimate
 		if ($type != self::TOKEN_DEFAULT && $type != self::TOKEN_LOGIN) {
 			$this->error = array();
 			$this->error['token'] = 'The API does not support the token type';
-			return false;
+			return null;
 		}
 
 		// Check for existing CSRF token for this login session
@@ -277,7 +277,7 @@ class Wikimate
 		if (strpos($response->body, "This is an auto-generated MediaWiki API documentation page") !== false) {
 			$this->error = array();
 			$this->error['token'] = 'The API could not understand the token request';
-			return false;
+			return null;
 		}
 
 		$tokenResult = json_decode($response->body, true);
@@ -285,7 +285,7 @@ class Wikimate
 		if ($tokenResult === null) {
 			$this->error = array();
 			$this->error['token'] = 'The API did not return the token response';
-			return false;
+			return null;
 		}
 
 		if ($this->debugMode) {
@@ -316,7 +316,7 @@ class Wikimate
 	public function login($username, $password, $domain = null)
 	{
 		// Obtain login token first
-		if (($logintoken = $this->token(self::TOKEN_LOGIN)) === false) {
+		if (($logintoken = $this->token(self::TOKEN_LOGIN)) === null) {
 			return false;
 		}
 
@@ -576,7 +576,7 @@ class Wikimate
 	public function edit($array)
 	{
 		// Obtain default token first
-		if (($edittoken = $this->token()) === false) {
+		if (($edittoken = $this->token()) === null) {
 			return false;
 		}
 
@@ -610,7 +610,7 @@ class Wikimate
 	public function delete($array)
 	{
 		// Obtain default token first
-		if (($deletetoken = $this->token()) === false) {
+		if (($deletetoken = $this->token()) === null) {
 			return false;
 		}
 
@@ -667,7 +667,7 @@ class Wikimate
 	public function upload($array)
 	{
 		// Obtain default token first
-		if (($uploadtoken = $this->token()) === false) {
+		if (($uploadtoken = $this->token()) === null) {
 			return false;
 		}
 
