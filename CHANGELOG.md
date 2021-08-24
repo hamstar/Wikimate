@@ -4,7 +4,9 @@ Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/) 
 
 ### Upcoming version
 
-No changes yet.
+#### Fixed
+
+* Fixed format of user agent string ([#121])
 
 ### Version 0.14.0 - 2021-08-24
 
@@ -138,3 +140,4 @@ No changes yet.
 [#112]: https://github.com/hamstar/Wikimate/pull/112
 [#114]: https://github.com/hamstar/Wikimate/pull/114
 [#118]: https://github.com/hamstar/Wikimate/pull/118
+[#121]: https://github.com/hamstar/Wikimate/pull/121

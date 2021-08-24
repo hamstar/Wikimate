@@ -88,6 +88,7 @@ class Wikimate
 	 *
 	 * @var string
 	 * @link https://requests.ryanmccue.info/docs/usage-advanced.html#session-handling
+	 * @link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Etiquette#The_User-Agent_header
 	 */
 	protected $useragent;
 
@@ -143,10 +144,12 @@ class Wikimate
 	 * Sets up a Requests_Session with appropriate user agent.
 	 *
 	 * @return  void
+	 * @link https://requests.ryanmccue.info/docs/usage-advanced.html#session-handling
+	 * @link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Etiquette#The_User-Agent_header
 	 */
 	protected function initRequests()
 	{
-		$this->useragent = 'Wikimate '.self::VERSION.' (https://github.com/hamstar/Wikimate)';
+		$this->useragent = 'Wikimate/'.self::VERSION.' (https://github.com/hamstar/Wikimate)';
 
 		$this->session = new Requests_Session($this->api, $this->headers, $this->data, $this->options);
 		$this->session->useragent = $this->useragent;
@@ -401,6 +404,7 @@ class Wikimate
 	 *
 	 * @return  string  The default user agent, or the current one defined
 	 *                  by {@see Wikimate::setUserAgent()}
+	 * @link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Etiquette#The_User-Agent_header
 	 */
 	public function getUserAgent()
 	{
@@ -415,6 +419,7 @@ class Wikimate
 	 *
 	 * @param   string   $ua  The new user agent
 	 * @return  Wikimate      This object
+	 * @link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Etiquette#The_User-Agent_header
 	 */
 	public function setUserAgent($ua)
 	{
