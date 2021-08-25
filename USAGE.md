@@ -341,7 +341,7 @@ Both methods return an array of the MediaWiki API result.
 API requests are made over HTTP with a user agent string to identify
 the client to the server. By default the user agent is formatted as:
 
-`Wikimate <VERSION> (https://github.com/hamstar/Wikimate)`
+`Wikimate/<VERSION> (https://github.com/hamstar/Wikimate)`
 
 The string can be retrieved and customized via:
 
@@ -363,7 +363,8 @@ print_r($page->getError());
 ```
 
 For MediaWiki API errors, the array contains the 'code' and 'info' key/value pairs [defined by the API](https://www.mediawiki.org/wiki/Special:MyLanguage/API:Errors_and_warnings#Errors).  For other errors, the following key/value pairs are returned:
-* 'login' for Wikimate authentication problems
+* 'login' for Wikimate authentication problems <!-- TODO: remove after changing login() to use the 'auth' code too -->
+* 'auth' for Wikimate authentication problems
 * 'token' for Wikimate token problems
 * 'page' for WikiPage errors
 * 'file' for WikiFile errors
