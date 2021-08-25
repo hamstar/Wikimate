@@ -298,13 +298,15 @@ $file = $wiki->getFile('Old-button.png');
 $file->delete('The button was superseded by a new one');
 ```
 
-To delete a specific older revision of the file, the archive name is needed:
+To delete or revert to a specific older revision of the file, the archive name is needed:
 
 ```php
 $file = $wiki->getFile('Often-changed-file.zip');
 $history = $file->getHistory(true);
 $archivename = $file->getArchivename(3);
 $file->delete('This was an inadvertent release', $archivename);
+$archivename = $file->getArchivename(1);
+$file->revert($archivename, 'Revert to the previous release');
 ```
 
 ### Other stuff
@@ -360,7 +362,7 @@ Did something go wrong?  Check the error array:
 print_r($page->getError());
 ```
 
-For MediaWiki API errors, the array contains the 'code' and 'info' key/value pairs [defined by the API](https://www.mediawiki.org/wiki/API:Errors_and_warnings#Errors).  For other errors, the following key/value pairs are returned:
+For MediaWiki API errors, the array contains the 'code' and 'info' key/value pairs [defined by the API](https://www.mediawiki.org/wiki/Special:MyLanguage/API:Errors_and_warnings#Errors).  For other errors, the following key/value pairs are returned:
 * 'login' for Wikimate authentication problems
 * 'token' for Wikimate token problems
 * 'page' for WikiPage errors
