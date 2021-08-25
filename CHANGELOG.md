@@ -8,6 +8,7 @@ Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/) 
 
 * New methods `WikiFile::revert()` and `Wikimate::filerevert()` ([#123])
 * New method `Wikimate::logout()` ([#124])
+* Added post-release update steps to GOVERNANCE.md ([#125])
 
 #### Changed
 
@@ -153,3 +154,4 @@ Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/) 
 [#122]: https://github.com/hamstar/Wikimate/pull/122
 [#123]: https://github.com/hamstar/Wikimate/pull/123
 [#124]: https://github.com/hamstar/Wikimate/pull/124
+[#125]: https://github.com/hamstar/Wikimate/pull/125
