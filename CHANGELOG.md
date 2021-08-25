@@ -4,6 +4,10 @@ Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/) 
 
 ### Upcoming version
 
+#### Added
+
+* New methods `WikiFile::revert()` and `Wikimate::filerevert()` ([#123])
+
 #### Changed
 
 * Updated `Wikimate::token()` to remember CSRF token and reduce API calls ([#122])
@@ -146,3 +150,4 @@ Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/) 
 [#118]: https://github.com/hamstar/Wikimate/pull/118
 [#121]: https://github.com/hamstar/Wikimate/pull/121
 [#122]: https://github.com/hamstar/Wikimate/pull/122
+[#123]: https://github.com/hamstar/Wikimate/pull/123

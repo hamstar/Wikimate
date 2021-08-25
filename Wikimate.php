@@ -715,6 +715,40 @@ class Wikimate
 	}
 
 	/**
+	 * Performs a file revert query to the wiki API.
+	 *
+	 * @param   array  $array  Array of details to be passed in the query
+	 * @return  array          Decoded JSON output from the wiki API
+	 * @link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Filerevert
+	 */
+	public function filerevert($array)
+	{
+		// Obtain default token first
+		if (($reverttoken = $this->token()) === null) {
+			return false;
+		}
+
+		$array['action'] = 'filerevert';
+		$array['token'] = $reverttoken;
+
+		$headers = array(
+			'Content-Type' => "application/x-www-form-urlencoded"
+		);
+
+		if ($this->debugMode) {
+			echo "filerevert POST parameters:\n";
+			echo http_build_query($array) . "\n";
+		}
+		$apiResult = $this->request($array, $headers, true);
+
+		if ($this->debugMode) {
+			echo "filerevert POST response:\n";
+			print_r(json_decode($apiResult->body, true));
+		}
+		return json_decode($apiResult->body, true);
+	}
+
+	/**
 	 * Returns the latest error if there is one.
 	 *
 	 * @return  mixed  The error array, or null if no error
@@ -2213,6 +2247,37 @@ class WikiFile
 				$this->exists = false; // The file was deleted altogether
 			}
 
+			$this->error = null; // Reset the error status
+			return true;
+		}
+
+		$this->error = $r['error']; // Return error response
+		return false;
+	}
+
+	/**
+	 * Reverts file to an older revision.
+	 *
+	 * @param   string   $archivename  The archive name of the older revision
+	 * @param   string   $reason       Reason for the revert
+	 * @return  boolean                True if reverting was successful
+	 * @link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Filerevert
+	 */
+	public function revert($archivename, $reason = null)
+	{
+		// Set options from arguments
+		$data = array(
+			'filename' => $this->filename,
+			'archivename' => $archivename,
+		);
+		if (!is_null($reason)) {
+			$data['comment'] = $reason;
+		}
+
+		$r = $this->wikimate->filerevert($data); // The revert query
+
+		// Check if it worked
+		if (isset($r['filerevert']['result']) && $r['filerevert']['result'] == 'Success') {
 			$this->error = null; // Reset the error status
 			return true;
 		}
