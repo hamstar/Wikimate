@@ -53,3 +53,7 @@ The version tag and the title of the release notes should be in the format v1.2.
 to determine which part of the version number to increase).
 The body of the release notes should be a summary of the contents
 of the relevant section in `CHANGELOG.md`.
+
+Finally, update the Wikimate entry on [Packagist](https://packagist.org/packages/hamstar/wikimate) (via the "Update Now" link in the right sidebar)
+and the corresponding row in the [PHP libraries table](https://www.mediawiki.org/wiki/API:Client_code/All#PHP) on MediaWiki.org,
+along with Wikipedia's [PHP bot framework table](https://en.wikipedia.org/wiki/Wikipedia:PHP_bot_framework_table) if applicable.
