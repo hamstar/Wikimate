@@ -4,6 +4,10 @@ Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/) 
 
 ### Upcoming version
 
+#### Changed
+
+* Updated `Wikimate::token()` to remember CSRF token and reduce API calls ([#122])
+
 #### Fixed
 
 * Fixed format of user agent string ([#121])
@@ -141,3 +145,4 @@ Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/) 
 [#114]: https://github.com/hamstar/Wikimate/pull/114
 [#118]: https://github.com/hamstar/Wikimate/pull/118
 [#121]: https://github.com/hamstar/Wikimate/pull/121
+[#122]: https://github.com/hamstar/Wikimate/pull/122
