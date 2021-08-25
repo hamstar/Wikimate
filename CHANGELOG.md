@@ -7,6 +7,7 @@ Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/) 
 #### Added
 
 * New methods `WikiFile::revert()` and `Wikimate::filerevert()` ([#123])
+* New method `Wikimate::logout()` ([#124])
 
 #### Changed
 
@@ -151,3 +152,4 @@ Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/) 
 [#121]: https://github.com/hamstar/Wikimate/pull/121
 [#122]: https://github.com/hamstar/Wikimate/pull/122
 [#123]: https://github.com/hamstar/Wikimate/pull/123
+[#124]: https://github.com/hamstar/Wikimate/pull/124

@@ -241,6 +241,8 @@ class Wikimate
 	 *
 	 * If a CSRF (default) token is requested, it is stored and returned
 	 * upon further such requests, instead of making another API call.
+	 * The stored token is discarded via {@see Wikimate::logout()}.
+	 *
 	 * For now this method, in Wikimate tradition, is kept simple and supports
 	 * only the two token types needed elsewhere in the library.  It also
 	 * doesn't support the option to request multiple tokens at once.
@@ -371,6 +373,56 @@ class Wikimate
 			return false;
 		}
 
+		return true;
+	}
+
+	/**
+	 * Logs out of the wiki and discard CSRF token.
+	 *
+	 * @return  boolean  True if logged out
+	 * @link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Logout
+	 */
+	public function logout()
+	{
+		// Obtain logout token first
+		if (($logouttoken = $this->token()) === null) {
+			return false;
+		}
+
+		// Token is needed in MediaWiki v1.34+, older versions produce an
+		// 'Unrecognized parameter' warning which can be ignored
+		$details = array(
+			'action' => 'logout',
+			'token' => $logouttoken,
+		);
+
+		// Send the logout request
+		$response = $this->request($details, array(), true);
+
+		// Check if we got an API result or the API doc page (invalid request)
+		if (strpos($response->body, "This is an auto-generated MediaWiki API documentation page") !== false) {
+			$this->error = array();
+			$this->error['auth'] = 'The API could not understand the logout request';
+			return false;
+		}
+
+		$logoutResult = json_decode($response->body, true);
+		// Check if we got a JSON result
+		if ($logoutResult === null) {
+			$this->error = array();
+			$this->error['auth'] = 'The API did not return the logout response';
+			return false;
+		}
+
+		if ($this->debugMode) {
+			echo "Logout request:\n";
+			print_r($details);
+			echo "Logout response:\n";
+			print_r($logoutResult);
+		}
+
+		// Discard CSRF token for this login session
+		$this->csrf_token = null;
 		return true;
 	}
 
