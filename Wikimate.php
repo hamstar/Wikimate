@@ -1308,7 +1308,7 @@ class WikiPage
 			// Check for errors
 			if (isset($r['error'])) {
 				$this->error = $r['error']; // Set the error if there was one
-				return null;
+				return false;
 			} else {
 				$this->error = null; // Reset the error status
 			}

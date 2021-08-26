@@ -16,6 +16,10 @@ and may require changes in applications that invoke these methods:_
 
 * Error return values for `WikiPage::getSection()` changed from `false` to `null` ([#129])
 
+#### Fixed
+
+* Fixed one error return value in `WikiPage::setText()` ([#129])
+
 #### Removed
 
 * Method `Wikimate::debugCurlConfig()`, deprecated since v0.10.0 ([#128])
