@@ -5,6 +5,11 @@ and [Keep a Changelog](http://keepachangelog.com/).
 
 ### Upcoming version
 
+#### Changed
+
+* Added additional context to README.md ([#127])
+* Added semi-linear merge recommendation to GOVERNANCE.md ([#130])
+
 #### Removed
 
 * Method `Wikimate::debugCurlConfig()`, deprecated since v0.10.0 ([#128])
@@ -162,4 +167,6 @@ and [Keep a Changelog](http://keepachangelog.com/).
 [#123]: https://github.com/hamstar/Wikimate/pull/123
 [#124]: https://github.com/hamstar/Wikimate/pull/124
 [#125]: https://github.com/hamstar/Wikimate/pull/125
+[#127]: https://github.com/hamstar/Wikimate/pull/127
 [#128]: https://github.com/hamstar/Wikimate/pull/128
+[#130]: https://github.com/hamstar/Wikimate/pull/130
