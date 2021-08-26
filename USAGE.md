@@ -17,10 +17,10 @@
 
 ### Introduction
 
-In your script file (e.g. `index.php`), include the `globals.php` file,
+In your script file (e.g. `index.php`), include Wikimate's `globals.php` file,
 and create a new `Wikimate` object with the target wiki's API address.
 Then provide a username and password to Wikimate's `login` method,
-to login to that wiki.
+to log in to that wiki.
 
 ```php
 include 'globals.php';
@@ -48,7 +48,7 @@ Instead of using echo statements, you can enable/disable debugging
 with the `$wiki->debugMode($boolean)` method.
 Currently only output from the logon process is printed for debugging.
 
-Assuming you were able to login, you're now ready to fully use the API.
+Assuming you were able to log in, you're now ready to fully use the API.
 The next sections provide example code for several common tasks.
 
 ### Getting a page object
