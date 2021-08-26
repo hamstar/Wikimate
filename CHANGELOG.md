@@ -5,7 +5,9 @@ and [Keep a Changelog](http://keepachangelog.com/).
 
 ### Upcoming version
 
-No changes yet.
+#### Removed
+
+* Method `Wikimate::debugCurlConfig()`, deprecated since v0.10.0 ([#128])
 
 ### Version 0.15.0 - 2021-08-26
 
@@ -160,3 +162,4 @@ No changes yet.
 [#123]: https://github.com/hamstar/Wikimate/pull/123
 [#124]: https://github.com/hamstar/Wikimate/pull/124
 [#125]: https://github.com/hamstar/Wikimate/pull/125
+[#128]: https://github.com/hamstar/Wikimate/pull/128
