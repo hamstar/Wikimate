@@ -1145,20 +1145,20 @@ class WikiPage
 	 *                                        true to include heading too
 	 * @param   boolean  $includeSubsections  False to get section text only,
 	 *                                        true to include subsections too
-	 * @return  string                        Wikitext of the section on the page,
-	 *                                        or false if section is undefined
+	 * @return  mixed                         Wikitext of the section on the page,
+	 *                                        or null if section is undefined
 	 */
 	public function getSection($section, $includeHeading = false, $includeSubsections = true)
 	{
 		// Check if we have a section name or index
 		if (is_int($section)) {
 			if (!isset($this->sections->byIndex[$section])) {
-				return false;
+				return null;
 			}
 			$coords = $this->sections->byIndex[$section];
 		} else if (is_string($section)) {
 			if (!isset($this->sections->byName[$section])) {
-				return false;
+				return null;
 			}
 			$coords = $this->sections->byName[$section];
 		}
@@ -1308,7 +1308,7 @@ class WikiPage
 			// Check for errors
 			if (isset($r['error'])) {
 				$this->error = $r['error']; // Set the error if there was one
-				return null;
+				return false;
 			} else {
 				$this->error = null; // Reset the error status
 			}

@@ -11,6 +11,15 @@ and [Keep a Changelog](http://keepachangelog.com/).
 * Added semi-linear merge recommendation to GOVERNANCE.md ([#130])
 * Added GitHub Action to enforce updates to CHANGELOG.md ([#131])
 
+_The following entry is a backwards incompatible API change
+and may require changes in applications that invoke these methods:_
+
+* Error return values for `WikiPage::getSection()` changed from `false` to `null` ([#129])
+
+#### Fixed
+
+* Fixed one error return value in `WikiPage::setText()` ([#129])
+
 #### Removed
 
 * Method `Wikimate::debugCurlConfig()`, deprecated since v0.10.0 ([#128])
@@ -170,5 +179,6 @@ and [Keep a Changelog](http://keepachangelog.com/).
 [#125]: https://github.com/hamstar/Wikimate/pull/125
 [#127]: https://github.com/hamstar/Wikimate/pull/127
 [#128]: https://github.com/hamstar/Wikimate/pull/128
+[#129]: https://github.com/hamstar/Wikimate/pull/129
 [#130]: https://github.com/hamstar/Wikimate/pull/130
 [#131]: https://github.com/hamstar/Wikimate/pull/131
