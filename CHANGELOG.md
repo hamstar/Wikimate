@@ -9,6 +9,7 @@ and [Keep a Changelog](http://keepachangelog.com/).
 
 * Added additional context to README.md ([#127])
 * Added semi-linear merge recommendation to GOVERNANCE.md ([#130])
+* Added GitHub Action to enforce updates to CHANGELOG.md ([#131])
 
 #### Removed
 
@@ -170,3 +171,4 @@ and [Keep a Changelog](http://keepachangelog.com/).
 [#127]: https://github.com/hamstar/Wikimate/pull/127
 [#128]: https://github.com/hamstar/Wikimate/pull/128
 [#130]: https://github.com/hamstar/Wikimate/pull/130
+[#131]: https://github.com/hamstar/Wikimate/pull/131
