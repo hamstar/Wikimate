@@ -513,22 +513,6 @@ class Wikimate
 	}
 
 	/**
-	 * Used to return or print the curl settings, but now prints an error and
-	 * returns Wikimate::debugRequestsConfig().
-	 *
-	 * @deprecated                  Since version 0.10.0
-	 * @param       boolean  $echo  True to echo the configuration
-	 * @return      mixed           Array of config if $echo is false, (boolean) true if echo is true
-	 */
-	public function debugCurlConfig($echo = false)
-	{
-		if ($echo) {
-			echo "ERROR: Curl is no longer used by Wikimate.\n";
-		}
-		return $this->debugRequestsConfig($echo);
-	}
-
-	/**
 	 * Gets or prints the Requests configuration.
 	 *
 	 * @param   boolean  $echo  Whether to echo the options
