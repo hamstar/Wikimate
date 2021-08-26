@@ -515,9 +515,9 @@ class Wikimate
 	/**
 	 * Gets or prints the Requests configuration.
 	 *
-	 * @param   boolean  $echo  Whether to echo the options
-	 * @return  array           Options if $echo is false
-	 * @return  boolean         True if options have been echoed to STDOUT
+	 * @param   boolean  $echo  Whether to echo the session options and headers
+	 * @return  mixed           Options array if $echo is false, or
+	 *                          True if options/headers have been echoed to STDOUT
 	 */
 	public function debugRequestsConfig($echo = false)
 	{
