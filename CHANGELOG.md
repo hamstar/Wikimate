@@ -1,8 +1,13 @@
 ## Changelog
 
-Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/) and [Keep a Changelog](http://keepachangelog.com/).
+Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/)
+and [Keep a Changelog](http://keepachangelog.com/).
 
 ### Upcoming version
+
+No changes yet.
+
+### Version 0.15.0 - 2021-08-26
 
 #### Added
 
