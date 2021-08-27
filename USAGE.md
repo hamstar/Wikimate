@@ -127,7 +127,7 @@ Array
 )
 ```
 
-An Exception is thrown if an unsupported value is supplied for the $keyNames parameter.
+An `UnexpectedValueException` is thrown if an unsupported value is supplied for the `$keyNames` parameter.
 
 #### Writing...
 
