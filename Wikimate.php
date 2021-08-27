@@ -340,7 +340,7 @@ class Wikimate
 		// Check if we got an API result or the API doc page (invalid request)
 		if (strpos($response->body, "This is an auto-generated MediaWiki API documentation page") !== false) {
 			$this->error = array();
-			$this->error['login'] = 'The API could not understand the login request';
+			$this->error['auth'] = 'The API could not understand the login request';
 			return false;
 		}
 
@@ -348,7 +348,7 @@ class Wikimate
 		// Check if we got a JSON result
 		if ($loginResult === null) {
 			$this->error = array();
-			$this->error['login'] = 'The API did not return the login response';
+			$this->error['auth'] = 'The API did not return the login response';
 			return false;
 		}
 
@@ -364,10 +364,10 @@ class Wikimate
 			$this->error = array();
 			switch ($loginResult['login']['result']) {
 				case 'Failed':
-					$this->error['login'] = 'Incorrect username or password';
+					$this->error['auth'] = 'Incorrect username or password';
 					break;
 				default:
-					$this->error['login'] = 'The API result was: ' . $loginResult['login']['result'];
+					$this->error['auth'] = 'The API result was: ' . $loginResult['login']['result'];
 					break;
 			}
 			return false;
