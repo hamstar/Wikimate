@@ -37,7 +37,7 @@ if ($wiki->login($username, $password))
 	echo 'Success: user logged in.' ;
 else {
 	$error = $wiki->getError();
-	echo "<b>Wikimate error</b>: ".$error['login'];
+	echo "<b>Wikimate error</b>: ".$error['auth'];
 }
 ```
 
@@ -360,11 +360,11 @@ Did something go wrong?  Check the error array:
 
 ```php
 print_r($page->getError());
+print_r($file->getError());
 ```
 
 For MediaWiki API errors, the array contains the 'code' and 'info' key/value pairs [defined by the API](https://www.mediawiki.org/wiki/Special:MyLanguage/API:Errors_and_warnings#Errors).  For other errors, the following key/value pairs are returned:
-* 'login' for Wikimate authentication problems <!-- TODO: remove after changing login() to use the 'auth' code too -->
-* 'auth' for Wikimate authentication problems
+* 'auth' for Wikimate authentication (login & logout) problems
 * 'token' for Wikimate token problems
 * 'page' for WikiPage errors
 * 'file' for WikiFile errors
