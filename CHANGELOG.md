@@ -11,10 +11,11 @@ and [Keep a Changelog](http://keepachangelog.com/).
 * Added semi-linear merge recommendation to GOVERNANCE.md ([#130])
 * Added GitHub Action to enforce updates to CHANGELOG.md ([#131])
 
-_The following entry is a backwards incompatible API change
+_The following two entries are backwards incompatible API changes
 and may require changes in applications that invoke these methods:_
 
 * Error return values for `WikiPage::getSection()` changed from `false` to `null` ([#129])
+* `Wikimate::login()` error code `'login'` is now `'auth'`, also used by `logout()` ([#132])
 
 #### Fixed
 
@@ -182,3 +183,4 @@ and may require changes in applications that invoke these methods:_
 [#129]: https://github.com/hamstar/Wikimate/pull/129
 [#130]: https://github.com/hamstar/Wikimate/pull/130
 [#131]: https://github.com/hamstar/Wikimate/pull/131
+[#132]: https://github.com/hamstar/Wikimate/pull/132
