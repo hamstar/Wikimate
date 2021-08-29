@@ -67,6 +67,11 @@ Assuming you were able to log in, you're now ready to fully use the API.
 
 See [USAGE.md](USAGE.md) for detailed example code to perform common tasks.
 
+## Contributing
+
+As an open source project, Wikimate welcomes community contributions.
+Please see [CONTRIBUTING.md](CONTRIBUTING.md) for information on how to contribute.
+
 ## License
 
 This project is licensed under the MIT license.

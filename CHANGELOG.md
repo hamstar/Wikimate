@@ -8,6 +8,7 @@ and [Keep a Changelog](http://keepachangelog.com/).
 #### Added
 
 * Usage documentation about maximum lag and retries ([#134])
+* New `CONTRIBUTING.md` file with contribution guidelines ([#135])
 
 #### Changed
 
@@ -191,3 +192,4 @@ and may require changes in applications that invoke these methods:_
 [#132]: https://github.com/hamstar/Wikimate/pull/132
 [#133]: https://github.com/hamstar/Wikimate/pull/133
 [#134]: https://github.com/hamstar/Wikimate/pull/134
+[#135]: https://github.com/hamstar/Wikimate/pull/135

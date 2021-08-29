@@ -17,21 +17,14 @@ if they would like to help maintaining the repository.
    This allows every change to be validated by at least another maintainer.
    That said, if there's no input by other maintainers in over a week,
    the maintainer who authored the pull request can merge their own PR.
-3. **Pull requests should be limited to a single feature or bugfix.**
-   Unrelated changes should be sent as separate PRs.
-   The exception are minor cleanup changes,
-   which can be included (as a separate commit) in the PR that prompted them.
-4. **Commits should be atomic**
-   (as small as possible while still representing a self-contained set of changes)
-   and have descriptive commit messages.
-5. **Every pull request should include a `CHANGELOG.md` entry**.
-   This makes it much easier to prepare releases,
-   and allows the author of each change to properly summarize it.
-6. **Pull requests should be rebased before merging**.
+3. **Pull requests should be rebased before merging**.
    The merge should be done with the "Create a merge commit" option.
    This allows preserving individual atomic commits while keeping them grouped per PR,
    while avoiding crossing branches in the git history, which becomes a
    [semi-linear graph](https://devblogs.microsoft.com/devops/pull-requests-with-rebase/#semi-linear-merge).
+
+Note: when creating or handling pull requests,
+make sure their contents follow the [contribution guidelines](CONTRIBUTING.md).
 
 ## Process for releasing a new version of Wikimate
 
