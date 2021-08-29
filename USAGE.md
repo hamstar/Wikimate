@@ -13,6 +13,7 @@
 - [Other stuff](#other-stuff)
   * [Running custom queries](#running-custom-queries)
   * [Customizing the user agent](#customizing-the-user-agent)
+  * [Maximum lag and retries](#maximum-lag-and-retries)
   * [Handling errors](#handling-errors)
 
 ### Introduction
@@ -353,6 +354,18 @@ $wiki->setUserAgent('Custom Prefix - ' . $useragent);
 
 In order to use a custom user agent for all requests in the session,
 call this method before invoking `Wikimate::login()`.
+
+#### Maximum lag and retries
+
+API requests include the [maxlag parameter](https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Maxlag_parameter)
+so they time out when the server's time to respond exceeds the specified lag.
+The default lag is 5 seconds, which can be obtained via `$wiki->getMaxlag()`
+and changed via `$wiki->setMaxlag()`.
+Upon a lag error response,
+the request is [paused](https://www.php.net/manual/en/function.sleep)
+for the number of seconds recommended by the server, and then retried.
+Retries continue indefinitely, unless limited via `$wiki->setMaxretries()`.
+If a limited number of retries runs out, `WikimateException` is thrown.
 
 #### Handling errors
 
