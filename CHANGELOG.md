@@ -5,6 +5,10 @@ and [Keep a Changelog](http://keepachangelog.com/).
 
 ### Upcoming version
 
+#### Added
+
+* Usage documentation about maximum lag and retries ([#134])
+
 #### Changed
 
 * Added additional context to README.md ([#127])
@@ -186,3 +190,4 @@ and may require changes in applications that invoke these methods:_
 [#131]: https://github.com/hamstar/Wikimate/pull/131
 [#132]: https://github.com/hamstar/Wikimate/pull/132
 [#133]: https://github.com/hamstar/Wikimate/pull/133
+[#134]: https://github.com/hamstar/Wikimate/pull/134
