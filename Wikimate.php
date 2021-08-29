@@ -891,7 +891,7 @@ class WikiPage
 	{
 		$this->wikimate = $wikimate;
 		$this->title    = $title;
-		$this->sections = new stdClass();
+		$this->sections = new \stdClass();
 		$this->text     = $this->getText(true);
 
 		if ($this->invalid) {
@@ -1206,7 +1206,7 @@ class WikiPage
 	 * @param   boolean  $includeHeading  False to get section text only
 	 * @param   integer  $keyNames        Modifier for the array key names
 	 * @return  array                     Array of sections
-	 * @throw   Exception                 If $keyNames is not a supported constant
+	 * @throw   UnexpectedValueException  If $keyNames is not a supported constant
 	 */
 	public function getAllSections($includeHeading = false, $keyNames = self::SECTIONLIST_BY_INDEX)
 	{
@@ -1220,7 +1220,7 @@ class WikiPage
 				$array = array_keys($this->sections->byName);
 				break;
 			default:
-				throw new Exception('Unexpected parameter $keyNames given to WikiPage::getAllSections()');
+				throw new \UnexpectedValueException("Unexpected keyNames parameter ($keyNames) passed to WikiPage::getAllSections()");
 				break;
 		}
 

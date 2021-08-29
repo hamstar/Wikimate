@@ -20,6 +20,7 @@ and may require changes in applications that invoke these methods:_
 #### Fixed
 
 * Fixed one error return value in `WikiPage::setText()` ([#129])
+* Fixed exception type/message for `$keyNames` parameter to `WikiPage::getAllSections()` ([#133])
 
 #### Removed
 
@@ -184,3 +185,4 @@ and may require changes in applications that invoke these methods:_
 [#130]: https://github.com/hamstar/Wikimate/pull/130
 [#131]: https://github.com/hamstar/Wikimate/pull/131
 [#132]: https://github.com/hamstar/Wikimate/pull/132
+[#133]: https://github.com/hamstar/Wikimate/pull/133
