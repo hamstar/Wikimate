@@ -183,7 +183,8 @@ class Wikimate
 	 * @param  array         $headers  Optional extra headers to send with the request
 	 * @param  boolean       $post     True to send a POST request, otherwise GET
 	 * @return Requests_Response       The API response
-	 * @throw  WikimateException       If lagged and ran out of retries
+	 * @throw  WikimateException       If lagged and ran out of retries,
+	 *                                 or got an unexpected API response
 	 */
 	private function request($data, $headers = array(), $post = false)
 	{
@@ -193,7 +194,12 @@ class Wikimate
 		if (is_array($data)) {
 			$data['format'] = 'json';
 			$data['maxlag'] = $this->getMaxlag();
+			$action = $data['action'];
+		} else {
+			$action = 'upload';
 		}
+		// Define type of HTTP request for messages
+		$httptype = $post ? 'POST' : 'GET';
 
 		// Send appropriate type of request, once or multiple times
 		do {
@@ -231,9 +237,20 @@ class Wikimate
 		// Throw exception if we ran out of retries
 		if ($server_lagged) {
 			throw new WikimateException("Server lagged ($retries consecutive maxlag responses)");
-		} else {
-			return $response;
 		}
+
+		// Check if we got the API doc page (invalid request)
+		if (strpos($response->body, "This is an auto-generated MediaWiki API documentation page") !== false) {
+			throw new WikimateException("The API could not understand the $action $httptype request");
+		}
+
+		// Check if we got a JSON result
+		$result = json_decode($response->body, true);
+		if ($result === null) {
+			throw new WikimateException("The API did not return the $action JSON response");
+		}
+
+		return $response;
 	}
 
 	/**
@@ -275,20 +292,7 @@ class Wikimate
 		// Send the token request
 		$response = $this->request($details, array(), true);
 
-		// Check if we got an API result or the API doc page (invalid request)
-		if (strpos($response->body, "This is an auto-generated MediaWiki API documentation page") !== false) {
-			$this->error = array();
-			$this->error['token'] = 'The API could not understand the token request';
-			return null;
-		}
-
 		$tokenResult = json_decode($response->body, true);
-		// Check if we got a JSON result
-		if ($tokenResult === null) {
-			$this->error = array();
-			$this->error['token'] = 'The API did not return the token response';
-			return null;
-		}
 
 		if ($this->debugMode) {
 			echo "Token request:\n";
@@ -337,20 +341,7 @@ class Wikimate
 		// Send the login request
 		$response = $this->request($details, array(), true);
 
-		// Check if we got an API result or the API doc page (invalid request)
-		if (strpos($response->body, "This is an auto-generated MediaWiki API documentation page") !== false) {
-			$this->error = array();
-			$this->error['auth'] = 'The API could not understand the login request';
-			return false;
-		}
-
 		$loginResult = json_decode($response->body, true);
-		// Check if we got a JSON result
-		if ($loginResult === null) {
-			$this->error = array();
-			$this->error['auth'] = 'The API did not return the login response';
-			return false;
-		}
 
 		if ($this->debugMode) {
 			echo "Login request:\n";
@@ -399,20 +390,7 @@ class Wikimate
 		// Send the logout request
 		$response = $this->request($details, array(), true);
 
-		// Check if we got an API result or the API doc page (invalid request)
-		if (strpos($response->body, "This is an auto-generated MediaWiki API documentation page") !== false) {
-			$this->error = array();
-			$this->error['auth'] = 'The API could not understand the logout request';
-			return false;
-		}
-
 		$logoutResult = json_decode($response->body, true);
-		// Check if we got a JSON result
-		if ($logoutResult === null) {
-			$this->error = array();
-			$this->error['auth'] = 'The API did not return the logout response';
-			return false;
-		}
 
 		if ($this->debugMode) {
 			echo "Logout request:\n";
