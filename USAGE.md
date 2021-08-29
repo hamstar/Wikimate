@@ -55,7 +55,8 @@ The next sections provide example code for several common tasks.
 ### Getting a page object
 
 Once logged in you can start playing around with pages.
-If the title given to the WikiPage object is invalid, your `$page` object will be null.
+If the title given to the WikiPage object is invalid,
+your `$page` object will be null.
 
 ```php
 // create a new page object
@@ -84,7 +85,8 @@ $wikiCode = $page->getText();
 $wikiCode = $page->getText(true);
 ```
 
-You can get sections from the page as well, via the section index, or the section heading name:
+You can get sections from the page as well,
+via the section index or the section heading:
 
 ```php
 // get the part between the title and the first section
@@ -128,7 +130,8 @@ Array
 )
 ```
 
-An `UnexpectedValueException` is thrown if an unsupported value is supplied for the `$keyNames` parameter.
+An `UnexpectedValueException` is thrown
+if an unsupported value is supplied for the `$keyNames` parameter.
 
 #### Writing...
 
@@ -181,7 +184,8 @@ you can delete entire pages with `delete()`:
 $page->delete('The page was created accidentally in the first place');
 ```
 
-If you pass in a message argument, it will be recorded as the reason for the deletion.
+If you pass in a message argument,
+it will be recorded as the reason for the deletion.
 
 ### Getting a file object
 
@@ -214,7 +218,8 @@ echo $file->getAspectRatio();
 
 #### Downloading...
 
-You can obtain the data of the file by using the `downloadData()` method and use it in your script, or write it directly to a local file via the `downloadFile()` method.
+You can obtain the data of the file by using the `downloadData()` method and use it in your script,
+or write it directly to a local file via the `downloadFile()` method.
 
 ```php
 $data = $file->downloadData();
@@ -224,11 +229,16 @@ $result = $file->downloadFile('/path/to/sitelogo.png');
 
 #### Uploading...
 
-You can upload data from your script to the file by using the `uploadData()` method, or read it directly from a local file via the `uploadFile()` method. Additionally, uploading from a URL is possible via the `uploadFromUrl()` method.
+You can upload data from your script to the file by using the `uploadData()` method,
+or read it directly from a local file via the `uploadFile()` method.
+Additionally, uploading from a URL is possible via the `uploadFromUrl()` method.
 
-A comment for the file's history must be supplied, and for a new file the text for its associated description page can be provided as well. If no such text is passed, the comment will be used instead.
+A comment for the file's history must be supplied,
+and for a new file the text for its associated description page can be provided as well.
+If no such text is passed, the comment will be used instead.
 
-All upload methods guard against uploading data to an existing file, but allow this when the overwrite flag is set.
+All upload methods guard against uploading data to an existing file,
+but allow this when the overwrite flag is set.
 
 ```php
 // construct image $data for Site-logo.png
@@ -265,7 +275,9 @@ foreach ($history as $revision => $properties) {
 }
 ```
 
-One specific revision can be requested by revision sequence number or by exact timestamp in the current history, as can its archive name.  Invoking `getHistory(true[, ...])` is required before any older revisions can be requested.
+A specific revision can be requested by revision sequence number or by exact timestamp,
+as can its archive name.
+Invoking `getHistory(true[, ...])` is required before any older revisions can be requested.
 
 ```php
 // get the latest 50 revisions
@@ -299,7 +311,8 @@ $file = $wiki->getFile('Old-button.png');
 $file->delete('The button was superseded by a new one');
 ```
 
-To delete or revert to a specific older revision of the file, the archive name is needed:
+To delete or revert to a specific older revision of the file,
+the archive name is needed:
 
 ```php
 $file = $wiki->getFile('Often-changed-file.zip');
@@ -376,7 +389,9 @@ print_r($page->getError());
 print_r($file->getError());
 ```
 
-For MediaWiki API errors, the array contains the 'code' and 'info' key/value pairs [defined by the API](https://www.mediawiki.org/wiki/Special:MyLanguage/API:Errors_and_warnings#Errors).  For other errors, the following key/value pairs are returned:
+For MediaWiki API errors, the array contains the 'code' and 'info' key/value pairs
+[defined by the API](https://www.mediawiki.org/wiki/Special:MyLanguage/API:Errors_and_warnings#Errors).
+For other errors, the following key/value pairs are returned:
 * 'auth' for Wikimate authentication (login & logout) problems
 * 'token' for Wikimate token problems
 * 'page' for WikiPage errors
