@@ -8,7 +8,8 @@ It currently consists of three classes:
 * **WikiFile** – Provides an interface to downloading/uploading files and getting their properties.
 
 The [latest released version](https://github.com/hamstar/Wikimate/releases) of Wikimate
-is v0.15.0, released on Aug 26, 2021. It requires MediaWiki v1.27 or newer.
+is v0.15.0, released on Aug 26, 2021.
+It requires MediaWiki v1.27 or newer.
 See [CHANGELOG.md](CHANGELOG.md) for the detailed version history.
 
 ## Installation
@@ -16,14 +17,14 @@ See [CHANGELOG.md](CHANGELOG.md) for the detailed version history.
 **Requirements: [PHP](https://php.net), and [Composer](https://getcomposer.org).**
 
 Before anything else, since Wikimate is written in PHP, a server-side language,
-you will need to have PHP installed to run it. Install it with your preferred
-package management tool (for example, on Ubuntu Linux you can run:
-`sudo apt-get install php`)
+you will need to have PHP installed to run it.
+Install it with your preferred package management tool
+(for example, on Ubuntu Linux you can run: `sudo apt-get install php`)
 
 Install Composer by following the instructions [here](https://getcomposer.org/doc/00-intro.md).
 
-Then, download Wikimate, and initialise it by running `composer install` (or
-`composer.bat install` if you're on Windows).
+Then, download Wikimate, and initialise it by running `composer install`
+(or `composer.bat install` if you're on Windows).
 
 To use Wikimate within another project, you can add it as a composer dependency
 by adding the following to your `composer.json` file:
@@ -66,6 +67,11 @@ Currently only output from the logon process is printed for debugging.
 Assuming you were able to log in, you're now ready to fully use the API.
 
 See [USAGE.md](USAGE.md) for detailed example code to perform common tasks.
+
+## Contributing
+
+As an open source project, Wikimate welcomes community contributions.
+Please see [CONTRIBUTING.md](CONTRIBUTING.md) for information on how to contribute.
 
 ## License
 

@@ -8,12 +8,13 @@ and [Keep a Changelog](http://keepachangelog.com/).
 #### Added
 
 * Usage documentation about maximum lag and retries ([#134])
+* New `CONTRIBUTING.md` file with contribution guidelines ([#135])
 
 #### Changed
 
-* Added additional context to README.md ([#127])
-* Added semi-linear merge recommendation to GOVERNANCE.md ([#130])
-* Added GitHub Action to enforce updates to CHANGELOG.md ([#131])
+* Added additional context to `README.md` ([#127])
+* Added semi-linear merge recommendation to `GOVERNANCE.md` ([#130])
+* Added GitHub Action to enforce updates to `CHANGELOG.md` ([#131])
 
 _The following two entries are backwards incompatible API changes
 and may require changes in applications that invoke these methods:_
@@ -36,7 +37,7 @@ and may require changes in applications that invoke these methods:_
 
 * New methods `WikiFile::revert()` and `Wikimate::filerevert()` ([#123])
 * New method `Wikimate::logout()` ([#124])
-* Added post-release update steps to GOVERNANCE.md ([#125])
+* Added post-release update steps to `GOVERNANCE.md` ([#125])
 
 #### Changed
 
@@ -57,7 +58,7 @@ and may require changes in applications that invoke these methods:_
 #### Changed
 
 * Changed API requests from deprecated PHP format to JSON format ([#111])
-* Grouped sections and added table of contents in USAGE.md ([#108])
+* Grouped sections and added table of contents in `USAGE.md` ([#108])
 
 #### Fixed
 
@@ -69,11 +70,13 @@ and may require changes in applications that invoke these methods:_
 #### Added
 
 * Added more debug logging of MediaWiki requests and responses ([#101], [#106])
-* New GOVERNANCE.md file to explicitly codify the project management principles and provide guidelines for maintenance tasks ([#83], [#105])
+* New `GOVERNANCE.md` file to explicitly codify the project management principles
+  and provide guidelines for maintenance tasks ([#83], [#105])
 
 #### Changed
 
-* Modernized token handling for login and data-modifying actions. Requires MediaWiki v1.27 or newer. ([#100], [#106])
+* Modernized token handling for login and data-modifying actions.
+  Requires MediaWiki v1.27 or newer. ([#100], [#106])
 
 #### Fixed
 
@@ -84,21 +87,29 @@ and may require changes in applications that invoke these methods:_
 
 #### Added
 
-* New class WikiFile to retrieve properties of a file, and download and upload its contents.  All properties pertain to the current revision of the file, or a specific older revision. ([#69], [#71], [#78], [#80])
-* WikiFile also provides the file history and the ability to delete a file or an older revision of it ([#76])
+* New class WikiFile to retrieve properties of a file, and download and upload its contents.
+  All properties pertain to the current revision of the file, or a specific older revision.
+  ([#69], [#71], [#78], [#80])
+* WikiFile also provides the file history
+  and the ability to delete a file or an older revision of it ([#76])
 
 ### Version 0.11.0 - 2016-11-16
 
 #### Added
 
-* Support for a section name (in addition to an index) in `WikiPage::setText()` and `WikiPage::setSection()` ([#45])
+* Support for a section name (in addition to an index)
+  in `WikiPage::setText()` and `WikiPage::setSection()` ([#45])
 * Support for optional domain at authentication ([#28])
 
 #### Changed
 
-* Updated `WikiPage::getSection()` to include subsections by default; disabling the new `$includeSubsections` option reverts to the old behavior of returning only the text until the first subsection ([#55])
+* Updated `WikiPage::getSection()` to include subsections by default;
+  disabling the new `$includeSubsections` option reverts to the old behavior
+  of returning only the text until the first subsection ([#55])
 * Improved section processing in `WikiPage::getText()` ([#33], [#37], [#50])
-* Ensured that MediaWiki API error responses appear directly in `WikiPage::$error` rather than a nested 'error' array ([#63]) -- this may require changes in your application's error handling
+* Ensured that MediaWiki API error responses appear directly in `WikiPage::$error`
+  rather than a nested 'error' array.
+  This may require changes in your application's error handling ([#63])
 * Restructured and improved documentation ([#32], [#34], [#47], [#49], [#61])
 
 #### Fixed
@@ -133,7 +144,8 @@ and may require changes in applications that invoke these methods:_
 * Added `WikiPage::newSection()` and `WikiPage::setSection()` (shortcuts to `WikiPage::setText()`)
 * Added the ability to get individual sections of the article with `WikiPage::getSection()`
 * Added the ability to get all sections in an array with `WikiPage::getAllSections()`
-* Added the ability to get array showing section offsets and lengths in the page wikicode with `WikiPage::getSectionOffsets()`
+* Added the ability to get an array showing section offsets and lengths in the page wikicode
+  with `WikiPage::getSectionOffsets()`
 * Added the ability to see how many sections are on a page with `WikiPage::getNumSections()`
 
 ### Version 0.3 - 2010-12-26
@@ -191,3 +203,4 @@ and may require changes in applications that invoke these methods:_
 [#132]: https://github.com/hamstar/Wikimate/pull/132
 [#133]: https://github.com/hamstar/Wikimate/pull/133
 [#134]: https://github.com/hamstar/Wikimate/pull/134
+[#135]: https://github.com/hamstar/Wikimate/pull/135
