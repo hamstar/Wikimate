@@ -1,4 +1,4 @@
-## MIT License
+# MIT License
 
 Copyright (c) 2010-2021 Robert McLeod, Frans P. de Vries, and
 [contributors](https://github.com/hamstar/Wikimate/graphs/contributors)

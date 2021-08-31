@@ -1,3 +1,5 @@
+# Governance
+
 The Wikimate project strives for a transparent and welcoming maintenance process.
 Below are some guidelines for current and prospective maintainers.
 Anyone is welcome to propose changes to this document via issues or pull requests.

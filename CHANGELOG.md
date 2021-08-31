@@ -1,17 +1,17 @@
-## Changelog
+# Changelog
 
 Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/)
 and [Keep a Changelog](http://keepachangelog.com/).
 
-### Upcoming version
+## Upcoming version
 
-#### Added
+### Added
 
 * New exception class `WikimateException` for API communication errors ([#136])
 * Usage documentation about maximum lag and retries ([#134])
 * New `CONTRIBUTING.md` file with contribution guidelines ([#135])
 
-#### Changed
+### Changed
 
 * Centralized API communication checks in `WikiPage::request()` ([#136])
 * Added additional context to `README.md` ([#127])
@@ -24,70 +24,70 @@ and may require changes in applications that invoke these methods:_
 * Error return values for `WikiPage::getSection()` changed from `false` to `null` ([#129])
 * `Wikimate::login()` error code `'login'` is now `'auth'`, also used by `logout()` ([#132])
 
-#### Fixed
+### Fixed
 
 * Fixed one error return value in `WikiPage::setText()` ([#129])
 * Fixed exception type/message for `$keyNames` parameter to `WikiPage::getAllSections()` ([#133])
 
-#### Removed
+### Removed
 
 * Method `Wikimate::debugCurlConfig()`, deprecated since v0.10.0 ([#128])
 
-### Version 0.15.0 - 2021-08-26
+## Version 0.15.0 - 2021-08-26
 
-#### Added
+### Added
 
 * New methods `WikiFile::revert()` and `Wikimate::filerevert()` ([#123])
 * New method `Wikimate::logout()` ([#124])
 * Added post-release update steps to `GOVERNANCE.md` ([#125])
 
-#### Changed
+### Changed
 
 * Updated `Wikimate::token()` to remember CSRF token and reduce API calls ([#122])
 
-#### Fixed
+### Fixed
 
 * Fixed format of user agent string ([#121])
 
-### Version 0.14.0 - 2021-08-24
+## Version 0.14.0 - 2021-08-24
 
-#### Added
+### Added
 
 * Support for the maxlag parameter (with retries) in API requests ([#112])
 * Support for getting/setting user agent for API requests ([#107])
 * Added missing PHPDoc comments for properties, constants, and more ([#109])
 
-#### Changed
+### Changed
 
 * Changed API requests from deprecated PHP format to JSON format ([#111])
 * Grouped sections and added table of contents in `USAGE.md` ([#108])
 
-#### Fixed
+### Fixed
 
 * Removed null returns from destructors & fixed PHPDoc comments ([#114])
 * Fixed sections object initialization warning in PHP 7.4+ ([#118])
 
-### Version 0.13.0 - 2021-07-05
+## Version 0.13.0 - 2021-07-05
 
-#### Added
+### Added
 
 * Added more debug logging of MediaWiki requests and responses ([#101], [#106])
 * New `GOVERNANCE.md` file to explicitly codify the project management principles
   and provide guidelines for maintenance tasks ([#83], [#105])
 
-#### Changed
+### Changed
 
 * Modernized token handling for login and data-modifying actions.
   Requires MediaWiki v1.27 or newer. ([#100], [#106])
 
-#### Fixed
+### Fixed
 
 * Prevented PHP notice in `WikiFile::getInfo()` for moved or deleted file ([#85])
 * Fixed capitalization of a built-in PHP class in a comment ([#106])
 
-### Version 0.12.0 - 2017-02-03
+## Version 0.12.0 - 2017-02-03
 
-#### Added
+### Added
 
 * New class WikiFile to retrieve properties of a file, and download and upload its contents.
   All properties pertain to the current revision of the file, or a specific older revision.
@@ -95,15 +95,15 @@ and may require changes in applications that invoke these methods:_
 * WikiFile also provides the file history
   and the ability to delete a file or an older revision of it ([#76])
 
-### Version 0.11.0 - 2016-11-16
+## Version 0.11.0 - 2016-11-16
 
-#### Added
+### Added
 
 * Support for a section name (in addition to an index)
   in `WikiPage::setText()` and `WikiPage::setSection()` ([#45])
 * Support for optional domain at authentication ([#28])
 
-#### Changed
+### Changed
 
 * Updated `WikiPage::getSection()` to include subsections by default;
   disabling the new `$includeSubsections` option reverts to the old behavior
@@ -114,7 +114,7 @@ and may require changes in applications that invoke these methods:_
   This may require changes in your application's error handling ([#63])
 * Restructured and improved documentation ([#32], [#34], [#47], [#49], [#61])
 
-#### Fixed
+### Fixed
 
 * Ensured use of Wikimate user agent by Requests library ([#64])
 * Corrected handling an invalid page title ([#57])
@@ -124,24 +124,24 @@ and may require changes in applications that invoke these methods:_
 * Fixed passing the return value in `WikiPage::setSection()` ([#30])
 * Corrected call to `Wikimate::debugRequestsConfig()` ([#30])
 
-### Version 0.10.0 - 2014-06-24
+## Version 0.10.0 - 2014-06-24
 
-#### Changed
+### Changed
 
 * Switched to using the *Requests* library instead of Curl ([#25])
 
-### Version 0.9 - 2014-06-13
+## Version 0.9 - 2014-06-13
 
 * Bumped version for stable release
 
-### Version 0.5 - 2011-09-09
+## Version 0.5 - 2011-09-09
 
 * Removed the use of constants in favour of constructor arguments
 * Added checks that throw an exception if can't write to wikimate_cookie.txt
 * Throws exception if curl library not loaded
 * Throws exception if can't login
 
-### Version 0.4 - 2011-01-15
+## Version 0.4 - 2011-01-15
 
 * Added `WikiPage::newSection()` and `WikiPage::setSection()` (shortcuts to `WikiPage::setText()`)
 * Added the ability to get individual sections of the article with `WikiPage::getSection()`
@@ -150,7 +150,7 @@ and may require changes in applications that invoke these methods:_
   with `WikiPage::getSectionOffsets()`
 * Added the ability to see how many sections are on a page with `WikiPage::getNumSections()`
 
-### Version 0.3 - 2010-12-26
+## Version 0.3 - 2010-12-26
 
 * Initial commit
 

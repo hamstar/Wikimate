@@ -1,4 +1,4 @@
-## Usage
+# Usage
 
 - [Introduction](#introduction)
 - [Getting a page object](#getting-a-page-object)
@@ -16,7 +16,7 @@
   * [Maximum lag and retries](#maximum-lag-and-retries)
   * [Handling errors and exceptions](#handling-errors-and-exceptions)
 
-### Introduction
+## Introduction
 
 In your script file (e.g. `index.php`), include Wikimate's `globals.php` file,
 and create a new `Wikimate` object with the target wiki's API address.
@@ -52,7 +52,7 @@ Currently only output from the logon process is printed for debugging.
 Assuming you were able to log in, you're now ready to fully use the API.
 The next sections provide example code for several common tasks.
 
-### Getting a page object
+## Getting a page object
 
 Once logged in you can start playing around with pages.
 If the title given to the WikiPage object is invalid,
@@ -71,7 +71,7 @@ echo $page->getNumSections();
 echo $page->getSectionOffsets();
 ```
 
-#### Reading...
+### Reading...
 
 You can get the text of the page by using the `getText()` method
 which returns the text that was obtained when the page object was created.
@@ -133,7 +133,7 @@ Array
 An `UnexpectedValueException` is thrown
 if an unsupported value is supplied for the `$keyNames` parameter.
 
-#### Writing...
+### Writing...
 
 You can modify the whole article using the `setText()` method:
 
@@ -174,7 +174,7 @@ $page->newSection($sectionTitle, $text);
 
 For the latter method, the $sectionTitle is also used as part of the edit summary description.
 
-#### Deleting...
+### Deleting...
 
 If the account you're using has delete permissions,
 you can delete entire pages with `delete()`:
@@ -187,7 +187,7 @@ $page->delete('The page was created accidentally in the first place');
 If you pass in a message argument,
 it will be recorded as the reason for the deletion.
 
-### Getting a file object
+## Getting a file object
 
 Once connected you can also start playing around with files.
 
@@ -216,7 +216,7 @@ echo $file->getMime();
 echo $file->getAspectRatio();
 ```
 
-#### Downloading...
+### Downloading...
 
 You can obtain the data of the file by using the `downloadData()` method and use it in your script,
 or write it directly to a local file via the `downloadFile()` method.
@@ -227,7 +227,7 @@ $data = $file->downloadData();
 $result = $file->downloadFile('/path/to/sitelogo.png');
 ```
 
-#### Uploading...
+### Uploading...
 
 You can upload data from your script to the file by using the `uploadData()` method,
 or read it directly from a local file via the `uploadFile()` method.
@@ -256,7 +256,7 @@ if ($file->exists()) die('Example image already exists');
 $result = uploadFromUrl('https://upload.wikimedia.org/wikipedia/en/a/a9/Example.jpg', 'Adopt Wiki example image');
 ```
 
-#### Accessing revisions...
+### Accessing revisions...
 
 The revision history of a file can be obtained as an array with a properties array per revision:
 
@@ -301,7 +301,7 @@ echo $file->getAspectRatio(2);
 echo $file->getUrl('2016-11-22T33:44:55Z');
 ```
 
-#### Deleting...
+### Deleting...
 
 If the account you're using has delete permissions, you can delete files as well:
 
@@ -323,9 +323,9 @@ $archivename = $file->getArchivename(1);
 $file->revert($archivename, 'Revert to the previous release');
 ```
 
-### Other stuff
+## Other stuff
 
-#### Running custom queries
+### Running custom queries
 
 Wanna run your own queries?
 You can use the edit and query commands in Wikimate:
@@ -350,7 +350,7 @@ $array_result = $wiki->edit($data);
 
 Both methods return an array of the MediaWiki API result.
 
-#### Customizing the user agent
+### Customizing the user agent
 
 API requests are made over HTTP with a user agent string to identify
 the client to the server. By default the user agent is formatted as:
@@ -368,7 +368,7 @@ $wiki->setUserAgent('Custom Prefix - ' . $useragent);
 In order to use a custom user agent for all requests in the session,
 call this method before invoking `Wikimate::login()`.
 
-#### Maximum lag and retries
+### Maximum lag and retries
 
 API requests include the [maxlag parameter](https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Maxlag_parameter)
 so they time out when the server's time to respond exceeds the specified lag.
@@ -380,7 +380,7 @@ for the number of seconds recommended by the server, and then retried.
 Retries continue indefinitely, unless limited via `$wiki->setMaxretries()`.
 If a limited number of retries runs out, `WikimateException` is thrown.
 
-#### Handling errors and exceptions
+### Handling errors and exceptions
 
 Did something go wrong?  Check the error array:
 

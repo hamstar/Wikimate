@@ -1,3 +1,5 @@
+# Wikimate
+
 Wikimate is a PHP wrapper for the
 [MediaWiki Action API](https://www.mediawiki.org/wiki/Special:MyLanguage/API:Main_page)
 that aims to be very easy to use.
