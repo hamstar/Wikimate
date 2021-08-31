@@ -7,11 +7,13 @@ and [Keep a Changelog](http://keepachangelog.com/).
 
 #### Added
 
+* New exception class `WikimateException` for API communication errors ([#136])
 * Usage documentation about maximum lag and retries ([#134])
 * New `CONTRIBUTING.md` file with contribution guidelines ([#135])
 
 #### Changed
 
+* Centralized API communication checks in `WikiPage::request()` ([#136])
 * Added additional context to `README.md` ([#127])
 * Added semi-linear merge recommendation to `GOVERNANCE.md` ([#130])
 * Added GitHub Action to enforce updates to `CHANGELOG.md` ([#131])
@@ -204,3 +206,4 @@ and may require changes in applications that invoke these methods:_
 [#133]: https://github.com/hamstar/Wikimate/pull/133
 [#134]: https://github.com/hamstar/Wikimate/pull/134
 [#135]: https://github.com/hamstar/Wikimate/pull/135
+[#136]: https://github.com/hamstar/Wikimate/pull/136

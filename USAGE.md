@@ -14,7 +14,7 @@
   * [Running custom queries](#running-custom-queries)
   * [Customizing the user agent](#customizing-the-user-agent)
   * [Maximum lag and retries](#maximum-lag-and-retries)
-  * [Handling errors](#handling-errors)
+  * [Handling errors and exceptions](#handling-errors-and-exceptions)
 
 ### Introduction
 
@@ -380,7 +380,7 @@ for the number of seconds recommended by the server, and then retried.
 Retries continue indefinitely, unless limited via `$wiki->setMaxretries()`.
 If a limited number of retries runs out, `WikimateException` is thrown.
 
-#### Handling errors
+#### Handling errors and exceptions
 
 Did something go wrong?  Check the error array:
 
@@ -396,3 +396,7 @@ For other errors, the following key/value pairs are returned:
 * 'token' for Wikimate token problems
 * 'page' for WikiPage errors
 * 'file' for WikiFile errors
+
+In case of an unexpected error while communicating with the API,
+i.e. receiving an HTML response or an invalid JSON response,
+or running out of maxlag retries, `WikimateException` is thrown.
