@@ -31,7 +31,9 @@ Then, download Wikimate, and initialise it by running `composer install`
 To use Wikimate within another project, you can add it as a composer dependency
 by adding the following to your `composer.json` file:
 
-    "hamstar/Wikimate": "0.15.0"
+```json
+"hamstar/Wikimate": "0.15.0"
+```
 
 ## Usage
 

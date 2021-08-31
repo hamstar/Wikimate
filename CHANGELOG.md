@@ -1,5 +1,7 @@
 # Changelog
 
+This page lists the changes that were done in each version of Wikimate.
+
 Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/)
 and [Keep a Changelog](http://keepachangelog.com/).
 
@@ -9,6 +11,7 @@ and [Keep a Changelog](http://keepachangelog.com/).
 
 * New exception class `WikimateException` for API communication errors ([#136])
 * Usage documentation about maximum lag and retries ([#134])
+* New GitHub Action to enforce updates to `CHANGELOG.md` ([#131])
 * New `CONTRIBUTING.md` file with contribution guidelines ([#135])
 
 ### Changed
@@ -16,7 +19,6 @@ and [Keep a Changelog](http://keepachangelog.com/).
 * Centralized API communication checks in `WikiPage::request()` ([#136])
 * Added additional context to `README.md` ([#127])
 * Added semi-linear merge recommendation to `GOVERNANCE.md` ([#130])
-* Added GitHub Action to enforce updates to `CHANGELOG.md` ([#131])
 
 _The following two entries are backwards incompatible API changes
 and may require changes in applications that invoke these methods:_

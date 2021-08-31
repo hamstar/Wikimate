@@ -1,8 +1,12 @@
 # Governance
 
+This page contains guidelines for current and prospective maintainers.
+
+## Process transparency and contributor onboarding
+
 The Wikimate project strives for a transparent and welcoming maintenance process.
-Below are some guidelines for current and prospective maintainers.
-Anyone is welcome to propose changes to this document via issues or pull requests.
+Discussions are expected to happen in public channels, via issues or pull requests,
+including proposals to change this document or the [contribution guidelines](CONTRIBUTING.md).
 
 Regular contributors are to be given collaborator status
 (which includes commit access, the ability to merge PRs, make releases, etc.).
@@ -39,14 +43,14 @@ It should apply the following actions:
    to the appropriate version name and date (e.g. "Version 1.2.3 - 2020-12-31")
    and add a new "Upcoming version" section heading above it,
    with the contents "No changes yet.";
-2. Edit the README and replace all references
+2. Edit `README.md` and replace all references
    to the previous version number and release date
    with the corresponding data for the new version;
 3. Update all version references in `Wikimate.php`
    to the new version.
 
-Once this PR is merged, create a new release 
-in https://github.com/hamstar/Wikimate/releases/new
+Once this PR is merged, create a new release
+in <https://github.com/hamstar/Wikimate/releases/new>
 (collaborator status is required for this step).
 
 The version tag and the title of the release notes should be in the format `v1.2.3`
@@ -57,5 +61,7 @@ of the relevant section in `CHANGELOG.md`.
 
 Finally, update the Wikimate entry on [Packagist](https://packagist.org/packages/hamstar/wikimate)
 (via the "Update Now" link in the right sidebar)
-and the corresponding row in the [PHP libraries table](https://www.mediawiki.org/wiki/API:Client_code/All#PHP) on MediaWiki.org,
-along with Wikipedia's [PHP bot framework table](https://en.wikipedia.org/wiki/Wikipedia:PHP_bot_framework_table) if applicable.
+and the corresponding row in MediaWiki.org's
+[PHP libraries table](https://www.mediawiki.org/wiki/API:Client_code/All#PHP).
+If applicable, also update Wikipedia's
+[PHP bot frameworks table](https://en.wikipedia.org/wiki/Wikipedia:PHP_bot_framework_table).

@@ -118,7 +118,7 @@ $sections = $page->getAllSections(false, 2);
 
 The array looks like this:
 
-```
+```text
 Array
 (
 	[intro] => bit between title and first section
@@ -392,6 +392,7 @@ print_r($file->getError());
 For MediaWiki API errors, the array contains the 'code' and 'info' key/value pairs
 [defined by the API](https://www.mediawiki.org/wiki/Special:MyLanguage/API:Errors_and_warnings#Errors).
 For other errors, the following key/value pairs are returned:
+
 * 'auth' for Wikimate authentication (login & logout) problems
 * 'token' for Wikimate token problems
 * 'page' for WikiPage errors
