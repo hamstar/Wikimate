@@ -1,0 +1,26 @@
+# MD010/no-hard-tabs
+MD010:
+  # Exclude code blocks
+  code_blocks: false
+
+# MD013/line-length
+MD013:
+  # Custom length limit (default is 80)
+  line_length: 100
+  # Exclude code blocks
+  code_blocks: false
+
+# MD024/no-duplicate-heading
+MD024:
+  # Only check sibling headings
+  allow_different_nesting: true
+
+# MD026/no-trailing-punctuation
+MD026:
+  # Trailing punctuation characters not allowed in headings
+  punctuation: ",;:!"
+
+# MD004/ul-style
+MD004:
+  # Use dashes for lists, leaving asterisks for emphasis
+  style: "dash"

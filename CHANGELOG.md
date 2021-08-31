@@ -13,6 +13,7 @@ and [Keep a Changelog](http://keepachangelog.com/).
 - Usage documentation about maximum lag and retries ([#134])
 - New GitHub Action to enforce updates to `CHANGELOG.md` ([#131])
 - New `CONTRIBUTING.md` file with contribution guidelines ([#135])
+- New GitHub Action to check markdown files ([#138])
 
 ### Changed
 
@@ -209,3 +210,4 @@ and may require changes in applications that invoke these methods:_
 [#134]: https://github.com/hamstar/Wikimate/pull/134
 [#135]: https://github.com/hamstar/Wikimate/pull/135
 [#136]: https://github.com/hamstar/Wikimate/pull/136
+[#138]: https://github.com/hamstar/Wikimate/pull/138
