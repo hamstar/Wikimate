@@ -5,9 +5,9 @@ Wikimate is a PHP wrapper for the
 that aims to be very easy to use.
 It currently consists of three classes:
 
-* **Wikimate** – Serves as a loader and manager for different wiki objects (e.g. pages).
-* **WikiPage** – Provides an interface to getting/editing pages or sections of them.
-* **WikiFile** – Provides an interface to downloading/uploading files and getting their properties.
+- **Wikimate** – Serves as a loader and manager for different wiki objects (e.g. pages).
+- **WikiPage** – Provides an interface to getting/editing pages or sections of them.
+- **WikiFile** – Provides an interface to downloading/uploading files and getting their properties.
 
 The [latest released version](https://github.com/hamstar/Wikimate/releases) of Wikimate
 is v0.15.0, released on Aug 26, 2021.

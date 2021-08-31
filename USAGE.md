@@ -2,19 +2,19 @@
 
 - [Introduction](#introduction)
 - [Getting a page object](#getting-a-page-object)
-  * [Reading...](#reading)
-  * [Writing...](#writing)
-  * [Deleting...](#deleting)
+  - [Reading...](#reading)
+  - [Writing...](#writing)
+  - [Deleting...](#deleting)
 - [Getting a file object](#getting-a-file-object)
-  * [Downloading...](#downloading)
-  * [Uploading...](#uploading)
-  * [Accessing revisions...](#accessing-revisions)
-  * [Deleting...](#deleting-1)
+  - [Downloading...](#downloading)
+  - [Uploading...](#uploading)
+  - [Accessing revisions...](#accessing-revisions)
+  - [Deleting...](#deleting-1)
 - [Other stuff](#other-stuff)
-  * [Running custom queries](#running-custom-queries)
-  * [Customizing the user agent](#customizing-the-user-agent)
-  * [Maximum lag and retries](#maximum-lag-and-retries)
-  * [Handling errors and exceptions](#handling-errors-and-exceptions)
+  - [Running custom queries](#running-custom-queries)
+  - [Customizing the user agent](#customizing-the-user-agent)
+  - [Maximum lag and retries](#maximum-lag-and-retries)
+  - [Handling errors and exceptions](#handling-errors-and-exceptions)
 
 ## Introduction
 
@@ -393,10 +393,10 @@ For MediaWiki API errors, the array contains the 'code' and 'info' key/value pai
 [defined by the API](https://www.mediawiki.org/wiki/Special:MyLanguage/API:Errors_and_warnings#Errors).
 For other errors, the following key/value pairs are returned:
 
-* 'auth' for Wikimate authentication (login & logout) problems
-* 'token' for Wikimate token problems
-* 'page' for WikiPage errors
-* 'file' for WikiFile errors
+- 'auth' for Wikimate authentication (login & logout) problems
+- 'token' for Wikimate token problems
+- 'page' for WikiPage errors
+- 'file' for WikiFile errors
 
 In case of an unexpected error while communicating with the API,
 i.e. receiving an HTML response or an invalid JSON response,
