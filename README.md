@@ -1,11 +1,13 @@
+# Wikimate
+
 Wikimate is a PHP wrapper for the
 [MediaWiki Action API](https://www.mediawiki.org/wiki/Special:MyLanguage/API:Main_page)
 that aims to be very easy to use.
 It currently consists of three classes:
 
-* **Wikimate** – Serves as a loader and manager for different wiki objects (e.g. pages).
-* **WikiPage** – Provides an interface to getting/editing pages or sections of them.
-* **WikiFile** – Provides an interface to downloading/uploading files and getting their properties.
+- **Wikimate** – Serves as a loader and manager for different wiki objects (e.g. pages).
+- **WikiPage** – Provides an interface to getting/editing pages or sections of them.
+- **WikiFile** – Provides an interface to downloading/uploading files and getting their properties.
 
 The [latest released version](https://github.com/hamstar/Wikimate/releases) of Wikimate
 is v0.15.0, released on Aug 26, 2021.
@@ -29,7 +31,9 @@ Then, download Wikimate, and initialise it by running `composer install`
 To use Wikimate within another project, you can add it as a composer dependency
 by adding the following to your `composer.json` file:
 
-    "hamstar/Wikimate": "0.15.0"
+```json
+"hamstar/Wikimate": "0.15.0"
+```
 
 ## Usage
 

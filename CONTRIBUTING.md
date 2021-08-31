@@ -1,6 +1,6 @@
 # Contribution guidelines
 
-The Wikimate projects welcomes contributions of [all kinds](https://allcontributors.org/docs/en/emoji-key),
+The Wikimate project welcomes contributions of [all kinds](https://allcontributors.org/docs/en/emoji-key),
 no matter how small!
 Feel free to open [an issue](https://github.com/hamstar/Wikimate/issues/new)
 to discuss your suggestion or request,
@@ -27,4 +27,5 @@ Below are some guidelines that might help you prepare your contribution.
    When writing prose, break lines [semantically](https://rhodesmill.org/brandon/2012/one-sentence-per-line/).
    We don't have a strict maximum line length
    (especially since things like long URLs can easily surpass them),
-   but you should start thinking about breaking lines once they're approaching 100 characters in length.
+   but you should start thinking about breaking lines
+   once they're approaching 100 characters in length.
