@@ -204,8 +204,18 @@ class Wikimate
 		// Send appropriate type of request, once or multiple times
 		do {
 			if ($post) {
+				// Debug logging of POST requests, except for upload string
+				if ($this->debugMode && is_array($data)) {
+					echo "$action $httptype parameters:\n";
+					print_r($data);
+				}
 				$response = $this->session->post($this->api, $headers, $data);
 			} else {
+				// Debug logging of GET requests as a query string
+				if ($this->debugMode) {
+					echo "$action $httptype parameters:\n";
+					echo http_build_query($data) . "\n";
+				}
 				$response = $this->session->get($this->api.'?'.http_build_query($data), $headers);
 			}
 
@@ -248,6 +258,11 @@ class Wikimate
 		$result = json_decode($response->body, true);
 		if ($result === null) {
 			throw new WikimateException("The API did not return the $action JSON response");
+		}
+
+		if ($this->debugMode) {
+			echo "$action $httptype response:\n";
+			print_r($result);
 		}
 
 		return $response;
@@ -659,6 +674,7 @@ class Wikimate
 		$getResult = $this->session->get($url);
 
 		if (!$getResult->success) {
+			// Debug logging of Requests_Response only on failed download
 			if ($this->debugMode) {
 				echo "download GET response:\n";
 				print_r($getResult);
