@@ -182,7 +182,7 @@ class Wikimate
 	 * @param  array|string  $data     Data for the request
 	 * @param  array         $headers  Optional extra headers to send with the request
 	 * @param  boolean       $post     True to send a POST request, otherwise GET
-	 * @return Requests_Response       The API response
+	 * @return array                   The API response
 	 * @throw  WikimateException       If lagged and ran out of retries,
 	 *                                 or got an unexpected API response
 	 */
@@ -265,7 +265,7 @@ class Wikimate
 			print_r($result);
 		}
 
-		return $response;
+		return $result;
 	}
 
 	/**
@@ -305,16 +305,7 @@ class Wikimate
 		);
 
 		// Send the token request
-		$response = $this->request($details, array(), true);
-
-		$tokenResult = json_decode($response->body, true);
-
-		if ($this->debugMode) {
-			echo "Token request:\n";
-			print_r($details);
-			echo "Token response:\n";
-			print_r($tokenResult);
-		}
+		$tokenResult = $this->request($details, array(), true);
 
 		if ($type == self::TOKEN_LOGIN) {
 			return $tokenResult['query']['tokens']['logintoken'];
@@ -354,16 +345,7 @@ class Wikimate
 		}
 
 		// Send the login request
-		$response = $this->request($details, array(), true);
-
-		$loginResult = json_decode($response->body, true);
-
-		if ($this->debugMode) {
-			echo "Login request:\n";
-			print_r($details);
-			echo "Login response:\n";
-			print_r($loginResult);
-		}
+		$loginResult = $this->request($details, array(), true);
 
 		if (isset($loginResult['login']['result']) && $loginResult['login']['result'] != 'Success') {
 			// Some more comprehensive error checking
@@ -403,16 +385,7 @@ class Wikimate
 		);
 
 		// Send the logout request
-		$response = $this->request($details, array(), true);
-
-		$logoutResult = json_decode($response->body, true);
-
-		if ($this->debugMode) {
-			echo "Logout request:\n";
-			print_r($details);
-			echo "Logout response:\n";
-			print_r($logoutResult);
-		}
+		$logoutResult = $this->request($details, array(), true);
 
 		// Discard CSRF token for this login session
 		$this->csrf_token = null;
@@ -558,17 +531,7 @@ class Wikimate
 	{
 		$array['action'] = 'query';
 
-		if ($this->debugMode) {
-			echo "query GET parameters:\n";
-			echo http_build_query($array) . "\n";
-		}
-		$apiResult = $this->request($array);
-
-		if ($this->debugMode) {
-			echo "query GET response:\n";
-			print_r(json_decode($apiResult->body, true));
-		}
-		return json_decode($apiResult->body, true);
+		return $this->request($array);
 	}
 
 	/**
@@ -582,17 +545,7 @@ class Wikimate
 	{
 		$array['action'] = 'parse';
 
-		if ($this->debugMode) {
-			echo "parse GET parameters:\n";
-			echo http_build_query($array) . "\n";
-		}
-		$apiResult = $this->request($array);
-
-		if ($this->debugMode) {
-			echo "parse GET response:\n";
-			print_r(json_decode($apiResult->body, true));
-		}
-		return json_decode($apiResult->body, true);
+		return $this->request($array);
 	}
 
 	/**
@@ -616,17 +569,7 @@ class Wikimate
 		$array['action'] = 'edit';
 		$array['token'] = $edittoken;
 
-		if ($this->debugMode) {
-			echo "edit POST parameters:\n";
-			print_r($array);
-		}
-		$apiResult = $this->request($array, $headers, true);
-
-		if ($this->debugMode) {
-			echo "edit POST response:\n";
-			print_r(json_decode($apiResult->body, true));
-		}
-		return json_decode($apiResult->body, true);
+		return $this->request($array, $headers, true);
 	}
 
 	/**
@@ -650,17 +593,7 @@ class Wikimate
 		$array['action'] = 'delete';
 		$array['token'] = $deletetoken;
 
-		if ($this->debugMode) {
-			echo "delete POST parameters:\n";
-			print_r($array);
-		}
-		$apiResult = $this->request($array, $headers, true);
-
-		if ($this->debugMode) {
-			echo "delete POST response:\n";
-			print_r(json_decode($apiResult->body, true));
-		}
-		return json_decode($apiResult->body, true);
+		return $this->request($array, $headers, true);
 	}
 
 	/**
@@ -735,13 +668,7 @@ class Wikimate
 			'Content-Length' => strlen($body),
 		);
 
-		$apiResult = $this->request($body, $headers, true);
-
-		if ($this->debugMode) {
-			echo "upload POST response:\n";
-			print_r(json_decode($apiResult->body, true));
-		}
-		return json_decode($apiResult->body, true);
+		return $this->request($body, $headers, true);
 	}
 
 	/**
@@ -765,17 +692,7 @@ class Wikimate
 			'Content-Type' => "application/x-www-form-urlencoded"
 		);
 
-		if ($this->debugMode) {
-			echo "filerevert POST parameters:\n";
-			echo http_build_query($array) . "\n";
-		}
-		$apiResult = $this->request($array, $headers, true);
-
-		if ($this->debugMode) {
-			echo "filerevert POST response:\n";
-			print_r(json_decode($apiResult->body, true));
-		}
-		return json_decode($apiResult->body, true);
+		return $this->request($array, $headers, true);
 	}
 
 	/**
