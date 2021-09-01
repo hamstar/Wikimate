@@ -15,6 +15,7 @@
   - [Customizing the user agent](#customizing-the-user-agent)
   - [Maximum lag and retries](#maximum-lag-and-retries)
   - [Handling errors and exceptions](#handling-errors-and-exceptions)
+  - [Debug logging](#debug-logging)
 
 ## Introduction
 
@@ -44,10 +45,6 @@ else {
 
 This example uses echo statements to output any potential errors.
 You should get a meaningful error message if the authentication fails.
-
-Instead of using echo statements, you can enable/disable debugging
-with the `$wiki->debugMode($boolean)` method.
-Currently only output from the logon process is printed for debugging.
 
 Assuming you were able to log in, you're now ready to fully use the API.
 The next sections provide example code for several common tasks.
@@ -401,3 +398,13 @@ For other errors, the following key/value pairs are returned:
 In case of an unexpected error while communicating with the API,
 i.e. receiving an HTML response or an invalid JSON response,
 or running out of maxlag retries, `WikimateException` is thrown.
+
+### Debug logging
+
+In addition to checking the error array,
+you can enable/disable debugging with the `$wiki->debugMode($boolean)` method.
+Debug logging is printed to [standard output](https://en.wikipedia.org/wiki/Standard_output)
+and includes API requests/responses as well as retry messages for [lag errors](#maximum-lag-and-retries).
+
+Only requests for file uploads are not logged,
+because of the (potential) volume of the associated data.

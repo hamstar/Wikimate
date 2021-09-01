@@ -182,7 +182,7 @@ class Wikimate
 	 * @param  array|string  $data     Data for the request
 	 * @param  array         $headers  Optional extra headers to send with the request
 	 * @param  boolean       $post     True to send a POST request, otherwise GET
-	 * @return Requests_Response       The API response
+	 * @return array                   The API response
 	 * @throw  WikimateException       If lagged and ran out of retries,
 	 *                                 or got an unexpected API response
 	 */
@@ -204,8 +204,18 @@ class Wikimate
 		// Send appropriate type of request, once or multiple times
 		do {
 			if ($post) {
+				// Debug logging of POST requests, except for upload string
+				if ($this->debugMode && is_array($data)) {
+					echo "$action $httptype parameters:\n";
+					print_r($data);
+				}
 				$response = $this->session->post($this->api, $headers, $data);
 			} else {
+				// Debug logging of GET requests as a query string
+				if ($this->debugMode) {
+					echo "$action $httptype parameters:\n";
+					echo http_build_query($data) . "\n";
+				}
 				$response = $this->session->get($this->api.'?'.http_build_query($data), $headers);
 			}
 
@@ -250,7 +260,12 @@ class Wikimate
 			throw new WikimateException("The API did not return the $action JSON response");
 		}
 
-		return $response;
+		if ($this->debugMode) {
+			echo "$action $httptype response:\n";
+			print_r($result);
+		}
+
+		return $result;
 	}
 
 	/**
@@ -290,15 +305,14 @@ class Wikimate
 		);
 
 		// Send the token request
-		$response = $this->request($details, array(), true);
+		$tokenResult = $this->request($details, array(), true);
 
-		$tokenResult = json_decode($response->body, true);
-
-		if ($this->debugMode) {
-			echo "Token request:\n";
-			print_r($details);
-			echo "Token response:\n";
-			print_r($tokenResult);
+		// Check for errors
+		if (isset($tokenResult['error'])) {
+			$this->error = $tokenResult['error']; // Set the error if there was one
+			return null;
+		} else {
+			$this->error = null; // Reset the error status
 		}
 
 		if ($type == self::TOKEN_LOGIN) {
@@ -339,15 +353,14 @@ class Wikimate
 		}
 
 		// Send the login request
-		$response = $this->request($details, array(), true);
+		$loginResult = $this->request($details, array(), true);
 
-		$loginResult = json_decode($response->body, true);
-
-		if ($this->debugMode) {
-			echo "Login request:\n";
-			print_r($details);
-			echo "Login response:\n";
-			print_r($loginResult);
+		// Check for errors
+		if (isset($loginResult['error'])) {
+			$this->error = $loginResult['error']; // Set the error if there was one
+			return false;
+		} else {
+			$this->error = null; // Reset the error status
 		}
 
 		if (isset($loginResult['login']['result']) && $loginResult['login']['result'] != 'Success') {
@@ -388,15 +401,14 @@ class Wikimate
 		);
 
 		// Send the logout request
-		$response = $this->request($details, array(), true);
+		$logoutResult = $this->request($details, array(), true);
 
-		$logoutResult = json_decode($response->body, true);
-
-		if ($this->debugMode) {
-			echo "Logout request:\n";
-			print_r($details);
-			echo "Logout response:\n";
-			print_r($logoutResult);
+		// Check for errors
+		if (isset($logoutResult['error'])) {
+			$this->error = $logoutResult['error']; // Set the error if there was one
+			return false;
+		} else {
+			$this->error = null; // Reset the error status
 		}
 
 		// Discard CSRF token for this login session
@@ -543,17 +555,7 @@ class Wikimate
 	{
 		$array['action'] = 'query';
 
-		if ($this->debugMode) {
-			echo "query GET parameters:\n";
-			echo http_build_query($array) . "\n";
-		}
-		$apiResult = $this->request($array);
-
-		if ($this->debugMode) {
-			echo "query GET response:\n";
-			print_r(json_decode($apiResult->body, true));
-		}
-		return json_decode($apiResult->body, true);
+		return $this->request($array);
 	}
 
 	/**
@@ -567,17 +569,7 @@ class Wikimate
 	{
 		$array['action'] = 'parse';
 
-		if ($this->debugMode) {
-			echo "parse GET parameters:\n";
-			echo http_build_query($array) . "\n";
-		}
-		$apiResult = $this->request($array);
-
-		if ($this->debugMode) {
-			echo "parse GET response:\n";
-			print_r(json_decode($apiResult->body, true));
-		}
-		return json_decode($apiResult->body, true);
+		return $this->request($array);
 	}
 
 	/**
@@ -601,17 +593,7 @@ class Wikimate
 		$array['action'] = 'edit';
 		$array['token'] = $edittoken;
 
-		if ($this->debugMode) {
-			echo "edit POST parameters:\n";
-			print_r($array);
-		}
-		$apiResult = $this->request($array, $headers, true);
-
-		if ($this->debugMode) {
-			echo "edit POST response:\n";
-			print_r(json_decode($apiResult->body, true));
-		}
-		return json_decode($apiResult->body, true);
+		return $this->request($array, $headers, true);
 	}
 
 	/**
@@ -635,17 +617,7 @@ class Wikimate
 		$array['action'] = 'delete';
 		$array['token'] = $deletetoken;
 
-		if ($this->debugMode) {
-			echo "delete POST parameters:\n";
-			print_r($array);
-		}
-		$apiResult = $this->request($array, $headers, true);
-
-		if ($this->debugMode) {
-			echo "delete POST response:\n";
-			print_r(json_decode($apiResult->body, true));
-		}
-		return json_decode($apiResult->body, true);
+		return $this->request($array, $headers, true);
 	}
 
 	/**
@@ -659,6 +631,7 @@ class Wikimate
 		$getResult = $this->session->get($url);
 
 		if (!$getResult->success) {
+			// Debug logging of Requests_Response only on failed download
 			if ($this->debugMode) {
 				echo "download GET response:\n";
 				print_r($getResult);
@@ -719,13 +692,7 @@ class Wikimate
 			'Content-Length' => strlen($body),
 		);
 
-		$apiResult = $this->request($body, $headers, true);
-
-		if ($this->debugMode) {
-			echo "upload POST response:\n";
-			print_r(json_decode($apiResult->body, true));
-		}
-		return json_decode($apiResult->body, true);
+		return $this->request($body, $headers, true);
 	}
 
 	/**
@@ -749,17 +716,7 @@ class Wikimate
 			'Content-Type' => "application/x-www-form-urlencoded"
 		);
 
-		if ($this->debugMode) {
-			echo "filerevert POST parameters:\n";
-			echo http_build_query($array) . "\n";
-		}
-		$apiResult = $this->request($array, $headers, true);
-
-		if ($this->debugMode) {
-			echo "filerevert POST response:\n";
-			print_r(json_decode($apiResult->body, true));
-		}
-		return json_decode($apiResult->body, true);
+		return $this->request($array, $headers, true);
 	}
 
 	/**

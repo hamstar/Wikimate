@@ -63,11 +63,6 @@ else {
 
 This example uses echo statements to output any potential errors.
 You should get a meaningful error message if the authentication fails.
-
-Instead of using echo statements, you can enable/disable debugging
-with the `$wiki->debugMode($boolean)` method.
-Currently only output from the logon process is printed for debugging.
-
 Assuming you were able to log in, you're now ready to fully use the API.
 
 See [USAGE.md](USAGE.md) for detailed example code to perform common tasks.
