@@ -307,6 +307,14 @@ class Wikimate
 		// Send the token request
 		$tokenResult = $this->request($details, array(), true);
 
+		// Check for errors
+		if (isset($tokenResult['error'])) {
+			$this->error = $tokenResult['error']; // Set the error if there was one
+			return null;
+		} else {
+			$this->error = null; // Reset the error status
+		}
+
 		if ($type == self::TOKEN_LOGIN) {
 			return $tokenResult['query']['tokens']['logintoken'];
 		} else {
@@ -347,6 +355,14 @@ class Wikimate
 		// Send the login request
 		$loginResult = $this->request($details, array(), true);
 
+		// Check for errors
+		if (isset($loginResult['error'])) {
+			$this->error = $loginResult['error']; // Set the error if there was one
+			return false;
+		} else {
+			$this->error = null; // Reset the error status
+		}
+
 		if (isset($loginResult['login']['result']) && $loginResult['login']['result'] != 'Success') {
 			// Some more comprehensive error checking
 			$this->error = array();
@@ -386,6 +402,14 @@ class Wikimate
 
 		// Send the logout request
 		$logoutResult = $this->request($details, array(), true);
+
+		// Check for errors
+		if (isset($logoutResult['error'])) {
+			$this->error = $logoutResult['error']; // Set the error if there was one
+			return false;
+		} else {
+			$this->error = null; // Reset the error status
+		}
 
 		// Discard CSRF token for this login session
 		$this->csrf_token = null;
