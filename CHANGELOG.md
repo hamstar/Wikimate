@@ -18,6 +18,7 @@ and [Keep a Changelog](http://keepachangelog.com/).
 ### Changed
 
 - Centralized API communication checks in `WikiPage::request()` ([#136])
+- Centralized debug logging of API requests/responses in `WikiPage::request()` ([#139])
 - Added additional context to `README.md` ([#127])
 - Added semi-linear merge recommendation to `GOVERNANCE.md` ([#130])
 
@@ -211,3 +212,4 @@ and may require changes in applications that invoke these methods:_
 [#135]: https://github.com/hamstar/Wikimate/pull/135
 [#136]: https://github.com/hamstar/Wikimate/pull/136
 [#138]: https://github.com/hamstar/Wikimate/pull/138
+[#139]: https://github.com/hamstar/Wikimate/pull/139
