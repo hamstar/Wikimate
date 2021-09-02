@@ -19,13 +19,13 @@
 
 ## Introduction
 
-In your script file (e.g. `index.php`), include Wikimate's `globals.php` file,
+In your script file (e.g. `index.php`), include the project's `autoload.php` file,
 and create a new `Wikimate` object with the target wiki's API address.
 Then provide a username and password to Wikimate's `login` method,
 to log in to that wiki.
 
 ```php
-include 'globals.php';
+require __DIR__.'/vendor/autoload.php';
 
 $api_url = 'http://example.com/api.php';
 $username = 'bot';
