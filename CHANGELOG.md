@@ -19,6 +19,7 @@ and [Keep a Changelog](http://keepachangelog.com/).
 
 - Centralized API communication checks in `WikiPage::request()` ([#136])
 - Centralized debug logging of API requests/responses in `WikiPage::request()` ([#139])
+- Rewrote installation and invocation instructions using Composer ([#140])
 - Added additional context to `README.md` ([#127])
 - Added semi-linear merge recommendation to `GOVERNANCE.md` ([#130])
 
@@ -36,6 +37,7 @@ and may require changes in applications that invoke these methods:_
 ### Removed
 
 - Method `Wikimate::debugCurlConfig()`, deprecated since v0.10.0 ([#128])
+- File `globals.php`, replaced by expanded Composer instructions ([#140])
 
 ## Version 0.15.0 - 2021-08-26
 
@@ -213,3 +215,4 @@ and may require changes in applications that invoke these methods:_
 [#136]: https://github.com/hamstar/Wikimate/pull/136
 [#138]: https://github.com/hamstar/Wikimate/pull/138
 [#139]: https://github.com/hamstar/Wikimate/pull/139
+[#140]: https://github.com/hamstar/Wikimate/pull/140
