@@ -36,7 +36,7 @@ make sure their contents follow the [contribution guidelines](CONTRIBUTING.md).
 ## Process for releasing a new version of Wikimate
 
 Create a PR with all relevant changes to update the repository for the upcoming release.
-(See [#81](https://github.com/hamstar/Wikimate/pull/81) for an example.)
+(See [#126](https://github.com/hamstar/Wikimate/pull/126) for an example.)
 It should apply the following actions:
 
 1. Change the "Upcoming version" heading in the `CHANGELOG.md` file

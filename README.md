@@ -23,27 +23,46 @@ you will need to have PHP installed to run it.
 Install it with your preferred package management tool
 (for example, on Ubuntu Linux you can run: `sudo apt-get install php`)
 
+The recommended way to install this library is with Composer.
+Composer is a dependency management tool for PHP
+that allows you to declare the dependencies your project needs
+and installs them into your project.
+
 Install Composer by following the instructions [here](https://getcomposer.org/doc/00-intro.md).
 
-Then, download Wikimate, and initialise it by running `composer install`
-(or `composer.bat install` if you're on Windows).
+Then, run the following command in your project's folder
+to download Wikimate and initialise it:
 
-To use Wikimate within another project, you can add it as a composer dependency
-by adding the following to your `composer.json` file:
+```sh
+composer require hamstar/Wikimate
+```
+
+(or `composer.bat require hamstar/Wikimate` if you're on Windows).
+
+To use Wikimate within another project, you can add it as a Composer dependency
+by adding the following to your existing `composer.json` file:
 
 ```json
-"hamstar/Wikimate": "0.15.0"
+{
+    "require": {
+        "hamstar/Wikimate": "^0.15"
+    }
+}
 ```
+
+You can find out more on how to install Composer,
+configure autoloading, and other best-practices for defining dependencies
+at [getcomposer.org](https://getcomposer.org).
 
 ## Usage
 
-In your script file (e.g. `index.php`), include Wikimate's `globals.php` file,
+In your script file (e.g. `index.php`), include the project's `autoload.php` file,
 and create a new `Wikimate` object with the target wiki's API address.
 Then provide a username and password to Wikimate's `login` method,
 to log in to that wiki.
 
 ```php
-include 'globals.php';
+require __DIR__.'/vendor/autoload.php';
 
 $api_url = 'http://example.com/api.php';
 $username = 'bot';
