@@ -10,7 +10,7 @@ It currently consists of three classes:
 - **WikiFile** – Provides an interface to downloading/uploading files and getting their properties.
 
 The [latest released version](https://github.com/hamstar/Wikimate/releases) of Wikimate
-is v0.15.0, released on Aug 26, 2021.
+is v1.0.0, released on September 5, 2021.
 It requires MediaWiki v1.27 or newer.
 See [CHANGELOG.md](CHANGELOG.md) for the detailed version history.
 
@@ -45,7 +45,7 @@ by adding the following to your existing `composer.json` file:
 ```json
 {
     "require": {
-        "hamstar/Wikimate": "^0.15"
+        "hamstar/Wikimate": "^1.0"
     }
 }
 ```
