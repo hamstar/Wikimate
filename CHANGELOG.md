@@ -7,6 +7,10 @@ and [Keep a Changelog](http://keepachangelog.com/).
 
 ## Upcoming version
 
+No changes yet.
+
+## Version 1.0.0 - 2021-09-05
+
 ### Added
 
 - New exception class `WikimateException` for API communication errors ([#136])
