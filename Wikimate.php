@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Wikimate is a wrapper for the MediaWiki API that aims to be very easy to use.
  *
@@ -158,7 +159,7 @@ class Wikimate
      */
     protected function initRequests()
     {
-        $this->useragent = 'Wikimate/'.self::VERSION.' (https://github.com/hamstar/Wikimate)';
+        $this->useragent = 'Wikimate/' . self::VERSION . ' (https://github.com/hamstar/Wikimate)';
 
         $this->session = new Requests_Session($this->api, $this->headers, $this->data, $this->options);
         $this->session->useragent = $this->useragent;
@@ -216,7 +217,7 @@ class Wikimate
                     echo "$action $httptype parameters:\n";
                     echo http_build_query($data) . "\n";
                 }
-                $response = $this->session->get($this->api.'?'.http_build_query($data), $headers);
+                $response = $this->session->get($this->api . '?' . http_build_query($data), $headers);
             }
 
             // Check for replication lag error
@@ -1056,9 +1057,9 @@ class WikiPage
 
                     // Set the offset and depth (from the matched ='s) for the current section
                     $this->sections->byIndex[$currIndex]['offset'] = $currOffset;
-                    $this->sections->byIndex[$currIndex]['depth']  = strlen($matches[1][$currIndex-1]);
+                    $this->sections->byIndex[$currIndex]['depth']  = strlen($matches[1][$currIndex - 1]);
                     $this->sections->byName[$currName]['offset']   = $currOffset;
-                    $this->sections->byName[$currName]['depth']    = strlen($matches[1][$currIndex-1]);
+                    $this->sections->byName[$currName]['depth']    = strlen($matches[1][$currIndex - 1]);
 
                     // If there is a section after this, set the length of this one
                     if (isset($sections[$currIndex])) {
@@ -1272,7 +1273,7 @@ class WikiPage
             $this->error = $r['error'];
         } else {
             $this->error = array();
-            $this->error['page'] = 'Unexpected edit response: '.$r['edit']['result'];
+            $this->error['page'] = 'Unexpected edit response: ' . $r['edit']['result'];
         }
         return false;
     }
@@ -2365,7 +2366,7 @@ class WikiFile
             $this->error = $r['error'];
         } else {
             $this->error = array();
-            $this->error['file'] = 'Unexpected upload response: '.$r['upload']['result'];
+            $this->error['file'] = 'Unexpected upload response: ' . $r['upload']['result'];
         }
         return false;
     }
