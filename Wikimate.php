@@ -741,7 +741,9 @@ class Wikimate
  * @since   1.0.0  August 2021
  * @link    https://www.php.net/manual/en/class.runtimeexception.php
  */
-class WikimateException extends RuntimeException {}
+class WikimateException extends RuntimeException
+{
+}
 
 
 /**
@@ -1068,8 +1070,7 @@ class WikiPage
                         // Set the length of this section
                         $this->sections->byIndex[$currIndex]['length'] = $length;
                         $this->sections->byName[$currName]['length']   = $length;
-                    }
-                    else {
+                    } else {
                         // Set the length of last section
                         $this->sections->byIndex[$currIndex]['length'] = strlen($this->text) - $currOffset;
                         $this->sections->byName[$currName]['length']   = strlen($this->text) - $currOffset;
@@ -1104,7 +1105,7 @@ class WikiPage
                 return null;
             }
             $coords = $this->sections->byIndex[$section];
-        } else if (is_string($section)) {
+        } elseif (is_string($section)) {
             if (!isset($this->sections->byName[$section])) {
                 return null;
             }
@@ -1168,7 +1169,8 @@ class WikiPage
                 $array = array_keys($this->sections->byName);
                 break;
             default:
-                throw new \UnexpectedValueException("Unexpected keyNames parameter ($keyNames) passed to WikiPage::getAllSections()");
+                throw new \UnexpectedValueException("Unexpected keyNames parameter " .
+                    "($keyNames) passed to WikiPage::getAllSections()");
                 break;
         }
 
@@ -1359,7 +1361,7 @@ class WikiPage
         // Check section type
         if (is_int($section) || $section === 'new') {
             return $section;
-        } else if (is_string($section)) {
+        } elseif (is_string($section)) {
             // Search section names for related index
             $sections = array_keys($this->sections->byName);
             $index = array_search($section, $sections);
