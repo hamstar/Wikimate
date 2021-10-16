@@ -169,7 +169,7 @@ class Wikimate
      * Sends a GET or POST request in JSON format to the API.
      *
      * This method handles maxlag errors as advised at:
-     * {@see https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Maxlag_parameter)
+     * {@see https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Maxlag_parameter}
      * The request is sent with the current maxlag value
      * (default: 5 seconds, per MAXLAG_DEFAULT).
      * If a lag error is received, the method waits (sleeps) for the
