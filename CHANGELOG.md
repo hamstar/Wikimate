@@ -9,7 +9,9 @@ and [Keep a Changelog](http://keepachangelog.com/).
 
 ### Changed
 
-- Applied code formatting rules from [PSR](https://www.php-fig.org/psr/) 2 and 12 ([#142])
+- Applied code formatting rules from [PSR-12](https://www.php-fig.org/psr/psr-12/) ([#142])
+- Resolved static analysis warnings reported by [PHPStan](https://phpstan.org/) &
+  [PHPMD](https://phpmd.org/) ([#143])
 
 ## Version 1.0.0 - 2021-09-05
 
@@ -223,3 +225,4 @@ and may require changes in applications that invoke these methods:_
 [#139]: https://github.com/hamstar/Wikimate/pull/139
 [#140]: https://github.com/hamstar/Wikimate/pull/140
 [#142]: https://github.com/hamstar/Wikimate/pull/142
+[#143]: https://github.com/hamstar/Wikimate/pull/143
