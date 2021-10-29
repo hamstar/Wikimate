@@ -11,7 +11,7 @@ It currently consists of three classes:
 
 The [latest released version](https://github.com/hamstar/Wikimate/releases) of Wikimate
 is v1.0.0, released on September 5, 2021.
-It requires MediaWiki v1.27 or newer.
+It requires PHP v5.3 or newer and MediaWiki v1.27 or newer.
 See [CHANGELOG.md](CHANGELOG.md) for the detailed version history.
 
 ## Installation
