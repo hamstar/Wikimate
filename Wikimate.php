@@ -61,6 +61,27 @@ class Wikimate
     protected $api;
 
     /**
+     * Default headers for Requests_Session
+     *
+     * @var array
+     */
+    protected $headers;
+
+    /**
+     * Default data for Requests_Session
+     *
+     * @var array
+     */
+    protected $data;
+
+    /**
+     * Default options for Requests_Session
+     *
+     * @var array
+     */
+    protected $options;
+
+    /**
      * Username for API requests
      *
      * @var string
@@ -576,8 +597,8 @@ class Wikimate
     /**
      * Perfoms an edit query to the wiki API.
      *
-     * @param   array  $array  Array of details to be passed in the query
-     * @return  array          Decoded JSON output from the wiki API
+     * @param   array         $array  Array of details to be passed in the query
+     * @return  array|boolean         Decoded JSON output from the wiki API
      * @link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Edit
      */
     public function edit($array)
@@ -600,8 +621,8 @@ class Wikimate
     /**
      * Perfoms a delete query to the wiki API.
      *
-     * @param   array  $array  Array of details to be passed in the query
-     * @return  array          Decoded JSON output from the wiki API
+     * @param   array          $array  Array of details to be passed in the query
+     * @return  array|boolean          Decoded JSON output from the wiki API
      * @link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Delete
      */
     public function delete($array)
@@ -648,8 +669,8 @@ class Wikimate
     /**
      * Uploads a file to the wiki API.
      *
-     * @param   array    $array  Array of details to be used in the upload
-     * @return  array            Decoded JSON output from the wiki API
+     * @param   array            $array  Array of details to be used in the upload
+     * @return  array|boolean            Decoded JSON output from the wiki API
      * @link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Upload
      */
     public function upload($array)
@@ -699,8 +720,8 @@ class Wikimate
     /**
      * Performs a file revert query to the wiki API.
      *
-     * @param   array  $array  Array of details to be passed in the query
-     * @return  array          Decoded JSON output from the wiki API
+     * @param   array          $array  Array of details to be passed in the query
+     * @return  array|boolean          Decoded JSON output from the wiki API
      * @link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Filerevert
      */
     public function filerevert($array)
@@ -903,6 +924,8 @@ class WikiPage
 
     /**
      * Alias of self::__destruct().
+     *
+     * @return void
      */
     public function destroy()
     {
@@ -1111,6 +1134,8 @@ class WikiPage
                 return null;
             }
             $coords = $this->sections->byName[$section];
+        } else {
+            $coords = array();
         }
 
         // Extract the offset, depth and (initial) length
@@ -1172,7 +1197,6 @@ class WikiPage
             default:
                 throw new \UnexpectedValueException("Unexpected keyNames parameter " .
                     "($keyNames) passed to WikiPage::getAllSections()");
-                break;
         }
 
         foreach ($array as $key) {
@@ -1492,6 +1516,8 @@ class WikiFile
 
     /**
      * Alias of self::__destruct().
+     *
+     * @return void
      */
     public function destroy()
     {
