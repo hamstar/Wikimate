@@ -61,6 +61,27 @@ class Wikimate
     protected $api;
 
     /**
+     * Default headers for Requests_Session
+     *
+     * @var array
+     */
+    protected $headers;
+
+    /**
+     * Default data for Requests_Session
+     *
+     * @var array
+     */
+    protected $data;
+
+    /**
+     * Default options for Requests_Session
+     *
+     * @var array
+     */
+    protected $options;
+
+    /**
      * Username for API requests
      *
      * @var string
@@ -129,7 +150,7 @@ class Wikimate
      * @link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Tokens
      * @link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Edit#Additional_notes
      */
-    private $csrf_token = null;
+    private $csrfToken = null;
 
     /**
      * Creates a new Wikimate object.
@@ -221,8 +242,8 @@ class Wikimate
             }
 
             // Check for replication lag error
-            $server_lagged = ($response->headers->offsetGet('X-Database-Lag') !== null);
-            if ($server_lagged) {
+            $serverLagged = ($response->headers->offsetGet('X-Database-Lag') !== null);
+            if ($serverLagged) {
                 // Determine recommended or default delay
                 if ($response->headers->offsetGet('Retry-After') !== null) {
                     $sleep = (int)$response->headers->offsetGet('Retry-After');
@@ -243,10 +264,10 @@ class Wikimate
                     $retries = -1; // continue indefinitely
                 }
             }
-        } while ($server_lagged && $retries <= $this->getMaxretries());
+        } while ($serverLagged && $retries <= $this->getMaxretries());
 
         // Throw exception if we ran out of retries
-        if ($server_lagged) {
+        if ($serverLagged) {
             throw new WikimateException("Server lagged ($retries consecutive maxlag responses)");
         }
 
@@ -295,8 +316,8 @@ class Wikimate
         }
 
         // Check for existing CSRF token for this login session
-        if ($type == self::TOKEN_DEFAULT && $this->csrf_token !== null) {
-            return $this->csrf_token;
+        if ($type == self::TOKEN_DEFAULT && $this->csrfToken !== null) {
+            return $this->csrfToken;
         }
 
         $details = array(
@@ -320,8 +341,8 @@ class Wikimate
             return $tokenResult['query']['tokens']['logintoken'];
         } else {
             // Store CSRF token for this login session
-            $this->csrf_token = $tokenResult['query']['tokens']['csrftoken'];
-            return $this->csrf_token;
+            $this->csrfToken = $tokenResult['query']['tokens']['csrftoken'];
+            return $this->csrfToken;
         }
     }
 
@@ -413,7 +434,7 @@ class Wikimate
         }
 
         // Discard CSRF token for this login session
-        $this->csrf_token = null;
+        $this->csrfToken = null;
         return true;
     }
 
@@ -576,8 +597,8 @@ class Wikimate
     /**
      * Perfoms an edit query to the wiki API.
      *
-     * @param   array  $array  Array of details to be passed in the query
-     * @return  array          Decoded JSON output from the wiki API
+     * @param   array         $array  Array of details to be passed in the query
+     * @return  array|boolean         Decoded JSON output from the wiki API
      * @link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Edit
      */
     public function edit($array)
@@ -600,8 +621,8 @@ class Wikimate
     /**
      * Perfoms a delete query to the wiki API.
      *
-     * @param   array  $array  Array of details to be passed in the query
-     * @return  array          Decoded JSON output from the wiki API
+     * @param   array          $array  Array of details to be passed in the query
+     * @return  array|boolean          Decoded JSON output from the wiki API
      * @link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Delete
      */
     public function delete($array)
@@ -648,8 +669,8 @@ class Wikimate
     /**
      * Uploads a file to the wiki API.
      *
-     * @param   array    $array  Array of details to be used in the upload
-     * @return  array            Decoded JSON output from the wiki API
+     * @param   array            $array  Array of details to be used in the upload
+     * @return  array|boolean            Decoded JSON output from the wiki API
      * @link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Upload
      */
     public function upload($array)
@@ -699,8 +720,8 @@ class Wikimate
     /**
      * Performs a file revert query to the wiki API.
      *
-     * @param   array  $array  Array of details to be passed in the query
-     * @return  array          Decoded JSON output from the wiki API
+     * @param   array          $array  Array of details to be passed in the query
+     * @return  array|boolean          Decoded JSON output from the wiki API
      * @link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Filerevert
      */
     public function filerevert($array)
@@ -903,6 +924,8 @@ class WikiPage
 
     /**
      * Alias of self::__destruct().
+     *
+     * @return void
      */
     public function destroy()
     {
@@ -1111,6 +1134,8 @@ class WikiPage
                 return null;
             }
             $coords = $this->sections->byName[$section];
+        } else {
+            $coords = array();
         }
 
         // Extract the offset, depth and (initial) length
@@ -1172,7 +1197,6 @@ class WikiPage
             default:
                 throw new \UnexpectedValueException("Unexpected keyNames parameter " .
                     "($keyNames) passed to WikiPage::getAllSections()");
-                break;
         }
 
         foreach ($array as $key) {
@@ -1310,7 +1334,7 @@ class WikiPage
      */
     public function newSection($name, $text)
     {
-        return $this->setSection($text, $section = 'new', $summary = $name, $minor = false);
+        return $this->setSection($text, 'new', $name, false);
     }
 
     /**
@@ -1492,6 +1516,8 @@ class WikiFile
 
     /**
      * Alias of self::__destruct().
+     *
+     * @return void
      */
     public function destroy()
     {
