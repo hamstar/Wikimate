@@ -12,6 +12,7 @@ and [Keep a Changelog](http://keepachangelog.com/).
 - Applied code formatting rules from [PSR-12](https://www.php-fig.org/psr/psr-12/) ([#142])
 - Resolved static analysis warnings reported by [PHPStan](https://phpstan.org/) &
   [PHPMD](https://phpmd.org/) ([#143])
+- Clarified error response for edits denied by a CAPTCHA ([#145])
 
 ## Version 1.0.0 - 2021-09-05
 
@@ -226,3 +227,4 @@ and may require changes in applications that invoke these methods:_
 [#140]: https://github.com/hamstar/Wikimate/pull/140
 [#142]: https://github.com/hamstar/Wikimate/pull/142
 [#143]: https://github.com/hamstar/Wikimate/pull/143
+[#145]: https://github.com/hamstar/Wikimate/pull/145

@@ -1297,7 +1297,11 @@ class WikiPage
             $this->error = $r['error'];
         } else {
             $this->error = array();
-            $this->error['page'] = 'Unexpected edit response: ' . $r['edit']['result'];
+            if (isset($r['edit']['captcha'])) {
+                $this->error['page'] = 'Edit denied by CAPTCHA';
+            } else {
+                $this->error['page'] = 'Unexpected edit response: ' . $r['edit']['result'];
+            }
         }
         return false;
     }
