@@ -131,7 +131,7 @@ and may require changes in applications that invoke these methods:_
 
 ### Fixed
 
-- Ensured use of Wikimate user agent by Requests library ([#64])
+- Ensured use of Wikimate user agent by _Requests_ library ([#64])
 - Corrected handling an invalid page title ([#57])
 - Fixed returning an empty section without header in `WikiPage::getSection()` ([#52])
 - Prevented PHP Notices in several methods ([#43], [#67])
@@ -143,7 +143,7 @@ and may require changes in applications that invoke these methods:_
 
 ### Changed
 
-- Switched to using the *Requests* library instead of Curl ([#25])
+- Switched to using the _Requests_ library instead of Curl ([#25])
 
 ## Version 0.9 - 2014-06-13
 
