@@ -1,3 +1,11 @@
+# Default state for all rules
+default: true
+
+# MD004/ul-style
+MD004:
+  # Use dashes for lists, leaving asterisks for emphasis
+  style: "dash"
+
 # MD010/no-hard-tabs
 MD010:
   # Exclude code blocks
@@ -19,8 +27,3 @@ MD024:
 MD026:
   # Trailing punctuation characters not allowed in headings
   punctuation: ",;:!"
-
-# MD004/ul-style
-MD004:
-  # Use dashes for lists, leaving asterisks for emphasis
-  style: "dash"

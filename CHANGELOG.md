@@ -13,6 +13,7 @@ and [Keep a Changelog](http://keepachangelog.com/).
 - Resolved static analysis warnings reported by [PHPStan](https://phpstan.org/) &
   [PHPMD](https://phpmd.org/) ([#143])
 - Clarified error response for edits denied by a CAPTCHA ([#145])
+- Activated default markdownlint rules ([#146])
 
 ## Version 1.0.0 - 2021-09-05
 
@@ -228,3 +229,4 @@ and may require changes in applications that invoke these methods:_
 [#142]: https://github.com/hamstar/Wikimate/pull/142
 [#143]: https://github.com/hamstar/Wikimate/pull/143
 [#145]: https://github.com/hamstar/Wikimate/pull/145
+[#146]: https://github.com/hamstar/Wikimate/pull/146
