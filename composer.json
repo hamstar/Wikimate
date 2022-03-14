@@ -25,6 +25,6 @@
         ]
     },
     "require": {
-        "rmccue/requests": "1.*"
+        "rmccue/requests": "^2.0"
     }
 }

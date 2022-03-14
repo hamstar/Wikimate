@@ -182,7 +182,7 @@ class Wikimate
     {
         $this->useragent = 'Wikimate/' . self::VERSION . ' (https://github.com/hamstar/Wikimate)';
 
-        $this->session = new Requests_Session($this->api, $this->headers, $this->data, $this->options);
+        $this->session = new WpOrg\Requests\Session($this->api, $this->headers, $this->data, $this->options);
         $this->session->useragent = $this->useragent;
     }
 
