@@ -16,6 +16,10 @@ and [Keep a Changelog](http://keepachangelog.com/).
 - Activated default markdownlint rules ([#146])
 - Updated dependency on rmccue/requests to Version 2.x (fixes PHP 8.1 deprecation warnings) ([#147])
 
+### Fixed
+
+- Fixed example not using correct array key for invalid login errors ([#148])
+
 ## Version 1.0.0 - 2021-09-05
 
 ### Added
@@ -232,3 +236,4 @@ and may require changes in applications that invoke these methods:_
 [#145]: https://github.com/hamstar/Wikimate/pull/145
 [#146]: https://github.com/hamstar/Wikimate/pull/146
 [#147]: https://github.com/hamstar/Wikimate/pull/147
+[#148]: https://github.com/hamstar/Wikimate/pull/148

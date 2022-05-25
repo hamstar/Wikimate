@@ -19,7 +19,7 @@ if ($wiki->login($username, $password)) {
 	echo "Success.\n";
 } else {
 	$error = $wiki->getError();
-	echo "\nWikimate error: ".$error['login']."\n";
+	echo "\nWikimate error: ".$error['auth']."\n";
 	exit(1);
 }
 
