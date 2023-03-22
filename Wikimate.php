@@ -403,7 +403,7 @@ class Wikimate
     }
 
     /**
-     * Logs out of the wiki and discard CSRF token.
+     * Logs out of the wiki and discards CSRF token.
      *
      * @return  boolean  True if logged out
      * @link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Logout
@@ -595,7 +595,7 @@ class Wikimate
     }
 
     /**
-     * Perfoms an edit query to the wiki API.
+     * Performs an edit query to the wiki API.
      *
      * @param   array         $array  Array of details to be passed in the query
      * @return  array|boolean         Decoded JSON output from the wiki API
@@ -619,7 +619,7 @@ class Wikimate
     }
 
     /**
-     * Perfoms a delete query to the wiki API.
+     * Performs a delete query to the wiki API.
      *
      * @param   array          $array  Array of details to be passed in the query
      * @return  array|boolean          Decoded JSON output from the wiki API
@@ -969,7 +969,7 @@ class WikiPage
     }
 
     /**
-     * Returns the sections offsets and lengths.
+     * Returns the sections with offsets and lengths.
      *
      * @return  stdClass  Section class
      */
