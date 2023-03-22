@@ -756,7 +756,7 @@ class Wikimate
 /**
  * Defines Wikimate's exception for unexpected run-time errors
  * while communicating with the API.
- * WikimateException can be thrown only from Wikimate::request(),
+ * WikimateException can be thrown only from {@see Wikimate::request()},
  * and is propagated to callers of this library.
  *
  * @author  Frans P. de Vries
@@ -1330,7 +1330,7 @@ class WikiPage
     }
 
     /**
-     * Alias of WikiPage::setSection() specifically for creating new sections.
+     * Alias of {@see WikiPage::setSection()} specifically for creating new sections.
      *
      * @param   string   $name  The heading name for the new section
      * @param   string   $text  The text of the new section
@@ -2354,7 +2354,7 @@ class WikiFile
     /**
      * Uploads to the current file using the given parameters.
      * $text is only used for the page contents of a new file,
-     * not an existing one (update that via WikiPage::setText()).
+     * not an existing one (update that via {@see WikiPage::setText()}).
      * If no $text is specified, $comment will be used as new page text.
      *
      * @param   array    $params     The upload parameters
@@ -2404,7 +2404,7 @@ class WikiFile
     /**
      * Uploads the given contents to the current file.
      * $text is only used for the page contents of a new file,
-     * not an existing one (update that via WikiPage::setText()).
+     * not an existing one (update that via {@see WikiPage::setText()}).
      * If no $text is specified, $comment will be used as new page text.
      *
      * @param   string   $data       The data to upload
@@ -2427,7 +2427,7 @@ class WikiFile
     /**
      * Reads contents from the given path and uploads it to the current file.
      * $text is only used for the page contents of a new file,
-     * not an existing one (update that via WikiPage::setText()).
+     * not an existing one (update that via {@see WikiPage::setText()}).
      * If no $text is specified, $comment will be used as new page text.
      *
      * @param   string   $path       The file path to upload
@@ -2452,7 +2452,7 @@ class WikiFile
     /**
      * Uploads file contents from the given URL to the current file.
      * $text is only used for the page contents of a new file,
-     * not an existing one (update that via WikiPage::setText()).
+     * not an existing one (update that via {@see WikiPage::setText()}).
      * If no $text is specified, $comment will be used as new page text.
      *
      * @param   string   $url        The URL from which to upload
