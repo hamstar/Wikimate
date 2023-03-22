@@ -500,8 +500,8 @@ class Wikimate
      * In order to use a custom user agent for all requests in the session,
      * call this method before invoking {@see Wikimate::login()}.
      *
-     * @param   string   $ua  The new user agent
-     * @return  Wikimate      This object
+     * @param   string    $ua  The new user agent
+     * @return  Wikimate       This object
      * @link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Etiquette#The_User-Agent_header
      */
     public function setUserAgent($ua)
@@ -597,8 +597,8 @@ class Wikimate
     /**
      * Performs an edit query to the wiki API.
      *
-     * @param   array         $array  Array of details to be passed in the query
-     * @return  array|boolean         Decoded JSON output from the wiki API
+     * @param   array          $array  Array of details to be passed in the query
+     * @return  array|boolean          Decoded JSON output from the wiki API
      * @link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Edit
      */
     public function edit($array)
@@ -669,8 +669,8 @@ class Wikimate
     /**
      * Uploads a file to the wiki API.
      *
-     * @param   array            $array  Array of details to be used in the upload
-     * @return  array|boolean            Decoded JSON output from the wiki API
+     * @param   array          $array  Array of details to be used in the upload
+     * @return  array|boolean          Decoded JSON output from the wiki API
      * @link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Upload
      */
     public function upload($array)
