@@ -19,6 +19,7 @@ and [Keep a Changelog](http://keepachangelog.com/).
 ### Fixed
 
 - Fixed example not using correct array key for invalid login errors ([#148])
+- Improved various code comments ([#149])
 
 ## Version 1.0.0 - 2021-09-05
 
@@ -237,3 +238,4 @@ and may require changes in applications that invoke these methods:_
 [#146]: https://github.com/hamstar/Wikimate/pull/146
 [#147]: https://github.com/hamstar/Wikimate/pull/147
 [#148]: https://github.com/hamstar/Wikimate/pull/148
+[#149]: https://github.com/hamstar/Wikimate/pull/149

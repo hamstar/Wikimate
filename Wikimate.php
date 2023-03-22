@@ -403,7 +403,7 @@ class Wikimate
     }
 
     /**
-     * Logs out of the wiki and discard CSRF token.
+     * Logs out of the wiki and discards CSRF token.
      *
      * @return  boolean  True if logged out
      * @link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Logout
@@ -500,8 +500,8 @@ class Wikimate
      * In order to use a custom user agent for all requests in the session,
      * call this method before invoking {@see Wikimate::login()}.
      *
-     * @param   string   $ua  The new user agent
-     * @return  Wikimate      This object
+     * @param   string    $ua  The new user agent
+     * @return  Wikimate       This object
      * @link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Etiquette#The_User-Agent_header
      */
     public function setUserAgent($ua)
@@ -595,10 +595,10 @@ class Wikimate
     }
 
     /**
-     * Perfoms an edit query to the wiki API.
+     * Performs an edit query to the wiki API.
      *
-     * @param   array         $array  Array of details to be passed in the query
-     * @return  array|boolean         Decoded JSON output from the wiki API
+     * @param   array          $array  Array of details to be passed in the query
+     * @return  array|boolean          Decoded JSON output from the wiki API
      * @link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Edit
      */
     public function edit($array)
@@ -619,7 +619,7 @@ class Wikimate
     }
 
     /**
-     * Perfoms a delete query to the wiki API.
+     * Performs a delete query to the wiki API.
      *
      * @param   array          $array  Array of details to be passed in the query
      * @return  array|boolean          Decoded JSON output from the wiki API
@@ -669,8 +669,8 @@ class Wikimate
     /**
      * Uploads a file to the wiki API.
      *
-     * @param   array            $array  Array of details to be used in the upload
-     * @return  array|boolean            Decoded JSON output from the wiki API
+     * @param   array          $array  Array of details to be used in the upload
+     * @return  array|boolean          Decoded JSON output from the wiki API
      * @link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Upload
      */
     public function upload($array)
@@ -756,7 +756,7 @@ class Wikimate
 /**
  * Defines Wikimate's exception for unexpected run-time errors
  * while communicating with the API.
- * WikimateException can be thrown only from Wikimate::request(),
+ * WikimateException can be thrown only from {@see Wikimate::request()},
  * and is propagated to callers of this library.
  *
  * @author  Frans P. de Vries
@@ -969,7 +969,7 @@ class WikiPage
     }
 
     /**
-     * Returns the sections offsets and lengths.
+     * Returns the sections with offsets and lengths.
      *
      * @return  stdClass  Section class
      */
@@ -1330,7 +1330,7 @@ class WikiPage
     }
 
     /**
-     * Alias of WikiPage::setSection() specifically for creating new sections.
+     * Alias of {@see WikiPage::setSection()} specifically for creating new sections.
      *
      * @param   string   $name  The heading name for the new section
      * @param   string   $text  The text of the new section
@@ -2354,7 +2354,7 @@ class WikiFile
     /**
      * Uploads to the current file using the given parameters.
      * $text is only used for the page contents of a new file,
-     * not an existing one (update that via WikiPage::setText()).
+     * not an existing one (update that via {@see WikiPage::setText()}).
      * If no $text is specified, $comment will be used as new page text.
      *
      * @param   array    $params     The upload parameters
@@ -2404,7 +2404,7 @@ class WikiFile
     /**
      * Uploads the given contents to the current file.
      * $text is only used for the page contents of a new file,
-     * not an existing one (update that via WikiPage::setText()).
+     * not an existing one (update that via {@see WikiPage::setText()}).
      * If no $text is specified, $comment will be used as new page text.
      *
      * @param   string   $data       The data to upload
@@ -2427,7 +2427,7 @@ class WikiFile
     /**
      * Reads contents from the given path and uploads it to the current file.
      * $text is only used for the page contents of a new file,
-     * not an existing one (update that via WikiPage::setText()).
+     * not an existing one (update that via {@see WikiPage::setText()}).
      * If no $text is specified, $comment will be used as new page text.
      *
      * @param   string   $path       The file path to upload
@@ -2452,7 +2452,7 @@ class WikiFile
     /**
      * Uploads file contents from the given URL to the current file.
      * $text is only used for the page contents of a new file,
-     * not an existing one (update that via WikiPage::setText()).
+     * not an existing one (update that via {@see WikiPage::setText()}).
      * If no $text is specified, $comment will be used as new page text.
      *
      * @param   string   $url        The URL from which to upload
