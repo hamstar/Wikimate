@@ -858,7 +858,7 @@ class WikiPage
 
     /**
      * Constructs a WikiPage object from the title given
-     * and associate with the passed Wikimate object.
+     * and associates it with the passed Wikimate object.
      *
      * @param  string    $title     Name of the wiki article
      * @param  Wikimate  $wikimate  Wikimate object
@@ -901,9 +901,10 @@ class WikiPage
     }
 
     /**
-     * Returns an array sections with the section name as the key
-     * and the text as the element, e.g.
+     * Returns an array of sections with the section name as the key
+     * and the text as the element.
      *
+     * For example:
      * array(
      *   'intro' => 'this text is the introduction',
      *   'History' => 'this is text under the history section'
@@ -1488,7 +1489,7 @@ class WikiFile
 
     /**
      * Constructs a WikiFile object from the filename given
-     * and associate with the passed Wikimate object.
+     * and associates it with the passed Wikimate object.
      *
      * @param  string    $filename  Name of the wiki file
      * @param  Wikimate  $wikimate  Wikimate object
@@ -2064,7 +2065,7 @@ class WikiFile
 
     /**
      * Returns the user who uploaded this file,
-     * or of its specified revision.
+     * or its specified revision.
      *
      * @param   mixed  $revision  The index or timestamp of the revision (optional)
      * @return  mixed             The user of this file (string),
@@ -2087,7 +2088,7 @@ class WikiFile
 
     /**
      * Returns the ID of the user who uploaded this file,
-     * or of its specified revision.
+     * or its specified revision.
      *
      * @param   mixed    $revision  The index or timestamp of the revision (optional)
      * @return  integer             The user ID of this file,
@@ -2187,6 +2188,7 @@ class WikiFile
      * Revision can be the following:
      * - revision timestamp (string, e.g. "2001-01-15T14:56:00Z")
      * - revision index (int, e.g. 3)
+     *
      * The most recent revision has index 0,
      * and it increments towards older revisions.
      * A timestamp must be in ISO 8601 format.
@@ -2222,6 +2224,7 @@ class WikiFile
      * Revision can be the following:
      * - revision timestamp (string, e.g. "2001-01-15T14:56:00Z")
      * - revision index (int, e.g. 3)
+     *
      * The most recent revision has index 0,
      * and it increments towards older revisions.
      * A timestamp must be in ISO 8601 format.
