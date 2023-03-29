@@ -192,7 +192,7 @@ class Wikimate
      * This method handles maxlag errors as advised at:
      * {@see https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Maxlag_parameter}
      * The request is sent with the current maxlag value
-     * (default: 5 seconds, per MAXLAG_DEFAULT).
+     * (default: 5 seconds, per {@see Wikimate::MAXLAG_DEFAULT}).
      * If a lag error is received, the method waits (sleeps) for the
      * recommended time (per the Retry-After header), then tries again.
      * It will do this indefinitely unless the number of retries is limited,
@@ -777,14 +777,18 @@ class WikimateException extends RuntimeException
 class WikiPage
 {
     /**
-     * Use section indexes as keys in return array of {@see WikiPage::getAllSections()}
+     * Identifier for page sections by index.
+     * Use section indexes as keys in return array
+     * of {@see WikiPage::getAllSections()}.
      *
      * @var integer
      */
     const SECTIONLIST_BY_INDEX = 1;
 
     /**
-     * Use section names as keys in return array of {@see WikiPage::getAllSections()}
+     * Identifier for page sections by name.
+     * Use section names as keys in return array
+     * of {@see WikiPage::getAllSections()}.
      *
      * @var integer
      */
@@ -923,7 +927,8 @@ class WikiPage
     }
 
     /**
-     * Alias of self::__destruct().
+     * Forgets all object properties.
+     * Alias of {@see WikiPage::__destruct()}.
      *
      * @return void
      */
@@ -985,8 +990,9 @@ class WikiPage
      */
 
     /**
-     * Gets the text of the page. If refresh is true,
-     * then this method will query the wiki API again for the page details.
+     * Gets the text of the page.
+     * If refresh is true, then this method will query the wiki API
+     * again for the page details.
      *
      * @param   boolean  $refresh  True to query the wiki API again
      * @return  mixed              The text of the page (string), or null if error
@@ -1173,10 +1179,11 @@ class WikiPage
     }
 
     /**
-     * Returns all the sections of the page in an array - the key names can be
-     * set to name or index by using the following for the second param:
+     * Returns all the sections of the page in an array.
+     * The keys can be set to name or index by using the following
+     * for the $keyNames parameter:
      * - self::SECTIONLIST_BY_NAME
-     * - self::SECTIONLIST_BY_INDEX
+     * - self::SECTIONLIST_BY_INDEX (default)
      *
      * @param   boolean  $includeHeading  False to get section text only
      * @param   integer  $keyNames        Modifier for the array key names
@@ -1213,8 +1220,9 @@ class WikiPage
      */
 
     /**
-     * Sets the text in the page.  Updates the starttimestamp to the timestamp
-     * after the page edit (if the edit is successful).
+     * Sets the text in the page.
+     * Updates the starttimestamp to the timestamp after the page edit
+     * (if the edit is successful).
      *
      * Section can be the following:
      * - section name (string, e.g. "History")
@@ -1308,7 +1316,7 @@ class WikiPage
 
     /**
      * Sets the text of the given section.
-     * Essentially an alias of WikiPage:setText()
+     * Essentially an alias of {@see WikiPage::setText()}
      * with the summary and minor parameters switched.
      *
      * Section can be the following:
@@ -1330,7 +1338,9 @@ class WikiPage
     }
 
     /**
-     * Alias of {@see WikiPage::setSection()} specifically for creating new sections.
+     * Appends a new section to the page.
+     * Alias of {@see WikiPage::setSection()} where the section heading
+     * also becomes the edit summary.
      *
      * @param   string   $name  The heading name for the new section
      * @param   string   $text  The text of the new section
@@ -1519,7 +1529,8 @@ class WikiFile
     }
 
     /**
-     * Alias of self::__destruct().
+     * Forgets all object properties.
+     * Alias of {@see WikiFile::__destruct()}.
      *
      * @return void
      */
@@ -1561,8 +1572,9 @@ class WikiFile
      */
 
     /**
-     * Gets the information of the file. If refresh is true,
-     * then this method will query the wiki API again for the file details.
+     * Gets the information of the file.
+     * If refresh is true, then this method will query the wiki API
+     * again for the file details.
      *
      * @param   boolean  $refresh  True to query the wiki API again
      * @param   array    $history  An optional array of revision history parameters
