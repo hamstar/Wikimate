@@ -1637,7 +1637,7 @@ class WikiFile
 
     /**
      * Returns the anonymous flag of this file,
-     * or of its specified revision.
+     * or a given revision of it, if specified.
      * If true, then getUser()'s value represents an anonymous IP address.
      *
      * @param   mixed  $revision  The index or timestamp of the revision (optional)
@@ -1663,7 +1663,7 @@ class WikiFile
 
     /**
      * Returns the aspect ratio of this image,
-     * or of its specified revision.
+     * or a given revision of it, if specified.
      * Returns 0 if file is not an image (and thus has no dimensions).
      *
      * @param   mixed  $revision  The index or timestamp of the revision (optional)
@@ -1697,7 +1697,7 @@ class WikiFile
 
     /**
      * Returns the bit depth of this file,
-     * or of its specified revision.
+     * or a given revision of it, if specified.
      *
      * @param   mixed    $revision  The index or timestamp of the revision (optional)
      * @return  integer             The bit depth of this file,
@@ -1720,7 +1720,7 @@ class WikiFile
 
     /**
      * Returns the canonical title of this file,
-     * or of its specified revision.
+     * or a given revision of it, if specified.
      *
      * @param   mixed  $revision  The index or timestamp of the revision (optional)
      * @return  mixed             The canonical title of this file (string),
@@ -1743,7 +1743,7 @@ class WikiFile
 
     /**
      * Returns the edit comment of this file,
-     * or of its specified revision.
+     * or a given revision of it, if specified.
      *
      * @param   mixed  $revision  The index or timestamp of the revision (optional)
      * @return  mixed             The edit comment of this file (string),
@@ -1766,7 +1766,7 @@ class WikiFile
 
     /**
      * Returns the common metadata of this file,
-     * or of its specified revision.
+     * or a given revision of it, if specified.
      *
      * @param   mixed  $revision  The index or timestamp of the revision (optional)
      * @return  mixed             The common metadata of this file (array),
@@ -1789,7 +1789,7 @@ class WikiFile
 
     /**
      * Returns the description URL of this file,
-     * or of its specified revision.
+     * or a given revision of it, if specified.
      *
      * @param   mixed  $revision  The index or timestamp of the revision (optional)
      * @return  mixed             The description URL of this file (string),
@@ -1812,7 +1812,7 @@ class WikiFile
 
     /**
      * Returns the extended metadata of this file,
-     * or of its specified revision.
+     * or a given revision of it, if specified.
      *
      * @param   mixed  $revision  The index or timestamp of the revision (optional)
      * @return  mixed             The extended metadata of this file (array),
@@ -1835,7 +1835,7 @@ class WikiFile
 
     /**
      * Returns the height of this file,
-     * or of its specified revision.
+     * or a given revision of it, if specified.
      *
      * @param   mixed    $revision  The index or timestamp of the revision (optional)
      * @return  integer             The height of this file, or -1 if revision not found
@@ -1857,7 +1857,7 @@ class WikiFile
 
     /**
      * Returns the media type of this file,
-     * or of its specified revision.
+     * or a given revision of it, if specified.
      *
      * @param   mixed  $revision  The index or timestamp of the revision (optional)
      * @return  mixed             The media type of this file (string),
@@ -1880,7 +1880,7 @@ class WikiFile
 
     /**
      * Returns the Exif metadata of this file,
-     * or of its specified revision.
+     * or a given revision of it, if specified.
      *
      * @param   mixed  $revision  The index or timestamp of the revision (optional)
      * @return  mixed             The metadata of this file (array),
@@ -1903,7 +1903,7 @@ class WikiFile
 
     /**
      * Returns the MIME type of this file,
-     * or of its specified revision.
+     * or a given revision of it, if specified.
      *
      * @param   mixed  $revision  The index or timestamp of the revision (optional)
      * @return  mixed             The MIME type of this file (string),
@@ -1926,7 +1926,7 @@ class WikiFile
 
     /**
      * Returns the parsed edit comment of this file,
-     * or of its specified revision.
+     * or a given revision of it, if specified.
      *
      * @param   mixed  $revision  The index or timestamp of the revision (optional)
      * @return  mixed             The parsed edit comment of this file (string),
@@ -1949,7 +1949,7 @@ class WikiFile
 
     /**
      * Returns the SHA-1 hash of this file,
-     * or of its specified revision.
+     * or a given revision of it, if specified.
      *
      * @param   mixed  $revision  The index or timestamp of the revision (optional)
      * @return  mixed             The SHA-1 hash of this file (string),
@@ -1972,7 +1972,7 @@ class WikiFile
 
     /**
      * Returns the size of this file,
-     * or of its specified revision.
+     * or a given revision of it, if specified.
      *
      * @param   mixed    $revision  The index or timestamp of the revision (optional)
      * @return  integer             The size of this file, or -1 if revision not found
@@ -1994,7 +1994,7 @@ class WikiFile
 
     /**
      * Returns the MIME type of this file's thumbnail,
-     * or of its specified revision.
+     * or a given revision of it, if specified.
      * Returns empty string if property not available for this file type.
      *
      * @param   mixed  $revision  The index or timestamp of the revision (optional)
@@ -2019,7 +2019,7 @@ class WikiFile
 
     /**
      * Returns the timestamp of this file,
-     * or of its specified revision.
+     * or a given revision of it, if specified.
      *
      * @param   mixed  $revision  The index or timestamp of the revision (optional)
      * @return  mixed             The timestamp of this file (string),
@@ -2042,7 +2042,7 @@ class WikiFile
 
     /**
      * Returns the URL of this file,
-     * or of its specified revision.
+     * or a given revision of it, if specified.
      *
      * @param   mixed  $revision  The index or timestamp of the revision (optional)
      * @return  mixed             The URL of this file (string),
@@ -2065,7 +2065,7 @@ class WikiFile
 
     /**
      * Returns the user who uploaded this file,
-     * or its specified revision.
+     * or a given revision of it, if specified.
      *
      * @param   mixed  $revision  The index or timestamp of the revision (optional)
      * @return  mixed             The user of this file (string),
@@ -2088,7 +2088,7 @@ class WikiFile
 
     /**
      * Returns the ID of the user who uploaded this file,
-     * or its specified revision.
+     * or a given revision of it, if specified.
      *
      * @param   mixed    $revision  The index or timestamp of the revision (optional)
      * @return  integer             The user ID of this file,
@@ -2111,7 +2111,7 @@ class WikiFile
 
     /**
      * Returns the width of this file,
-     * or of its specified revision.
+     * or a given revision of it, if specified.
      *
      * @param   mixed    $revision  The index or timestamp of the revision (optional)
      * @return  integer             The width of this file, or -1 if revision not found
