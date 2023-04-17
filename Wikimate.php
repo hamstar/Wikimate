@@ -192,7 +192,7 @@ class Wikimate
      * This method handles maxlag errors as advised at:
      * {@see https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Maxlag_parameter}
      * The request is sent with the current maxlag value
-     * (default: 5 seconds, per MAXLAG_DEFAULT).
+     * (default: 5 seconds, per {@see Wikimate::MAXLAG_DEFAULT}).
      * If a lag error is received, the method waits (sleeps) for the
      * recommended time (per the Retry-After header), then tries again.
      * It will do this indefinitely unless the number of retries is limited,
@@ -777,14 +777,18 @@ class WikimateException extends RuntimeException
 class WikiPage
 {
     /**
-     * Use section indexes as keys in return array of {@see WikiPage::getAllSections()}
+     * Identifier for page sections by index.
+     * Use section indexes as keys in return array
+     * of {@see WikiPage::getAllSections()}.
      *
      * @var integer
      */
     const SECTIONLIST_BY_INDEX = 1;
 
     /**
-     * Use section names as keys in return array of {@see WikiPage::getAllSections()}
+     * Identifier for page sections by name.
+     * Use section names as keys in return array
+     * of {@see WikiPage::getAllSections()}.
      *
      * @var integer
      */
@@ -854,7 +858,7 @@ class WikiPage
 
     /**
      * Constructs a WikiPage object from the title given
-     * and associate with the passed Wikimate object.
+     * and associates it with the passed Wikimate object.
      *
      * @param  string    $title     Name of the wiki article
      * @param  Wikimate  $wikimate  Wikimate object
@@ -897,9 +901,10 @@ class WikiPage
     }
 
     /**
-     * Returns an array sections with the section name as the key
-     * and the text as the element, e.g.
+     * Returns an array of sections with the section name as the key
+     * and the text as the element.
      *
+     * For example:
      * array(
      *   'intro' => 'this text is the introduction',
      *   'History' => 'this is text under the history section'
@@ -923,7 +928,8 @@ class WikiPage
     }
 
     /**
-     * Alias of self::__destruct().
+     * Forgets all object properties.
+     * Alias of {@see WikiPage::__destruct()}.
      *
      * @return void
      */
@@ -985,8 +991,9 @@ class WikiPage
      */
 
     /**
-     * Gets the text of the page. If refresh is true,
-     * then this method will query the wiki API again for the page details.
+     * Gets the text of the page.
+     * If refresh is true, then this method will query the wiki API
+     * again for the page details.
      *
      * @param   boolean  $refresh  True to query the wiki API again
      * @return  mixed              The text of the page (string), or null if error
@@ -1173,10 +1180,11 @@ class WikiPage
     }
 
     /**
-     * Returns all the sections of the page in an array - the key names can be
-     * set to name or index by using the following for the second param:
+     * Returns all the sections of the page in an array.
+     * The keys can be set to name or index by using the following
+     * for the $keyNames parameter:
      * - self::SECTIONLIST_BY_NAME
-     * - self::SECTIONLIST_BY_INDEX
+     * - self::SECTIONLIST_BY_INDEX (default)
      *
      * @param   boolean  $includeHeading  False to get section text only
      * @param   integer  $keyNames        Modifier for the array key names
@@ -1213,8 +1221,9 @@ class WikiPage
      */
 
     /**
-     * Sets the text in the page.  Updates the starttimestamp to the timestamp
-     * after the page edit (if the edit is successful).
+     * Sets the text in the page.
+     * Updates the starttimestamp to the timestamp after the page edit
+     * (if the edit is successful).
      *
      * Section can be the following:
      * - section name (string, e.g. "History")
@@ -1308,7 +1317,7 @@ class WikiPage
 
     /**
      * Sets the text of the given section.
-     * Essentially an alias of WikiPage:setText()
+     * Essentially an alias of {@see WikiPage::setText()}
      * with the summary and minor parameters switched.
      *
      * Section can be the following:
@@ -1330,7 +1339,9 @@ class WikiPage
     }
 
     /**
-     * Alias of {@see WikiPage::setSection()} specifically for creating new sections.
+     * Appends a new section to the page.
+     * Alias of {@see WikiPage::setSection()} where the section heading
+     * also becomes the edit summary.
      *
      * @param   string   $name  The heading name for the new section
      * @param   string   $text  The text of the new section
@@ -1478,7 +1489,7 @@ class WikiFile
 
     /**
      * Constructs a WikiFile object from the filename given
-     * and associate with the passed Wikimate object.
+     * and associates it with the passed Wikimate object.
      *
      * @param  string    $filename  Name of the wiki file
      * @param  Wikimate  $wikimate  Wikimate object
@@ -1519,7 +1530,8 @@ class WikiFile
     }
 
     /**
-     * Alias of self::__destruct().
+     * Forgets all object properties.
+     * Alias of {@see WikiFile::__destruct()}.
      *
      * @return void
      */
@@ -1561,8 +1573,9 @@ class WikiFile
      */
 
     /**
-     * Gets the information of the file. If refresh is true,
-     * then this method will query the wiki API again for the file details.
+     * Gets the information of the file.
+     * If refresh is true, then this method will query the wiki API
+     * again for the file details.
      *
      * @param   boolean  $refresh  True to query the wiki API again
      * @param   array    $history  An optional array of revision history parameters
@@ -1624,7 +1637,7 @@ class WikiFile
 
     /**
      * Returns the anonymous flag of this file,
-     * or of its specified revision.
+     * or a given revision of it, if specified.
      * If true, then getUser()'s value represents an anonymous IP address.
      *
      * @param   mixed  $revision  The index or timestamp of the revision (optional)
@@ -1650,7 +1663,7 @@ class WikiFile
 
     /**
      * Returns the aspect ratio of this image,
-     * or of its specified revision.
+     * or a given revision of it, if specified.
      * Returns 0 if file is not an image (and thus has no dimensions).
      *
      * @param   mixed  $revision  The index or timestamp of the revision (optional)
@@ -1684,7 +1697,7 @@ class WikiFile
 
     /**
      * Returns the bit depth of this file,
-     * or of its specified revision.
+     * or a given revision of it, if specified.
      *
      * @param   mixed    $revision  The index or timestamp of the revision (optional)
      * @return  integer             The bit depth of this file,
@@ -1707,7 +1720,7 @@ class WikiFile
 
     /**
      * Returns the canonical title of this file,
-     * or of its specified revision.
+     * or a given revision of it, if specified.
      *
      * @param   mixed  $revision  The index or timestamp of the revision (optional)
      * @return  mixed             The canonical title of this file (string),
@@ -1730,7 +1743,7 @@ class WikiFile
 
     /**
      * Returns the edit comment of this file,
-     * or of its specified revision.
+     * or a given revision of it, if specified.
      *
      * @param   mixed  $revision  The index or timestamp of the revision (optional)
      * @return  mixed             The edit comment of this file (string),
@@ -1753,7 +1766,7 @@ class WikiFile
 
     /**
      * Returns the common metadata of this file,
-     * or of its specified revision.
+     * or a given revision of it, if specified.
      *
      * @param   mixed  $revision  The index or timestamp of the revision (optional)
      * @return  mixed             The common metadata of this file (array),
@@ -1776,7 +1789,7 @@ class WikiFile
 
     /**
      * Returns the description URL of this file,
-     * or of its specified revision.
+     * or a given revision of it, if specified.
      *
      * @param   mixed  $revision  The index or timestamp of the revision (optional)
      * @return  mixed             The description URL of this file (string),
@@ -1799,7 +1812,7 @@ class WikiFile
 
     /**
      * Returns the extended metadata of this file,
-     * or of its specified revision.
+     * or a given revision of it, if specified.
      *
      * @param   mixed  $revision  The index or timestamp of the revision (optional)
      * @return  mixed             The extended metadata of this file (array),
@@ -1822,7 +1835,7 @@ class WikiFile
 
     /**
      * Returns the height of this file,
-     * or of its specified revision.
+     * or a given revision of it, if specified.
      *
      * @param   mixed    $revision  The index or timestamp of the revision (optional)
      * @return  integer             The height of this file, or -1 if revision not found
@@ -1844,7 +1857,7 @@ class WikiFile
 
     /**
      * Returns the media type of this file,
-     * or of its specified revision.
+     * or a given revision of it, if specified.
      *
      * @param   mixed  $revision  The index or timestamp of the revision (optional)
      * @return  mixed             The media type of this file (string),
@@ -1867,7 +1880,7 @@ class WikiFile
 
     /**
      * Returns the Exif metadata of this file,
-     * or of its specified revision.
+     * or a given revision of it, if specified.
      *
      * @param   mixed  $revision  The index or timestamp of the revision (optional)
      * @return  mixed             The metadata of this file (array),
@@ -1890,7 +1903,7 @@ class WikiFile
 
     /**
      * Returns the MIME type of this file,
-     * or of its specified revision.
+     * or a given revision of it, if specified.
      *
      * @param   mixed  $revision  The index or timestamp of the revision (optional)
      * @return  mixed             The MIME type of this file (string),
@@ -1913,7 +1926,7 @@ class WikiFile
 
     /**
      * Returns the parsed edit comment of this file,
-     * or of its specified revision.
+     * or a given revision of it, if specified.
      *
      * @param   mixed  $revision  The index or timestamp of the revision (optional)
      * @return  mixed             The parsed edit comment of this file (string),
@@ -1936,7 +1949,7 @@ class WikiFile
 
     /**
      * Returns the SHA-1 hash of this file,
-     * or of its specified revision.
+     * or a given revision of it, if specified.
      *
      * @param   mixed  $revision  The index or timestamp of the revision (optional)
      * @return  mixed             The SHA-1 hash of this file (string),
@@ -1959,7 +1972,7 @@ class WikiFile
 
     /**
      * Returns the size of this file,
-     * or of its specified revision.
+     * or a given revision of it, if specified.
      *
      * @param   mixed    $revision  The index or timestamp of the revision (optional)
      * @return  integer             The size of this file, or -1 if revision not found
@@ -1981,7 +1994,7 @@ class WikiFile
 
     /**
      * Returns the MIME type of this file's thumbnail,
-     * or of its specified revision.
+     * or a given revision of it, if specified.
      * Returns empty string if property not available for this file type.
      *
      * @param   mixed  $revision  The index or timestamp of the revision (optional)
@@ -2006,7 +2019,7 @@ class WikiFile
 
     /**
      * Returns the timestamp of this file,
-     * or of its specified revision.
+     * or a given revision of it, if specified.
      *
      * @param   mixed  $revision  The index or timestamp of the revision (optional)
      * @return  mixed             The timestamp of this file (string),
@@ -2029,7 +2042,7 @@ class WikiFile
 
     /**
      * Returns the URL of this file,
-     * or of its specified revision.
+     * or a given revision of it, if specified.
      *
      * @param   mixed  $revision  The index or timestamp of the revision (optional)
      * @return  mixed             The URL of this file (string),
@@ -2052,7 +2065,7 @@ class WikiFile
 
     /**
      * Returns the user who uploaded this file,
-     * or of its specified revision.
+     * or a given revision of it, if specified.
      *
      * @param   mixed  $revision  The index or timestamp of the revision (optional)
      * @return  mixed             The user of this file (string),
@@ -2075,7 +2088,7 @@ class WikiFile
 
     /**
      * Returns the ID of the user who uploaded this file,
-     * or of its specified revision.
+     * or a given revision of it, if specified.
      *
      * @param   mixed    $revision  The index or timestamp of the revision (optional)
      * @return  integer             The user ID of this file,
@@ -2098,7 +2111,7 @@ class WikiFile
 
     /**
      * Returns the width of this file,
-     * or of its specified revision.
+     * or a given revision of it, if specified.
      *
      * @param   mixed    $revision  The index or timestamp of the revision (optional)
      * @return  integer             The width of this file, or -1 if revision not found
@@ -2175,6 +2188,7 @@ class WikiFile
      * Revision can be the following:
      * - revision timestamp (string, e.g. "2001-01-15T14:56:00Z")
      * - revision index (int, e.g. 3)
+     *
      * The most recent revision has index 0,
      * and it increments towards older revisions.
      * A timestamp must be in ISO 8601 format.
@@ -2210,6 +2224,7 @@ class WikiFile
      * Revision can be the following:
      * - revision timestamp (string, e.g. "2001-01-15T14:56:00Z")
      * - revision index (int, e.g. 3)
+     *
      * The most recent revision has index 0,
      * and it increments towards older revisions.
      * A timestamp must be in ISO 8601 format.

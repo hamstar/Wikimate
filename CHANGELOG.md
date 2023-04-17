@@ -20,6 +20,7 @@ and [Keep a Changelog](http://keepachangelog.com/).
 
 - Fixed example not using correct array key for invalid login errors ([#148])
 - Improved various code comments ([#149])
+- Improved more PHPDoc comments ([#150])
 
 ## Version 1.0.0 - 2021-09-05
 
@@ -239,3 +240,4 @@ and may require changes in applications that invoke these methods:_
 [#147]: https://github.com/hamstar/Wikimate/pull/147
 [#148]: https://github.com/hamstar/Wikimate/pull/148
 [#149]: https://github.com/hamstar/Wikimate/pull/149
+[#150]: https://github.com/hamstar/Wikimate/pull/150
