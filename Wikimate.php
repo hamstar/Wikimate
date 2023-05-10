@@ -473,17 +473,18 @@ class Wikimate
      */
     public function logout()
     {
-        // Obtain logout token first
-        if (($logouttoken = $this->token()) === null) {
-            return false;
-        }
-
-        // Token is needed in MediaWiki v1.34+, older versions produce an
-        // 'Unrecognized parameter' warning which can be ignored
         $details = array(
             'action' => 'logout',
-            'token' => $logouttoken,
         );
+
+        // Check if token parameter is required (it is since MediaWiki v1.34)
+        if ($this->supportsModuleParam('logout', 'token')) {
+            // Obtain logout token
+            if (($logouttoken = $this->token()) === null) {
+                return false;
+            }
+            $details['token'] = $logouttoken;
+        }
 
         // Send the logout request
         $logoutResult = $this->request($details, array(), true);

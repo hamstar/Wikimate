@@ -7,6 +7,10 @@ and [Keep a Changelog](http://keepachangelog.com/).
 
 ## Upcoming version
 
+### Added
+
+- Added internal mechanism to handle version-dependent parameters of API modules ([#151])
+
 ### Changed
 
 - Applied code formatting rules from [PSR-12](https://www.php-fig.org/psr/psr-12/) ([#142])
@@ -241,3 +245,4 @@ and may require changes in applications that invoke these methods:_
 [#148]: https://github.com/hamstar/Wikimate/pull/148
 [#149]: https://github.com/hamstar/Wikimate/pull/149
 [#150]: https://github.com/hamstar/Wikimate/pull/150
+[#151]: https://github.com/hamstar/Wikimate/pull/151
