@@ -153,6 +153,14 @@ class Wikimate
     private $csrfToken = null;
 
     /**
+     * Stored parameter lists for API modules
+     *
+     * @var array
+     * @link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Parameter_information
+     */
+    private $moduleParams = array();
+
+    /**
      * Creates a new Wikimate object.
      *
      * @param   string    $api      Base URL for the API
@@ -347,6 +355,58 @@ class Wikimate
     }
 
     /**
+     * Obtains parameter lists for API modules.
+     * For specific API modules where supported parameters vary with
+     * MediaWiki versions, this method is used to fetch and store
+     * these parameter lists for use by the API calls of those modules.
+     * Current list of modules for which this mechanism is employed:
+     * - {@link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Logout logout}
+     *
+     * @return void
+     * @link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Parameter_information
+     */
+    private function storeModuleParams()
+    {
+        // Obtain parameter info for modules
+        $details = array(
+            'action' => 'paraminfo',
+            'modules' => 'logout',
+        );
+
+        // Send the paraminfo request
+        $paramResult = $this->request($details);
+
+        // Check for errors
+        if (isset($paramResult['error'])) {
+            $this->error = $paramResult['error']; // Set the error if there was one
+            return;
+        } else {
+            $this->error = null; // Reset the error status
+        }
+
+        // Store supported parameters for all requested modules
+        foreach ($paramResult['paraminfo']['modules'] as $module) {
+            $this->moduleParams[$module['name']] = array();
+            foreach ($module['parameters'] as $param) {
+                $this->moduleParams[$module['name']][] = $param['name'];
+            }
+        }
+    }
+
+    /**
+     * Checks API module's parameters for a supported parameter.
+     *
+     * @param   string   $module  The module name
+     * @param   string   $param   The parameter name
+     * @return  boolean           True if supported
+     * @link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Parameter_information
+     */
+    public function supportsModuleParam($module, $param)
+    {
+        return in_array($param, $this->moduleParams[$module]);
+    }
+
+    /**
      * Logs in to the wiki.
      *
      * @param   string   $username  The user name
@@ -399,6 +459,9 @@ class Wikimate
             return false;
         }
 
+        // Obtain parameter lists for API modules
+        $this->storeModuleParams();
+
         return true;
     }
 
@@ -410,17 +473,18 @@ class Wikimate
      */
     public function logout()
     {
-        // Obtain logout token first
-        if (($logouttoken = $this->token()) === null) {
-            return false;
-        }
-
-        // Token is needed in MediaWiki v1.34+, older versions produce an
-        // 'Unrecognized parameter' warning which can be ignored
         $details = array(
             'action' => 'logout',
-            'token' => $logouttoken,
         );
+
+        // Check if token parameter is required (it is since MediaWiki v1.34)
+        if ($this->supportsModuleParam('logout', 'token')) {
+            // Obtain logout token
+            if (($logouttoken = $this->token()) === null) {
+                return false;
+            }
+            $details['token'] = $logouttoken;
+        }
 
         // Send the logout request
         $logoutResult = $this->request($details, array(), true);
