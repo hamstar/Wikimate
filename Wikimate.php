@@ -361,6 +361,7 @@ class Wikimate
      * these parameter lists for use by the API calls of those modules.
      * Current list of modules for which this mechanism is employed:
      * - {@link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Logout logout}
+     * - {@link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Delete delete}
      *
      * @return void
      * @link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Parameter_information
@@ -370,7 +371,7 @@ class Wikimate
         // Obtain parameter info for modules
         $details = array(
             'action' => 'paraminfo',
-            'modules' => 'logout',
+            'modules' => 'logout|delete',
         );
 
         // Send the paraminfo request
@@ -1419,10 +1420,11 @@ class WikiPage
     /**
      * Deletes the page.
      *
-     * @param   string   $reason  Reason for the deletion
-     * @return  boolean           True if page was deleted successfully
+     * @param   string   $reason   Reason for the deletion
+     * @param   boolean  $talktoo  True to delete talk page too (MW 1.38+)
+     * @return  boolean            True if page was deleted successfully
      */
-    public function delete($reason = null)
+    public function delete($reason = null, $talktoo = false)
     {
         $data = array(
             'title' => $this->title,
@@ -1431,6 +1433,10 @@ class WikiPage
         // Set options from arguments
         if (!is_null($reason)) {
             $data['reason'] = $reason;
+        }
+        // Check if deletetalk parameter is supported (it is since MediaWiki v1.38)
+        if ($this->wikimate->supportsModuleParam('delete', 'deletetalk') && $talktoo) {
+            $data['deletetalk'] = $talktoo;
         }
 
         $r = $this->wikimate->delete($data); // The delete query
@@ -2319,9 +2325,10 @@ class WikiFile
      *
      * @param   string   $reason       Reason for the deletion
      * @param   string   $archivename  The archive name of the older revision
+     * @param   boolean  $talktoo      True to delete talk page too (MW 1.38+)
      * @return  boolean                True if file (revision) was deleted successfully
      */
-    public function delete($reason = null, $archivename = null)
+    public function delete($reason = null, $archivename = null, $talktoo = false)
     {
         $data = array(
             'title' => 'File:' . $this->filename,
@@ -2333,6 +2340,10 @@ class WikiFile
         }
         if (!is_null($archivename)) {
             $data['oldimage'] = $archivename;
+        }
+        // Check if deletetalk parameter is supported (it is since MediaWiki v1.38)
+        if ($this->wikimate->supportsModuleParam('delete', 'deletetalk') && $talktoo) {
+            $data['deletetalk'] = $talktoo;
         }
 
         $r = $this->wikimate->delete($data); // The delete query

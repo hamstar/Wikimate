@@ -10,6 +10,7 @@ and [Keep a Changelog](http://keepachangelog.com/).
 ### Added
 
 - Added internal mechanism to handle version-dependent parameters of API modules ([#151])
+- Support version-dependent `deletetalk` parameter in `WikiPage::delete()` and `WikiFile::delete()` ([#152])
 
 ### Changed
 
@@ -23,6 +24,8 @@ and [Keep a Changelog](http://keepachangelog.com/).
 ### Fixed
 
 - Fixed example not using correct array key for invalid login errors ([#148])
+- Prevented warning in `Wikimate::logout()` about `token` parameter that was unsupported
+  before MediaWiki v1.34 ([#151])
 - Improved various code comments ([#149])
 - Improved more PHPDoc comments ([#150])
 
@@ -246,3 +249,4 @@ and may require changes in applications that invoke these methods:_
 [#149]: https://github.com/hamstar/Wikimate/pull/149
 [#150]: https://github.com/hamstar/Wikimate/pull/150
 [#151]: https://github.com/hamstar/Wikimate/pull/151
+[#152]: https://github.com/hamstar/Wikimate/pull/152
