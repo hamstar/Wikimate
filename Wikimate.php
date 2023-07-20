@@ -362,6 +362,7 @@ class Wikimate
      * Current list of modules for which this mechanism is employed:
      * - {@link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Logout logout}
      * - {@link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Delete delete}
+     * - {@link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Undelete undelete}
      *
      * @return void
      * @link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Parameter_information
@@ -371,7 +372,7 @@ class Wikimate
         // Obtain parameter info for modules
         $details = array(
             'action' => 'paraminfo',
-            'modules' => 'logout|delete',
+            'modules' => 'logout|delete|undelete',
         );
 
         // Send the paraminfo request
@@ -703,6 +704,44 @@ class Wikimate
 
         $array['action'] = 'delete';
         $array['token'] = $deletetoken;
+
+        return $this->request($array, $headers, true);
+    }
+
+    /**
+     * Performs an undelete query to the wiki API.
+     *
+     * @param   string         $name     The original name of the wiki page or file
+     * @param   string         $reason   Reason for the restore
+     * @param   boolean        $talktoo  True to restore talk page, if any;
+     *                                   false to leave talk page deleted (MW 1.39+)
+     * @return  array|boolean            Decoded JSON output from the wiki API
+     * @link https://www.mediawiki.org/wiki/Special:MyLanguage/API:Undelete
+     */
+    public function undelete($name, $reason = null, $talktoo = true)
+    {
+        // Obtain default token first
+        if (($undeletetoken = $this->token()) === null) {
+            return false;
+        }
+
+        $headers = array(
+            'Content-Type' => "application/x-www-form-urlencoded"
+        );
+
+        // Set options from arguments
+        $array = array(
+            'action' => 'undelete',
+            'title' => $name,
+            'token' => $undeletetoken
+        );
+        if (!is_null($reason)) {
+            $array['reason'] = $reason;
+        }
+        // Check if undeletetalk parameter is supported (it is since MediaWiki v1.39)
+        if ($this->supportsModuleParam('undelete', 'undeletetalk') && $talktoo) {
+            $array['undeletetalk'] = $talktoo;
+        }
 
         return $this->request($array, $headers, true);
     }
