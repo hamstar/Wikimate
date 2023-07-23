@@ -7,6 +7,10 @@ and [Keep a Changelog](http://keepachangelog.com/).
 
 ## Upcoming version
 
+No changes yet.
+
+## Version 1.1.0 - 2023-07-30
+
 ### Added
 
 - Added internal mechanism to handle version-dependent parameters of API modules ([#151])
