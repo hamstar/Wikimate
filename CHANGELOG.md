@@ -7,7 +7,9 @@ and [Keep a Changelog](http://keepachangelog.com/).
 
 ## Upcoming version
 
-No changes yet.
+### Changed
+
+- Clarified instructions in `GOVERNANCE.md` for releasing new versions ([#157])
 
 ## Version 1.1.0 - 2023-07-30
 
@@ -257,3 +259,4 @@ and may require changes in applications that invoke these methods:_
 [#152]: https://github.com/hamstar/Wikimate/pull/152
 [#153]: https://github.com/hamstar/Wikimate/pull/153
 [#155]: https://github.com/hamstar/Wikimate/pull/155
+[#157]: https://github.com/hamstar/Wikimate/pull/157

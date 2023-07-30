@@ -35,29 +35,30 @@ make sure their contents follow the [contribution guidelines](CONTRIBUTING.md).
 
 ## Process for releasing a new version of Wikimate
 
-Create a PR with all relevant changes to update the repository for the upcoming release.
+Create a pull request with all relevant changes to update the repository for the upcoming release.
 (See [#126](https://github.com/hamstar/Wikimate/pull/126) for an example.)
 It should apply the following actions:
 
 1. Change the "Upcoming version" heading in the `CHANGELOG.md` file
-   to the appropriate version name and date (e.g. "Version 1.2.3 - 2020-12-31")
-   and add a new "Upcoming version" section heading above it,
-   with the contents "No changes yet.";
-2. Edit `README.md` and replace all references
+   to the appropriate version number and date (e.g. `Version 1.2.3 - 2020-12-31`).
+   Follow the [SemVer](http://semver.org/) conventions
+   to determine which part of the version number to increase.
+2. Still in the `CHANGELOG.md` file,
+   add a new "Upcoming version" section heading above the other sections,
+   with the contents "No changes yet."
+3. Edit `README.md` and replace all references
    to the previous version number and release date
-   with the corresponding data for the new version;
-3. Update all version references in `Wikimate.php`
+   with the corresponding data for the new version.
+4. Update all version references in `Wikimate.php`
    to the new version.
 
-Once this PR is merged, create a new release
+Once this PR is merged, create a new git tag and its associated release
 in <https://github.com/hamstar/Wikimate/releases/new>
 (collaborator status is required for this step).
 
-The version tag and the title of the release notes should be in the format `v1.2.3`
-(following [SemVer](http://semver.org/) conventions
-to determine which part of the version number to increase).
+The version tag and the title of the release notes should be in the format `v1.2.3`.
 The body of the release notes should be a summary of the contents
-of the relevant section in `CHANGELOG.md`.
+of the corresponding section in `CHANGELOG.md`.
 
 Finally, update the Wikimate entry on [Packagist](https://packagist.org/packages/hamstar/wikimate)
 (via the "Update Now" link in the right sidebar)
@@ -65,3 +66,6 @@ and the corresponding row in MediaWiki.org's
 [PHP libraries table](https://www.mediawiki.org/wiki/API:Client_code/All#PHP).
 If applicable, also update Wikipedia's
 [PHP bot frameworks table](https://en.wikipedia.org/wiki/Wikipedia:PHP_bot_framework_table).
+
+Once all of this is done, leave a comment in the release preparation PR
+to keep a record of the steps taken for completing the release.
