@@ -11,7 +11,7 @@ and [Keep a Changelog](http://keepachangelog.com/).
 
 - Added internal mechanism to handle version-dependent parameters of API modules ([#151])
 - Support version-dependent `deletetalk` parameter in `WikiPage::delete()` and `WikiFile::delete()` ([#152])
-- New method `Wikimate::undelete()` ([#153])
+- New method `Wikimate::undelete()` ([#153], [#155])
 
 ### Changed
 
@@ -251,3 +251,5 @@ and may require changes in applications that invoke these methods:_
 [#150]: https://github.com/hamstar/Wikimate/pull/150
 [#151]: https://github.com/hamstar/Wikimate/pull/151
 [#152]: https://github.com/hamstar/Wikimate/pull/152
+[#153]: https://github.com/hamstar/Wikimate/pull/153
+[#155]: https://github.com/hamstar/Wikimate/pull/155

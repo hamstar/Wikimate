@@ -12,6 +12,7 @@
   - [Deleting...](#deleting-1)
 - [Other stuff](#other-stuff)
   - [Running custom queries](#running-custom-queries)
+  - [Restoring a deleted page or file](#restoring-a-deleted-page-or-file)
   - [Customizing the user agent](#customizing-the-user-agent)
   - [Maximum lag and retries](#maximum-lag-and-retries)
   - [Handling errors and exceptions](#handling-errors-and-exceptions)
@@ -347,6 +348,16 @@ $array_result = $wiki->edit($data);
 
 Both methods return an array of the MediaWiki API result.
 
+### Restoring a deleted page or file
+
+A previously deleted page or file can be undeleted via its original path,
+including namespace if applicable:
+
+```php
+$wiki->undelete('Sausages');
+$wiki->undelete('File:Old-button.png');
+```
+
 ### Customizing the user agent
 
 API requests are made over HTTP with a user agent string to identify
@@ -358,8 +369,8 @@ The string can be retrieved and customized via:
 
 ```php
 $useragent = $wiki->getUserAgent();
-$wiki->setUserAgent('Custom User Agent');
 $wiki->setUserAgent('Custom Prefix - ' . $useragent);
+$wiki->setUserAgent('Custom User Agent');
 ```
 
 In order to use a custom user agent for all requests in the session,
