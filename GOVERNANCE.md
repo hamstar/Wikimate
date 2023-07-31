@@ -55,7 +55,6 @@ It should apply the following actions:
 Once this PR is merged, create a new git tag and its associated release
 in <https://github.com/hamstar/Wikimate/releases/new>
 (collaborator status is required for this step).
-
 The version tag and the title of the release notes should be in the format `v1.2.3`.
 The body of the release notes should be a summary of the contents
 of the corresponding section in `CHANGELOG.md`.
