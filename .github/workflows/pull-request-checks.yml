@@ -5,13 +5,12 @@ jobs:
   check-changelog-change:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: dangoslen/changelog-enforcer@v2
+    - uses: dangoslen/changelog-enforcer@v3
   # Ensure markdown files are formatted consistently
   lint-markdown-files:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: xt0rted/markdownlint-problem-matcher@v1
+      - uses: actions/checkout@v3
+      - uses: xt0rted/markdownlint-problem-matcher@v2
       - run: npm install -g markdownlint-cli
       - run: markdownlint **/*.md
