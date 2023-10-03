@@ -27,3 +27,8 @@ MD024:
 MD026:
   # Trailing punctuation characters not allowed in headings
   punctuation: ",;:!"
+
+# MD052/reference-links-images
+MD052:
+  # Validate shortcut-style links
+  shortcut_syntax: true
