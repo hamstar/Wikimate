@@ -11,8 +11,10 @@ and [Keep a Changelog](http://keepachangelog.com/).
 
 - Clarified instructions in `GOVERNANCE.md` for releasing new versions ([#157])
 - Updated versions of GitHub Actions dependencies ([#161])
+- Fixed markdownlint execution in the CI pipeline ([#154])
 
 <!-- Reference link URLs for this release section -->
+[#154]: https://github.com/hamstar/Wikimate/pull/154
 [#157]: https://github.com/hamstar/Wikimate/pull/157
 [#161]: https://github.com/hamstar/Wikimate/pull/161
 
