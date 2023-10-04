@@ -1,16 +1,22 @@
 name: "Pull Request Checks"
 on: pull_request
 jobs:
-  # Enforce the update of the changelog file
+  # Ensure that the changelog file has been updated in this PR
   check-changelog-change:
     runs-on: ubuntu-latest
     steps:
     - uses: dangoslen/changelog-enforcer@v3
-  # Ensure markdown files are formatted consistently
+  # Ensure that markdown files are formatted consistently (according to .markdownlint.yml)
   lint-markdown-files:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: xt0rted/markdownlint-problem-matcher@v2
-      - run: npm install -g markdownlint-cli
-      - run: markdownlint **/*.md
+      - name: Fetch the Wikimate code into the Actions runner
+        uses: actions/checkout@v3
+      - name: Install the markdownlint-problem-matcher action
+        uses: xt0rted/markdownlint-problem-matcher@v2
+      - name: Install markdownlint-cli
+        run: npm install -g markdownlint-cli
+      - name: List files that will be processed
+        run: npx --silent glob '**/*.md'
+      - name: Run markdownlint
+        run: markdownlint '**/*.md'
