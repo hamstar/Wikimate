@@ -41,7 +41,7 @@ It should apply the following actions:
 
 1. Change the "Upcoming version" heading in the `CHANGELOG.md` file
    to the appropriate version number and date (e.g. `Version 1.2.3 - 2020-12-31`).
-   Follow the [SemVer](http://semver.org/) conventions
+   Follow the [SemVer](https://semver.org/) conventions
    to determine which part of the version number to increase.
 2. Still in the `CHANGELOG.md` file,
    add a new "Upcoming version" section heading above the other sections,
