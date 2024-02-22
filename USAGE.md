@@ -28,7 +28,7 @@ to log in to that wiki.
 ```php
 require __DIR__.'/vendor/autoload.php';
 
-$api_url = 'http://example.com/api.php';
+$api_url = 'https://example.com/w/api.php';
 $username = 'bot';
 $password = 'password';
 

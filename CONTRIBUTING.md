@@ -5,7 +5,7 @@ no matter how small!
 Feel free to open [an issue](https://github.com/hamstar/Wikimate/issues/new)
 to discuss your suggestion or request,
 or submit your changes directly as a
-[pull request](https://docs.github.com/en/github/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork)
+[pull request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork)
 if you prefer.
 
 Below are some guidelines that might help you prepare your contribution.
@@ -18,7 +18,7 @@ Below are some guidelines that might help you prepare your contribution.
    Try to create commits that are as small as possible
    while still representing a self-contained set of changes,
    and use descriptive commit messages.
-   We recommend [these principles](https://chris.beams.io/posts/git-commit/#seven-rules)
+   We recommend [these principles](https://cbea.ms/git-commit/#seven-rules)
    for writing great commit messages (but they're not enforced, so don't sweat it 🙂).
 3. **Include a `CHANGELOG.md` entry in every pull request**.
    This makes it much easier to prepare releases,

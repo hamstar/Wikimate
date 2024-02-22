@@ -2,7 +2,7 @@
 
 include 'globals.php';
 
-$api_url = 'http://localhost/mediawiki/api.php';
+$api_url = 'https://localhost/mediawiki/w/api.php';
 echo "Connecting to: $api_url\n";
 
 echo "Enter your username: ";
