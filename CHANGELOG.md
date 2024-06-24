@@ -2,14 +2,15 @@
 
 This page lists the changes that were done in each version of Wikimate.
 
-Since v0.10.0 this project adheres to [Semantic Versioning](http://semver.org/)
-and [Keep a Changelog](http://keepachangelog.com/).
+Since v0.10.0 this project adheres to [Semantic Versioning](https://semver.org/)
+and [Keep a Changelog](https://keepachangelog.com/).
 
 ## Upcoming version
 
 ### Changed
 
 - Clarified instructions in `GOVERNANCE.md` for releasing new versions ([#157])
+- Updated API URLs to typical path, updated other links, and use https ([#163])
 - Updated versions of GitHub Actions dependencies ([#161])
 - Fixed markdownlint execution in the CI pipeline ([#154])
 
@@ -17,6 +18,7 @@ and [Keep a Changelog](http://keepachangelog.com/).
 [#154]: https://github.com/hamstar/Wikimate/pull/154
 [#157]: https://github.com/hamstar/Wikimate/pull/157
 [#161]: https://github.com/hamstar/Wikimate/pull/161
+[#163]: https://github.com/hamstar/Wikimate/pull/163
 
 ## Version 1.1.0 - 2023-07-30
 

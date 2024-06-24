@@ -21,7 +21,7 @@ MD013:
 # MD024/no-duplicate-heading
 MD024:
   # Only check sibling headings
-  allow_different_nesting: true
+  siblings_only: true
 
 # MD026/no-trailing-punctuation
 MD026:
